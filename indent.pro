@@ -1,0 +1,9 @@
+-bl
+-bs
+-c33
+-cd33
+-nce
+-d0
+-dj
+-i2
+-lp
