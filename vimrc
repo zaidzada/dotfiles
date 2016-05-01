@@ -84,15 +84,3 @@ vnoremap < <gv
 
 " Set spell check
 nmap <Leader>s :set spell!
-
-"------------------------------------------------------------------------------
-"                         Plugin Preferenes
-"------------------------------------------------------------------------------
-
-let delimitMate_expand_cr = 1 " Expand on carriage return
-
-let NERDTreeDirArrows=0       " Don't use triangles for arrows (for now)
-let NERDTreeWinSize=28        " Make the window size a little smaller
-
-                              " Toggle NERDTree and mirror across tabs
-map <Leader>t :NERDTreeToggle \| :silent NERDTreeMirror<CR>
