@@ -21,6 +21,11 @@ VISUAL=$(which vim)                    # Our visual is vim
 export PS1 EDITOR VISUAL
 
 case $(uname) in
+    "Cygwin")
+    alias ls='ls --color=auto'         # Use colors for ls
+    alias grep='grep --colour=auto'    # Use colors for grep
+    ;;
+
     "Linux")
     alias ls='ls --color=auto'         # Use colors for ls
     alias grep='grep --colour=auto'    # Use colors for grep
