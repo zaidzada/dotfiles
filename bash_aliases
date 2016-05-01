@@ -21,3 +21,5 @@ alias path='echo -e ${PATH//:/\\n}'    # Print path components, one per line
 
 alias ..='cd ..'                       # Go back one dir!
 alias ...='cd ../..'                   # Go back two dirs!
+
+alias prettyjson='python -m json.tool'
