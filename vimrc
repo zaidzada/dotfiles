@@ -16,6 +16,7 @@ let mapleader = ","     " Set the mapleader!
 
 syntax on 							" Show syntax highlighting 
 set number						  " Show numbering on the left
+set relativenumber      " Numbering is relative to current line
 set ruler               " Show the cursor position all the time
 
 set bs=2                " Allow backspacing over everything in insert mode
