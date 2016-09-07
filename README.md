@@ -9,6 +9,7 @@ Based on [GNU Stow](https://www.gnu.org/software/stow/):
     .
     ├── bash
     │   ├── .bash_aliases
+    │   ├── .bash_profile
     │   └── .bashrc
     ├── .gitignore
     ├── README.md
