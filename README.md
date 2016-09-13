@@ -6,17 +6,24 @@ My UNIX dot files.
 
 Based on [GNU Stow](https://www.gnu.org/software/stow/):
 
-    .
-    ├── bash
-    │   ├── .bash_aliases
-    │   ├── .bash_profile
-    │   └── .bashrc
-    ├── .gitignore
-    ├── README.md
-    ├── tmux
-    │   └── .tmux.conf
-    └── vim
-        └── .vimrc
+```shell
+.
+├── bash
+│   ├── .bash_aliases
+│   ├── .bash_profile
+│   └── .bashrc
+├── .gitignore
+├── README.md
+├── tmux
+│   └── .tmux.conf
+├── vim
+│   └── .vimrc
+└── x11
+    ├── .Xresources
+    └── .Xresources.d
+        ├── urxvt
+        └── xft
+```
 
 ## Usage
 

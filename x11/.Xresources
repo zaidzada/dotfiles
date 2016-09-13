@@ -1,0 +1,8 @@
+! Top-level X11 configurations
+! 
+! Add the following to .xinitrc to load configuration on startup:
+!
+!   [[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources
+
+#include ".Xresources.d/xft"
+#include ".Xresources.d/urxvt"
