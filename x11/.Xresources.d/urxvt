@@ -13,6 +13,9 @@ URxvt.scrollBar:        false
 URxvt.pointerBlank:     true
 URxvt.font:             xft:Inconsolata-12:antialias=false:hinting=true
 URxvt.boldFont:         xft:Inconsolata-12:antialias=false:hinting=true
+URxvt.colorIT:          #87af5f
+URxvt.colorBD:          #d7d7d7
+URxvt.colorUL:          #87afd7
 
 #define S_base03        #002b36
 #define S_base02        #073642
