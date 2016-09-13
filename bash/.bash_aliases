@@ -13,6 +13,7 @@ alias cp='cp -i'                       # Prompts if overriding a file
 alias vi='vim'                         # Always use vim, not vi
 alias sudo='sudo '                     # Autocomplete after using sudo
 alias mkdir='mkdir -p'                 # Create parent directories if needed
+alias grep='grep --colour=auto'        # Enable color highlighting
 
 alias df='df -h'                       # Human readable format
 alias du='du -h --max-depth=0'         # Don't recurse into subdirectories
