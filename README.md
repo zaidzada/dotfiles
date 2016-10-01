@@ -8,12 +8,17 @@ Based on [GNU Stow](https://www.gnu.org/software/stow/):
 
 ```shell
 .
-├── bash
-│   ├── .bash_aliases
-│   ├── .bash_profile
-│   └── .bashrc
 ├── .gitignore
 ├── README.md
+├── bash
+│   ├── .bash_aliases
+│   ├── .bash_exports
+│   ├── .bash_functions
+│   ├── .bash_profile
+│   └── .bashrc
+├── git
+│   └── .gitconfig
+├── tmp
 ├── tmux
 │   └── .tmux.conf
 ├── vim
