@@ -18,7 +18,6 @@ Based on [GNU Stow](https://www.gnu.org/software/stow/):
 │   └── .bashrc
 ├── git
 │   └── .gitconfig
-├── tmp
 ├── tmux
 │   └── .tmux.conf
 ├── vim
