@@ -6,7 +6,7 @@
 	l = log --pretty=oneline -n 20 --graph --abbrev-commit
 	s = status -s
 	d = diff
-	c = commit
+	c = commit -m
 	t = tags -l
 	b = branches -a
 	r = remotes -v
