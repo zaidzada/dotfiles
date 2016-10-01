@@ -49,12 +49,16 @@ filetype indent on      " Use filetype-specific indentation
 filetype plugin on      " Use filetype-specific plugins
 
 let mapleader = ","
+
+" Toggle spelling
 map <Leader>S :set spell!<CR>
-map <Leader>p i(<Esc>ea)<Esc>
-map <Leader>c i{<Esc>ea}<Esc>
-nmap <Leader>s :set spell!
-nmap <C-J> :tabnext<CR>       
-nmap <C-K> :tabprev<CR>   
+
+" Tab navigation
+nmap <C-J> :tabnext<CR>
+nmap <C-K> :tabprev<CR>
+
+" Append a single character after the cursor
+nnoremap <Leader>p :exec "normal a".nr2char(getchar())."\e"<CR>
 
 " Stay in visual mode when indenting
 vnoremap > >gv
