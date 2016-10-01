@@ -1,0 +1,7 @@
+# .bash_exports
+#
+# Exports
+
+export EDITOR=$(which vim);
+
+export PS1='\[\e[0;32m\]\u@\h\[\e[0;37m\] \w \$\[\e[00m\] ';

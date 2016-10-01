@@ -1,8 +1,6 @@
-###############################################################################
 # .bash_aliases
 #
-# @author Zaid Kokaja
-###############################################################################
+# Bash alias configuration
 
 alias ll='ls -l'                       # Common alias
 alias lla='ls -la'                     # List all hidden folders

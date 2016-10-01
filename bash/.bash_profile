@@ -1,9 +1,6 @@
-###############################################################################
 # .bash_profile
 #
-# @author Zaid Kokaja
-###############################################################################
+# Bash profile to source .profile and .bashrc
 
-if [ -f "$HOME/.bashrc" ] ; then
-  source $HOME/.bashrc
-fi
+[[ -r "$HOME/.profile" ]] && [[ -f "$HOME/.profile" ]] && source $HOME/.profile
+[[ -f "$HOME/.bashrc" ]]  && [[ -f "$HOME/.bashrc" ]]  && source $HOME/.bashrc

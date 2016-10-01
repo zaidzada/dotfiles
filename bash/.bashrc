@@ -1,39 +1,16 @@
-###############################################################################
 # .bashrc
 #
-# @author Zaid Kokaja
-###############################################################################
+# Main Bash configuration file for interactive shells
 
-# Exit if shell is not running interactively
 [[ "$-" != *i* ]] && return  
 
-#------------------------------------------------------------------------------
-#                         Environment variables
-#------------------------------------------------------------------------------
-                                       # Set colorized prompt
-PS1='\[\e[0;32m\]\u@\h\[\e[0;37m\] \w \$\[\e[00m\] '
+umask 027
 
-EDITOR=$(which vim)                    # Our editor is vim
-VISUAL=$(which vim)                    # Our visual is vim
+shopt -s cdspell
+shopt -s histappend
+shopt -s nocaseglob
 
-                                       # Export the variables
-export PS1 EDITOR VISUAL
-
-#------------------------------------------------------------------------------
-#                         Bash configureation
-#------------------------------------------------------------------------------
-
-shopt -s cdspell                       # Fix small typos
-umask 027                              # Change default file permissions
-
-#------------------------------------------------------------------------------
-#                         Alias configurations
-#------------------------------------------------------------------------------
-
-if [ -f "${HOME}/.bash_aliases" ]; then
-  source "${HOME}/.bash_aliases"
-fi
-
-if [ -f "${HOME}/.bash_functions" ]; then
-  source "${HOME}/.bash_functions"
-fi
+for file in ~/.bash_{prompt,aliases,functions,path,exports}; do
+	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
+done
+unset file
