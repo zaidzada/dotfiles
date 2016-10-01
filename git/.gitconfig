@@ -3,14 +3,17 @@
 # Git configuration file
 
 [alias]
-	l = log --pretty=oneline -n 20 --graph --abbrev-commit
-	s = status -s
+	a = add
+	b = branch -a
+	c = commit
 	d = diff
-	c = commit -m
-	t = tags -l
-	b = branches -a
-	r = remotes -v
+	l = log --pretty=oneline -n 20 --graph --abbrev-commit
+	r = remote -v
+	s = status -s
+	t = tag -l
 
+	cm = commit -m
+	co = checkout
 	st = status
 
 [core]
