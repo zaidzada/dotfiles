@@ -1,0 +1,29 @@
+# .gitconfig
+#
+# Git configuration file
+
+[alias]
+	l = log --pretty=oneline -n 20 --graph --abbrev-commit
+	s = status -s
+	d = diff
+	c = commit
+	t = tags -l
+	b = branches -a
+	r = remotes -v
+
+	st = status
+
+[core]
+	editor = vim
+
+[help]
+	autocorrect = 1
+
+[push]
+	default = simple
+
+[user]
+	name = Zaid Kokaja
+
+[github]
+	user = zkokaja
