@@ -1,87 +1,62 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " .vimrc file
 "
-" @author  Zaid Kokaja
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Initialization commands for Vim
 
-"------------------------------------------------------------------------------
-"                         Main configurations
-"------------------------------------------------------------------------------
+set nocompatible        " Set vi compatibility off
 
-set secure              " Security!
+syntax on               " Turn on syntax highlighting 
+colorscheme desert      " Our default color scheme
 
-set title               " Sets the title of window terminal
-set nocompatible        " Behave more vim-like
-let mapleader = ","     " Set the mapleader!
-
-syntax on               " Show syntax highlighting 
-set number              " Show numbering on the left
+set number              " Display numbering on the left
 set relativenumber      " Numbering is relative to current line
-set ruler               " Show the cursor position all the time
 
-set bs=2                " Allow backspacing over everything in insert mode
-set ai                  " Always set auto indenting on
-set history=50          " Keep 50 lines of command line history
+set laststatus=2        " Always display a status bar
+set showmode            " Display current mode in status bar
+set ruler               " Display current cursor position in status bar
+set showcmd             " Display an incomplete command in status bar
+set shortmess+=r        " Use shorter message for [readonly] in status bar
 
-set incsearch           " Turn on incremental search
-set ignorecase          " Ignore case when searching
-set smartcase           " Intelligent case searching
-set hlsearch            " Show highlighting of searches
+set incsearch           " Display the match of a search pattern while typing it
+set hlsearch            " Highlight matches of the last used search pattern
+set history=50          " Keep 50 commands and search patterns in the history
 
-set smarttab            " Inserts spaces for tabs
-set tabstop=2           " Number of spaces a tab counts for
-set shiftwidth=2        " Number of spaces to use for indents
-set shiftround          " Round to multiples of shift width
-set expandtab           " Expand tabs to spaces
-set autoindent          " Auto indent new lines with respect to current line
+set autoindent          " Use the indent of the previous line on the new line
+set smartindent         " Smart indenting for C-like programs, see :help si
+set backspace=2         " Allow backspacing over indent, eol, and start
 
-set nowrap              " Disable wrapping
-set textwidth=80        " Sets the maximum width of text to be 80 characters
-set formatoptions-=t    " Set formatting options 
+set tabstop=4           " Number of spaces that a <Tab> counts for
+set shiftwidth=4        " Number of spaces to use for each step of (auto)indent
+set noexpandtab         " Do not expand tabs into spaces
+
+set nowrap              " Disable wrapping of lines
+set textwidth=80        " Maximum width of the text that is being inserted
+set formatoptions-=t    " Auto-wrap text using textwidth
 
 set showmatch           " Highlight the matching bracket
-set matchpairs+=<:>     " Include anger brackets
-
-set showmode            " Show current mode in status line
-set showcmd             " Show current command in status line
-set laststatus=2        " Always have a status line
+set matchpairs+=<:>     " Include anger brackets in showmatch
 
 set splitright          " Split vertically to the right
 set splitbelow          " Split horizontally to the bottom
 
-set lazyredraw          " Don't redraw when macros are running
-set scrolloff=4         " Start scrolling at this number of lines from bottom
-set ttyfast             " Faster tty connection
-set noerrorbells        " No error bells
-set shortmess+=r        " Use shorter messages in status line
-set nostartofline       " Keep cursor in same column if possible
+set lazyredraw          " Screen will not be redrawn during macro execution
+set scrolloff=4         " Number of lines to keep above and below the cursor
+set ttyfast             " Indicates a fast terminal connection
+set nostartofline       " On movement, keep cursor in same column if possible
 set autowrite           " Automatically write the file before some commands
-
-set spell spl=en_us     " Set our spelling locale
-set nospell             " Turn spell check off at the start
 
 filetype on             " Enable filetype detection
 filetype indent on      " Use filetype-specific indentation
 filetype plugin on      " Use filetype-specific plugins
 
-colorscheme desert      " Our default color scheme
-
-" Open help in new tabs
-cabbrev help tab help
-
-"------------------------------------------------------------------------------
-"                         General Mappings
-"------------------------------------------------------------------------------
-
-" C-k goes to the next tab
-" C-j goes to the previous tab
+let mapleader = ","
+map <Leader>S :set spell!<CR>
+map <Leader>p i(<Esc>ea)<Esc>
+map <Leader>c i{<Esc>ea}<Esc>
+nmap <Leader>s :set spell!
 nmap <C-J> :tabnext<CR>       
 nmap <C-K> :tabprev<CR>   
-imap jj <Esc>
 
 " Stay in visual mode when indenting
 vnoremap > >gv
 vnoremap < <gv
 
-" Set spell check
-nmap <Leader>s :set spell!
