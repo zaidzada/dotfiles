@@ -39,4 +39,4 @@ $ stow tmux
 $ stow vim
 ```
 
-Use `-t ~` if parent directory is not home.
+Use `stow -t ~` if parent directory is not home.
