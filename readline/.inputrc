@@ -2,7 +2,23 @@
 #
 # readline configuration
 
-
-set editing-mode emacs
+# readline performs filename matching and completion in a case-insensitive
+# fashion.
 set completion-ignore-case on
 
+# Words which have more than one possible completion cause the matches to be 
+# listed immediately instead of ringing the bell.
+set show-all-if-ambiguous on
+
+# Display character denoting a file's type as reported by stat(2) is appended
+# to the filename when listing possible completions.
+set visible-stats on
+
+# Completed names which are symbolic links to directories have a slash appended
+set mark-symlinked-directories on
+
+# Custom keybindings
+Meta-DEL: backward-kill-word
+Meta-r: re-read-init-file
+Meta-j: history-search-forward
+Meta-k: history-search-backward

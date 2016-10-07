@@ -18,6 +18,8 @@ Based on [GNU Stow](https://www.gnu.org/software/stow/):
 │   └── .bashrc
 ├── git
 │   └── .gitconfig
+├── readline
+│   └── .inputrc
 ├── tmux
 │   └── .tmux.conf
 ├── vim
