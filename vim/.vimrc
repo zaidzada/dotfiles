@@ -53,6 +53,9 @@ let mapleader = ","
 " Toggle spelling
 map <Leader>S :set spell!<CR>
 
+" Reload .vimrc
+map <Leader>v :so ~/.vimrc<CR> 
+
 " Tab navigation
 nmap <C-J> :tabnext<CR>
 nmap <C-K> :tabprev<CR>
