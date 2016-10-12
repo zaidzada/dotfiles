@@ -54,7 +54,10 @@ let mapleader = ","
 map <Leader>S :set spell!<CR>
 
 " Reload .vimrc
-map <Leader>v :so ~/.vimrc<CR> 
+map <Leader>v :so ~/.vimrc<CR>
+
+" Explore in new window
+map <Leader>e :Sexplore!<CR>
 
 " Tab navigation
 nmap <C-J> :tabnext<CR>
