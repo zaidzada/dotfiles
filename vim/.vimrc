@@ -53,6 +53,9 @@ let mapleader = ","
 " Toggle spelling
 map <Leader>S :set spell!<CR>
 
+" Toggle paste
+map <Leader>P :set paste!<CR>
+
 " Reload .vimrc
 map <Leader>v :so ~/.vimrc<CR>
 
