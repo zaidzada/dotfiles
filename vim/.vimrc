@@ -21,12 +21,7 @@ set hlsearch            " Highlight matches of the last used search pattern
 set history=50          " Keep 50 commands and search patterns in the history
 
 set autoindent          " Use the indent of the previous line on the new line
-set smartindent         " Smart indenting for C-like programs, see :help si
 set backspace=2         " Allow backspacing over indent, eol, and start
-
-set tabstop=4           " Number of spaces that a <Tab> counts for
-set shiftwidth=4        " Number of spaces to use for each step of (auto)indent
-set noexpandtab         " Do not expand tabs into spaces
 
 set nowrap              " Disable wrapping of lines
 set textwidth=80        " Maximum width of the text that is being inserted
@@ -44,9 +39,31 @@ set ttyfast             " Indicates a fast terminal connection
 set nostartofline       " On movement, keep cursor in same column if possible
 set autowrite           " Automatically write the file before some commands
 
+
+" File type detection
+
 filetype on             " Enable filetype detection
 filetype indent on      " Use filetype-specific indentation
 filetype plugin on      " Use filetype-specific plugins
+
+" tabstop      changes the width of a TAB character
+" softtabstop  affects what happens when you press TAB or BS
+" shiftwidth   affects >> << and ==
+" expandtab    if set, will insert 'softtabstop'spaces, otherwise tabs
+
+autocmd FileType hs setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=80
+autocmd FileType sh setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=80
+autocmd FileType js setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=80
+autocmd FileType md setlocal expandtab shiftwidth=4 softtabstop=4
+autocmd FileType txt setlocal expandtab shiftwidth=2 softtabstop=2
+autocmd FileType xml setlocal expandtab shiftwidth=2 softtabstop=2
+autocmd FileType css setlocal expandtab shiftwidth=2 softtabstop=2
+autocmd FileType html setlocal shiftwidth=2 tabstop=2
+autocmd FileType java setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=100
+autocmd FileType python setlocal expandtab shiftwidth=4 softtabstop=4 textwidth=79
+
+
+" Custom mappings --
 
 let mapleader = ","
 
