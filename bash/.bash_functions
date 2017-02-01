@@ -7,6 +7,10 @@ mkd() {
 	mkdir -p "$@" && cd "$@"
 }
 
+bkp() {
+	mv "$@" $(date +%Y%m%d_%s_)"$@"
+}
+
 # Set colors for man
 man() {
     LESS_TERMCAP_md=$'\e[01;31m' \
