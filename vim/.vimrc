@@ -59,6 +59,7 @@ autocmd FileType txt setlocal expandtab shiftwidth=2 softtabstop=2
 autocmd FileType xml setlocal expandtab shiftwidth=2 softtabstop=2
 autocmd FileType css setlocal expandtab shiftwidth=2 softtabstop=2
 autocmd FileType html setlocal shiftwidth=2 tabstop=2
+autocmd FileType ruby setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=80
 autocmd FileType java setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=100
 autocmd FileType python setlocal expandtab shiftwidth=4 softtabstop=4 textwidth=79
 
