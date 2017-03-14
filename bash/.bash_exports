@@ -2,6 +2,8 @@
 #
 # Environment variable exports
 
+export PATH=$PATH:$HOME/.bin
+
 export EDITOR=$(which vim);
 
 bold="";

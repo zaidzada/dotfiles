@@ -1,0 +1,61 @@
+#!/usr/bin/env python
+
+# templatize
+#
+# Replace placeholders in a template with values from CSV.
+#
+# For example, given template.xml:
+#
+#   <example name="$name">
+#     <somevalue>$value</somevalue>
+#   </example>    
+# 
+# and data.csv:
+# 
+#   name,value
+#   hello,there
+#   world,again
+# 
+# $ templatize template.xml data.csv
+#
+#   <example name="hello">
+#     <somevalue>there</somevalue>
+#   </example>
+#   <example name="world">
+#     <somevalue>again</somevalue>
+#   </example>
+
+
+import re, csv, sys, argparse
+
+parser = argparse.ArgumentParser(description='Fill template with CSV params.')
+parser.add_argument('template', type=argparse.FileType('r'), help='the template file with placeholders')
+parser.add_argument('csv', type=argparse.FileType('r'), help='the csv file with header and values')
+
+args = parser.parse_args()
+
+# Read the template file into memory
+with args.template as template:
+  templatelines = template.readlines()
+
+# Loop through CSV file, replacing placeholders with the values in file 
+with args.csv as csvfile:
+
+  patterns = {}
+  reader = csv.DictReader(csvfile) 
+
+  for row in reader:
+
+    # Fill patterns dictionary with {header: pattern} on first loop
+    if len(patterns) == 0:
+      for header in row.keys():
+        patterns[header] = re.compile('\$'+header)
+
+    # Replace any patterns found in the template lines and write to stdout
+    for line in templatelines:
+
+      for header, pattern in patterns.iteritems():
+        line = pattern.sub(row[header], line)
+
+      sys.stdout.write(line)
+
