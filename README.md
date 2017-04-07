@@ -11,7 +11,7 @@ Based on [GNU Stow](https://www.gnu.org/software/stow/):
 ├── .gitignore
 ├── README.md
 ├── bash
-y   ├── .bash_aliases
+│   ├── .bash_aliases
 │   ├── .bash_exports
 │   ├── .bash_functions
 │   ├── .bash_profile
