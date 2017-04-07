@@ -55,6 +55,7 @@ autocmd FileType haskell setlocal expandtab shiftwidth=2 softtabstop=2 textwidth
 autocmd FileType bash setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=80
 autocmd FileType javascript setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=80
 autocmd FileType text setlocal expandtab shiftwidth=2 softtabstop=2
+autocmd FileType yaml setlocal expandtab shiftwidth=2 softtabstop=2
 autocmd FileType xml setlocal expandtab shiftwidth=2 softtabstop=2
 autocmd FileType css setlocal expandtab shiftwidth=2 softtabstop=2
 autocmd FileType html setlocal shiftwidth=2 tabstop=2
