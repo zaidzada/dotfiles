@@ -1,2 +1,3 @@
 .ssh/
 *.swp
+vim/.vim/plugged

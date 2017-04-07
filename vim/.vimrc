@@ -80,6 +80,9 @@ map <Leader>v :so ~/.vimrc<CR>
 " Explore in new window
 map <Leader>e :Sexplore!<CR>
 
+" Nerd tree
+map <Leader>t :NERDTree<CR>
+
 " Tab navigation
 nmap <C-J> :tabnext<CR>
 nmap <C-K> :tabprev<CR>
@@ -91,3 +94,9 @@ nnoremap <Leader>p :exec "normal a".nr2char(getchar())."\e"<CR>
 vnoremap > >gv
 vnoremap < <gv
 
+
+" Plugins 
+
+call plug#begin('~/.vim/plugged')
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+call plug#end()
