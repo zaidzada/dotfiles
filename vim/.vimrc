@@ -84,6 +84,9 @@ map <Leader>e :Sexplore!<CR>
 " Nerd tree
 map <Leader>t :NERDTree<CR>
 
+" Ctrl-p
+map <Leader>f :CtrlP<CR>
+
 " Tab navigation
 nmap <C-J> :tabnext<CR>
 nmap <C-K> :tabprev<CR>
@@ -100,4 +103,7 @@ vnoremap < <gv
 
 call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-fugitive'
 call plug#end()
