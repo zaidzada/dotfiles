@@ -8,6 +8,7 @@
 	c = commit
 	d = diff
 	l = log --pretty=oneline -n 20 --graph --abbrev-commit
+	ll = log --date=relative -10 --pretty=format:'%h  %>(12)%ad  %<(7)%aN %d %s'
 	r = remote -v
 	s = status -s
 	t = tag -l
@@ -27,6 +28,7 @@
 
 [user]
 	name = Zaid Kokaja
+	email = zkokaja@gmail.com
 
 [github]
 	user = zkokaja
