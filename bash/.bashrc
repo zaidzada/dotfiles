@@ -12,6 +12,6 @@ shopt -s nocaseglob
 shopt -s checkwinsize
 
 for file in ~/.bash_{prompt,aliases,functions,path,exports}; do
-	[[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
+  [[ -r "$file" ]] && [[ -f "$file" ]] && source "$file"
 done
 unset file
