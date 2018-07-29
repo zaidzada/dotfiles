@@ -32,3 +32,9 @@ PS1+="\[${green}\]\w ";    # working directory
 PS1+="\[${white}\]\$ ";    # $
 PS1+="\[${reset}\]";       # reset colors
 export PS1;
+
+# Add colors for macos
+if [[ "$(uname)" == "Darwin" ]]; then
+  export CLICOLOR=1;
+  export LSCOLORS=GxFxCxDxBxegedabagaced;
+fi
