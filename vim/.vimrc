@@ -25,7 +25,7 @@ set backspace=2         " Allow backspacing over indent, eol, and start
 
 set nowrap              " Disable wrapping of lines
 set textwidth=80        " Maximum width of the text that is being inserted
-set formatoptions-=t    " Auto-wrap text using textwidth
+"set formatoptions-=t    " Auto-wrap text using textwidth
 
 set showmatch           " Highlight the matching bracket
 set matchpairs+=<:>     " Include anger brackets in showmatch
@@ -39,6 +39,8 @@ set ttyfast             " Indicates a fast terminal connection
 set nostartofline       " On movement, keep cursor in same column if possible
 set autowrite           " Automatically write the file before some commands
 
+set cm=blowfish2        " Strong encryption (7.4.3+)
+set nojoinspaces
 
 " File type detection
 
@@ -51,15 +53,16 @@ filetype plugin on      " Use filetype-specific plugins
 " shiftwidth   affects >> << and ==
 " expandtab    if set, will insert 'softtabstop'spaces, otherwise tabs
 
-autocmd FileType haskell setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=80
-autocmd FileType bash setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=80
-autocmd FileType javascript setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=80
+autocmd FileType haskell setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=79
+autocmd FileType bash setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=79
+autocmd FileType javascript setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=79
 autocmd FileType text setlocal expandtab shiftwidth=2 softtabstop=2
+autocmd FileType tex setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=79
 autocmd FileType yaml setlocal expandtab shiftwidth=2 softtabstop=2
 autocmd FileType xml setlocal expandtab shiftwidth=2 softtabstop=2
 autocmd FileType css setlocal expandtab shiftwidth=2 softtabstop=2
 autocmd FileType html setlocal shiftwidth=2 tabstop=2
-autocmd FileType ruby setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=80
+autocmd FileType ruby setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=79
 autocmd FileType java setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=100
 autocmd FileType python setlocal expandtab shiftwidth=4 softtabstop=4 textwidth=79
 autocmd FileType markdown setlocal expandtab shiftwidth=4 softtabstop=4
@@ -78,9 +81,6 @@ map <Leader>P :set paste!<CR>
 " Reload .vimrc
 map <Leader>v :so ~/.vimrc<CR>
 
-" Explore in new window
-map <Leader>e :Sexplore!<CR>
-
 " Nerd tree
 map <Leader>t :NERDTree<CR>
 
@@ -91,13 +91,12 @@ map <Leader>f :CtrlP<CR>
 nmap <C-J> :tabnext<CR>
 nmap <C-K> :tabprev<CR>
 
-" Append a single character after the cursor
-nnoremap <Leader>p :exec "normal a".nr2char(getchar())."\e"<CR>
-
 " Stay in visual mode when indenting
 vnoremap > >gv
 vnoremap < <gv
 
+" Distraction free
+nnoremap <leader>z :Goyo<cr>
 
 " Plugins 
 
@@ -106,4 +105,9 @@ Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
+Plug 'junegunn/goyo.vim'
+Plug 'ervandew/supertab'
+Plug 'itchyny/lightline.vim'
+Plug 'scrooloose/nerdcommenter'
+Plug 'dhruvasagar/vim-table-mode'
 call plug#end()
