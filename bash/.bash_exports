@@ -3,6 +3,7 @@
 # Environment variable exports
 
 export PATH=$PATH:$HOME/.bin
+export PATH=/usr/local/miniconda3/bin:$PATH
 
 export EDITOR=$(which vim);
 
