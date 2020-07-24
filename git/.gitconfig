@@ -3,32 +3,39 @@
 # Git configuration file
 
 [alias]
-	a = add
-	b = branch -a
-	c = commit
-	d = diff
-	l = log --pretty=oneline -n 20 --graph --abbrev-commit
-	ll = log --date=relative -10 --pretty=format:'%h  %>(12)%ad  %<(7)%aN %d %s'
-	r = remote -v
-	s = status -s
-	t = tag -l
+    a = add
+    b = branch -a
+    c = commit
+    d = diff
+    r = remote -v
+    s = status -s
+    t = tag -l
 
-	cm = commit -m
-	co = checkout
-	st = status
+    cm = commit -m
+    co = checkout
+    st = status
+
+    l = log --pretty=oneline -n 20 --graph --abbrev-commit
+    ll = log --date=relative -10 --pretty=format:'%h  %>(12)%ad  %<(7)%aN %d %s'
+    lol = log --graph --decorate --pretty=oneline --abbrev-commit
+    lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
 
 [core]
-	editor = vim
+    editor = vim
+    excludesfile = /Users/zzada/.gitignore_global
 
 [help]
-	autocorrect = 1
+    autocorrect = 1
 
 [push]
-	default = simple
+    default = simple
 
 [user]
-	name = Zaid Kokaja
-	email = zkokaja@gmail.com
+    name = Zaid Kokaja
+    email = zkokaja@gmail.com
+
+[color]
+    ui = true
 
 [github]
-	user = zkokaja
+    user = zkokaja
