@@ -1,113 +1,194 @@
-" .vimrc file
-"
-" Initialization commands for Vim
+" -----------------------------------------------------------------------------
+" Basic settings
+" -----------------------------------------------------------------------------
 
-set nocompatible        " Set vi compatibility off
-
-syntax on               " Turn on syntax highlighting 
-colorscheme desert      " Our default color scheme
+set encoding=utf-8      " Use UTF-8
 
 set number              " Display numbering on the left
 set relativenumber      " Numbering is relative to current line
 
+" Status bar settings
 set laststatus=2        " Always display a status bar
-set showmode            " Display current mode in status bar
 set ruler               " Display current cursor position in status bar
+set showmode            " Display current mode in status bar
 set showcmd             " Display an incomplete command in status bar
 set shortmess+=r        " Use shorter message for [readonly] in status bar
 
+" Search and history
 set incsearch           " Display the match of a search pattern while typing it
 set hlsearch            " Highlight matches of the last used search pattern
-set history=50          " Keep 50 commands and search patterns in the history
+set history=100         " Keep 50 commands and search patterns in the history
+set ignorecase          " Ignore case on searches
+set smartcase           " Don't ignore case if search includs an uppercase
 
-set autoindent          " Use the indent of the previous line on the new line
-set backspace=2         " Allow backspacing over indent, eol, and start
-
-set nowrap              " Disable wrapping of lines
-set textwidth=80        " Maximum width of the text that is being inserted
-"set formatoptions-=t    " Auto-wrap text using textwidth
-
-set showmatch           " Highlight the matching bracket
-set matchpairs+=<:>     " Include anger brackets in showmatch
-
+" Window actions
 set splitright          " Split vertically to the right
 set splitbelow          " Split horizontally to the bottom
 
-set lazyredraw          " Screen will not be redrawn during macro execution
-set scrolloff=4         " Number of lines to keep above and below the cursor
-set ttyfast             " Indicates a fast terminal connection
+" Cursor settings
+set scrolloff=2         " Number of lines to keep above and below the cursor
 set nostartofline       " On movement, keep cursor in same column if possible
-set autowrite           " Automatically write the file before some commands
 
+" Text options
+set nowrap              " Disable wrapping of lines
+set nojoinspaces        " Only use one space after . ! and ?
+
+" Security and encryption
+set nomodeline          " Disable mode line for security reasons
 set cm=blowfish2        " Strong encryption (7.4.3+)
-set nojoinspaces
 
-" File type detection
+" Display unprintable characters (whitespace), npbsp:  
+set list listchars=tab:»·,trail:·,precedes:·,nbsp:⌴
 
-filetype on             " Enable filetype detection
+
+" -----------------------------------------------------------------------------
+" Indentation
+" -----------------------------------------------------------------------------
+
+" This is the default for all our files: use 4 spaces over tabs.
+set expandtab           " Always expands tabs into spaces
+set tabstop=8           " A tab is _always_ worth 8 spaces
+set shiftwidth=4        " For <<, >>, and ==. And for autoindent
+set softtabstop=4       " Insert this many spaces instead of a tab
+set autoindent          " Use the indent of the previous line on the new line
+set backspace=2         " Allow backspacing over indent, eol, and start
+
+syntax on               " Use syntax highlighting
 filetype indent on      " Use filetype-specific indentation
 filetype plugin on      " Use filetype-specific plugins
 
-" tabstop      changes the width of a TAB character
-" softtabstop  affects what happens when you press TAB or BS
-" shiftwidth   affects >> << and ==
-" expandtab    if set, will insert 'softtabstop'spaces, otherwise tabs
-
-autocmd FileType haskell setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=79
-autocmd FileType bash setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=79
-autocmd FileType javascript setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=79
-autocmd FileType text setlocal expandtab shiftwidth=2 softtabstop=2
-autocmd FileType tex setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=79
-autocmd FileType yaml setlocal expandtab shiftwidth=2 softtabstop=2
-autocmd FileType xml setlocal expandtab shiftwidth=2 softtabstop=2
-autocmd FileType css setlocal expandtab shiftwidth=2 softtabstop=2
-autocmd FileType html setlocal shiftwidth=2 tabstop=2
-autocmd FileType ruby setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=79
-autocmd FileType java setlocal expandtab shiftwidth=2 softtabstop=2 textwidth=100
-autocmd FileType python setlocal expandtab shiftwidth=4 softtabstop=4 textwidth=79
-autocmd FileType markdown setlocal expandtab shiftwidth=4 softtabstop=4
+" File specific settings go here:
+" autocmd FileType python setlocal shiftwidth=4 softtabstop=4
 
 
-" Custom mappings --
+" -----------------------------------------------------------------------------
+" Custom key bindings
+" -----------------------------------------------------------------------------
 
 let mapleader = ","
+
+" .vimrc editing and reloading
+nmap <leader>ve :e $MYVIMRC<CR>
+nmap <leader>vv :source $MYVIMRC<CR>
 
 " Toggle spelling
 map <Leader>S :set spell!<CR>
 
-" Toggle paste
-map <Leader>P :set paste!<CR>
-
-" Reload .vimrc
-map <Leader>v :so ~/.vimrc<CR>
-
-" Nerd tree
-map <Leader>t :NERDTree<CR>
-
-" Ctrl-p
-map <Leader>f :CtrlP<CR>
+" Toggle paste mode
+nmap <Leader>p :paste!<CR>
 
 " Tab navigation
 nmap <C-J> :tabnext<CR>
 nmap <C-K> :tabprev<CR>
+nnoremap <Tab> :tabnext<CR>
+nnoremap <S-Tab> :tabprev<CR>
 
 " Stay in visual mode when indenting
 vnoremap > >gv
 vnoremap < <gv
 
-" Distraction free
-nnoremap <leader>z :Goyo<cr>
+" Alias easy mistakes
+command W w
+command Q q
 
-" Plugins 
+
+" -----------------------------------------------------------------------------
+" Plugin definition and configurations
+" -----------------------------------------------------------------------------
 
 call plug#begin('~/.vim/plugged')
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-Plug 'ctrlpvim/ctrlp.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
-Plug 'junegunn/goyo.vim'
-Plug 'ervandew/supertab'
-Plug 'itchyny/lightline.vim'
-Plug 'scrooloose/nerdcommenter'
-Plug 'dhruvasagar/vim-table-mode'
+Plug 'tpope/vim-commentary'
+Plug 'dense-analysis/ale'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'junegunn/vim-easy-align'
+Plug 'rafi/awesome-vim-colorschemes'
 call plug#end()
+
+
+" -----------------------------------------------------------------------------
+" Colors
+" ------
+
+colorscheme solarized8_high
+set background=dark
+set colorcolumn=80
+
+" Airline
+let g:airline_theme='minimalist'
+
+
+" -----------------------------------------------------------------------------
+" ALE customization
+" -----------------
+
+let g:airline#extensions#ale#enabled = 1
+let g:ale_sign_column_always = 1
+
+let g:ale_linters = {
+\   'python': ['flake8', 'pyls']
+\}
+
+let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   'python': ['autopep8', 'isort'],
+\}
+
+" Completion
+let g:ale_completion_enabled = 1
+set omnifunc=ale#completion#OmniFunc
+
+" Custom symbols
+let g:ale_sign_error = "◉"
+let g:ale_sign_warning = "◉"
+highlight ALEErrorSign ctermfg=9
+highlight ALEWarningSign ctermfg=11
+highlight clear SignColumn
+
+" ALE key bindings
+map <silent> <Leader>d <Plug>(ale_go_to_definition)
+map <silent> <Leader>k <Plug>(ale_documentation)
+map <silent> <Leader>n <Plug>(ale_next)
+map <silent> <Leader>p <Plug>(ale_previous)
+map <silent> <Leader>f <Plug>(ale_fix)
+map <silent> <Leader>r <Plug>(ale_find_references)
+
+
+" -----------------------------------------------------------------------------
+" vim-easy-align
+" --------------
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+
+" -----------------------------------------------------------------------------
+" fzf (https://github.com/junegunn/fzf.vim)
+" -----------------------------------------
+
+nnoremap <c-f>b :Buffers<CR>
+nnoremap <c-f>c :Colors<CR>
+nnoremap <c-f>g :Ag<CR>
+nnoremap <c-f>t :Tags<CR>
+nnoremap <c-f>h :Helptags<CR>
+nnoremap <c-f>l :Lines<CR>
+nnoremap <c-f>n :GFiles<CR>
+nnoremap <c-f>f :Files<CR>
+nnoremap <c-f>s :Snippets<CR>
+
+
+" -----------------------------------------------------------------------------
+" Set auto commands
+" -----------------------------------------------------------------------------
+
+augroup spellChecking
+    autocmd!
+    autocmd FileType markdown setlocal spell
+augroup END
