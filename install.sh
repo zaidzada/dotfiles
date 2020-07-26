@@ -20,7 +20,9 @@ for df in `git ls-files`; do
     fi
 done
 
-# TODO - tar backups?
+# archive backups
+tar czf backups.tgz backups
+rm -r backups
 
 # Set up symlinks
 
