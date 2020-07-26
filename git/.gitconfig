@@ -1,6 +1,31 @@
-# .gitconfig
-#
-# Git configuration file
+# -----------------------------------------------------------------------------
+# Core settings
+# -----------------------------------------------------------------------------
+
+# User settings
+[user]
+    name = Zaid Kokaja
+    email = zkokaja@gmail.com
+
+[github]
+    user = zkokaja
+
+# Misc settings
+[core]
+    editor = vim
+
+[push]
+    default = simple
+
+[color]
+    ui = true
+
+[help]
+    autocorrect = 1
+
+# -----------------------------------------------------------------------------
+# Aliases
+# -----------------------------------------------------------------------------
 
 [alias]
     a = add
@@ -20,22 +45,3 @@
     lol = log --graph --decorate --pretty=oneline --abbrev-commit
     lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
 
-[core]
-    editor = vim
-    excludesfile = /Users/zzada/.gitignore_global
-
-[help]
-    autocorrect = 1
-
-[push]
-    default = simple
-
-[user]
-    name = Zaid Kokaja
-    email = zkokaja@gmail.com
-
-[color]
-    ui = true
-
-[github]
-    user = zkokaja
