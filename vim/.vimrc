@@ -75,7 +75,7 @@ nmap <leader>vv :source $MYVIMRC<CR>
 map <Leader>S :set spell!<CR>
 
 " Toggle paste mode
-nmap <Leader>p :paste!<CR>
+nmap <Leader>P :set paste!<CR>
 
 " Tab navigation
 nmap <C-J> :tabnext<CR>
@@ -107,6 +107,8 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'rafi/awesome-vim-colorschemes'
+Plug 'majutsushi/tagbar'
+Plug 'SirVer/ultisnips'
 call plug#end()
 
 
@@ -120,6 +122,19 @@ set colorcolumn=80
 
 " Airline
 let g:airline_theme='minimalist'
+
+" Tagbar
+nmap <silent> <Leader>t :TagbarToggle<CR>
+
+
+" -----------------------------------------------------------------------------
+" UltiSnips
+" -----------------
+
+let g:UltiSnipsEditSplit = 'vertical'
+let g:UltiSnipsJumpBackwardTrigger = '<c-p>'
+let g:UltiSnipsJumpForwardTrigger  = '<c-n>'
+let g:UltiSnipsSnippetDirectories=['custom_snippets', 'UltiSnips']
 
 
 " -----------------------------------------------------------------------------
