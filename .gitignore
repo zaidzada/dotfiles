@@ -1,5 +1,6 @@
 .ssh/
 backups/
 *.swp
+*.tgz
 vim/.vim/plugged
 vim/.vim/autoload/plug.vim*
