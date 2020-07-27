@@ -126,6 +126,8 @@ let g:airline_theme='minimalist'
 " Tagbar
 nmap <silent> <Leader>t :TagbarToggle<CR>
 
+" Git
+nmap <silent> <Leader>g :Git<CR>
 
 " -----------------------------------------------------------------------------
 " UltiSnips
@@ -207,3 +209,12 @@ augroup spellChecking
     autocmd!
     autocmd FileType markdown setlocal spell
 augroup END
+
+
+" -----------------------------------------------------------------------------
+" Load local settings
+" -----------------------------------------------------------------------------
+
+if filereadable(expand("~/.vimrc.local"))
+    source ~/.vimrc.local
+endif

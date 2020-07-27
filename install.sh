@@ -21,8 +21,8 @@ for df in `git ls-files`; do
 done
 
 # archive backups
-tar czf backups.tgz backups
-rm -r backups
+$dryrun tar czf backups.tgz backups
+$dryrun rm -r backups
 
 # Set up symlinks
 

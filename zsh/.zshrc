@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 export EDITOR="vim"
-export PATH="${PATH}:${HOME}/bin:"
+export PATH="${HOME}/bin:${PATH}"
 export HOMEBREW_NO_ANALYTICS=1
 
 
@@ -88,11 +88,14 @@ export PROMPT="%F{214}%n %F{255}lappy %F{214}%2~ %F{255}%# %f"
 # Initialization
 # -----------------------------------------------------------------------------
 
+# Load local settings
+if [[ -f ~/.zshrc.local ]]; then
+    source ~/.zshrc.local
+fi
+
 # Auto-attach a tmux session
 if [ -x "$(command -v tmux)" ]; then
-    # Do not run when already inside of a `tmux` session
     if [ -z "$TMUX" ]; then
-        # Attach to an existing session, or create a new session
         tmux attach || tmux new-session
     fi
 fi

@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 export EDITOR="vim"
-export PATH=$PATH:$HOME/.bin
+export PATH=$HOME/.bin:$PATH
 export HOMEBREW_NO_ANALYTICS=1
 
 
@@ -92,11 +92,14 @@ bkp() {
 # Initialization
 # -----------------------------------------------------------------------------
 
+# Load local settings
+if [[ -f ~/.bashrc.local ]]; then
+    source ~/.bashrc.local
+fi
+
 # Auto-attach a tmux session
 if [ -x "$(command -v tmux)" ]; then
-    # Do not run when already inside of a `tmux` session
     if [ -z "$TMUX" ]; then
-        # Attach to an existing session, or create a new session
         tmux attach || tmux new-session
     fi
 fi
