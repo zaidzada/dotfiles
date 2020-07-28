@@ -10,3 +10,14 @@ cd dotfiles
 bash install.sh
 ```
 
+## Vim 
+
+```shell
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+```
+
+## Resources
+
+- https://dotfiles.github.io/inspiration/
+- https://github.com/rupa/z

@@ -18,7 +18,5 @@ set visible-stats on
 set mark-symlinked-directories on
 
 # Custom keybindings
-Meta-DEL: backward-kill-word
-Meta-r: re-read-init-file
-Meta-j: history-search-forward
-Meta-k: history-search-backward
+"\C-f": forward-word
+"\C-b": backward-word

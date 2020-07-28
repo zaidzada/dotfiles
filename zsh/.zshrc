@@ -70,9 +70,13 @@ zmodload -i zsh/complist
 autoload -Uz compinit
 compinit
 
-# Move like bash
+# Move via words like bash
 autoload -U select-word-style
 select-word-style bash
+
+# Key bindings
+bindkey "^F" forward-word
+bindkey "^B" backward-word
 
 
 # -----------------------------------------------------------------------------

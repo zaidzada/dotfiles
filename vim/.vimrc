@@ -77,11 +77,11 @@ map <Leader>S :set spell!<CR>
 " Toggle paste mode
 nmap <Leader>P :set paste!<CR>
 
-" Tab navigation
+" Navigation
 nmap <C-J> :tabnext<CR>
 nmap <C-K> :tabprev<CR>
-nnoremap <Tab> :tabnext<CR>
-nnoremap <S-Tab> :tabprev<CR>
+nnoremap <Tab> :bnext<CR>
+nnoremap <S-Tab> :bprev<CR>
 
 " Stay in visual mode when indenting
 vnoremap > >gv
