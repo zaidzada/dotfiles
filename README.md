@@ -1,6 +1,6 @@
 # dotfiles
 
-My . files
+My .files
 
 ## Installation
 
@@ -10,12 +10,19 @@ cd dotfiles
 bash install.sh
 ```
 
-## Vim 
+## Vim
 
 ```shell
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 ```
+
+## Tmux
+
+```shell
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+```
+
 
 ## Resources
 
