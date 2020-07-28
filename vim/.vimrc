@@ -108,7 +108,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'rafi/awesome-vim-colorschemes'
 Plug 'majutsushi/tagbar'
-Plug 'SirVer/ultisnips'
+" Plug 'SirVer/ultisnips'
 call plug#end()
 
 

@@ -20,3 +20,5 @@ set mark-symlinked-directories on
 # Custom keybindings
 "\C-f": forward-word
 "\C-b": backward-word
+"\C-j": next-history
+"\C-k": previous-history
