@@ -1,52 +1,4 @@
-# -----------------------------------------------------------------------------
-# Environment settings
-# -----------------------------------------------------------------------------
-
-export EDITOR="vim"
-export PATH="${HOME}/bin:${PATH}"
-export HOMEBREW_NO_ANALYTICS=1
-
-
-# -----------------------------------------------------------------------------
-# Aliases
-# -----------------------------------------------------------------------------
-
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ls='ls -F'
-alias ll='ls -lh'
-alias llt='ls -ltr'
-alias lg='ls -1 | grep'
-alias mv='mv -i'
-alias cp='cp -i'
-alias vi='vim'
-alias pgrep='pgrep -fl'
-
-
-# -----------------------------------------------------------------------------
-# macOS specifics
-# -----------------------------------------------------------------------------
-
-if [[ "$(uname)" == "Darwin" ]]; then
-
-    # Add colors
-    export CLICOLOR=1;
-    export LSCOLORS=GxFxCxDxBxegedabagaced;
-
-    man() {
-      env \
-        LESS_TERMCAP_mb=$(printf "\e[1;31m") \
-        LESS_TERMCAP_md=$(printf "\e[1;31m") \
-        LESS_TERMCAP_me=$(printf "\e[0m") \
-        LESS_TERMCAP_se=$(printf "\e[0m") \
-        LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
-        LESS_TERMCAP_ue=$(printf "\e[0m") \
-        LESS_TERMCAP_us=$(printf "\e[1;32m") \
-        man "$@"
-    }
-
-fi
-
+[[ -f ~/.bashrc ]] && source ~/.bashrc
 
 # -----------------------------------------------------------------------------
 # zsh options
@@ -77,6 +29,8 @@ select-word-style bash
 # Key bindings
 bindkey "^F" forward-word
 bindkey "^B" backward-word
+bindkey "^J" history-search-forward
+bindkey "^K" history-search-backward
 
 
 # -----------------------------------------------------------------------------
@@ -102,4 +56,3 @@ if [ -x "$(command -v tmux)" ]; then
         tmux attach || tmux new-session
     fi
 fi
-

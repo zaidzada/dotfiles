@@ -1,3 +1,5 @@
+[[ $- != *i* ]] && return
+
 # -----------------------------------------------------------------------------
 # Environment settings
 # -----------------------------------------------------------------------------
@@ -6,33 +8,50 @@ export EDITOR="vim"
 export PATH=$HOME/.bin:$PATH
 export HOMEBREW_NO_ANALYTICS=1
 
+# Set colors for less
+export LESS_TERMCAP_mb=$(tput bold; tput setaf 2) # green
+export LESS_TERMCAP_md=$(tput bold; tput setaf 6) # cyan
+export LESS_TERMCAP_me=$(tput sgr0)
+export LESS_TERMCAP_so=$(tput bold; tput setaf 3; tput setab 4) # yellow on blue
+export LESS_TERMCAP_se=$(tput rmso; tput sgr0)
+export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 7) # white
+export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
+export LESS_TERMCAP_mr=$(tput rev)
+export LESS_TERMCAP_mh=$(tput dim)
+export LESS_TERMCAP_ZN=$(tput ssubm)
+export LESS_TERMCAP_ZV=$(tput rsubm)
+export LESS_TERMCAP_ZO=$(tput ssupm)
+export LESS_TERMCAP_ZW=$(tput rsupm)
+
 
 # -----------------------------------------------------------------------------
 # Aliases
 # -----------------------------------------------------------------------------
 
-alias ls='ls -F'                       # Display trailing file indicator
-alias ll='ls -lh'                      # List in long format
-alias llt='ls -ltr'                    # Most recently modified at bottom
-alias lg='ls -1 | grep'                # Search for file names in this dir
+# Navigation
+alias ..='cd ..'
+alias ...='cd ../..'
 
-alias mv='mv -i'                       # Prompts if overriding a file
-alias cp='cp -i'                       # Prompts if overriding a file
+# Listing
+alias ls='ls -F'
+alias ll='ls -lh'
+alias llt='ls -lhtr'
+alias lla='ll -lhtA'
 
-alias vi='vim'                         # Always use vim, not vi
-alias grep='grep --colour=auto'        # Enable color highlighting
+# Confirmation
+alias mv='mv -i'
+alias cp='cp -i'
 
-alias df='df -h'                       # Human readable figures
-alias du='du -h'                       # Human readable figures
-
-alias ..='cd ..'                       # Go back one dir
-alias ...='cd ../..'                   # Go back two dirs
-
-alias path='echo $PATH | tr ":" "\n"'  # Print path components, one per line
+# Misc
+alias vi='vim'
+alias df='df -h'
+alias du='du -h'
+alias pgrep='pgrep -fl'
+alias path='echo $PATH | tr ":" "\n"'
 
 
 # -----------------------------------------------------------------------------
-# macOS specifics
+# platform specifics
 # -----------------------------------------------------------------------------
 
 # Add colors for macos
@@ -42,18 +61,30 @@ if [[ "$(uname)" == "Darwin" ]]; then
     export CLICOLOR=1;
     export LSCOLORS=GxFxCxDxBxegedabagaced;
 
-    man() {
-      env \
-        LESS_TERMCAP_mb=$(printf "\e[1;31m") \
-        LESS_TERMCAP_md=$(printf "\e[1;31m") \
-        LESS_TERMCAP_me=$(printf "\e[0m") \
-        LESS_TERMCAP_se=$(printf "\e[0m") \
-        LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
-        LESS_TERMCAP_ue=$(printf "\e[0m") \
-        LESS_TERMCAP_us=$(printf "\e[1;32m") \
-        man "$@"
-    }
+elif [[ "$(uname)" == "Linux" ]]; then
 
+    alias ls='ls --color -F -h'
+    alias grep='grep --colour=auto'
+
+fi
+
+
+# -----------------------------------------------------------------------------
+# functions
+# -----------------------------------------------------------------------------
+
+mkd() {
+  mkdir -p "$@" && cd "$@"
+}
+
+bkp() {
+  cp "$@" $(date +%Y%m%d_%s_)"$@"
+}
+
+
+# NOTE - Only continue if on bash
+if [[ -z "$BASH_VERSION" ]]; then
+    return
 fi
 
 
@@ -75,18 +106,6 @@ export HISTTIMEFORMAT='%F %T '
 
 export PS1="\[\e[38;5;011m\]\u \[\e[38;5;255m\]\h \[\e[38;5;011m\]\W \[\e[38;5;255m\]\$ \[\e[m\]";
 
-# -----------------------------------------------------------------------------
-# functions
-# -----------------------------------------------------------------------------
-
-mkd() {
-  mkdir -p "$@" && cd "$@"
-}
-
-bkp() {
-  cp "$@" $(date +%Y%m%d_%s_)"$@"
-}
-
 
 # -----------------------------------------------------------------------------
 # Initialization
@@ -103,4 +122,3 @@ if [ -x "$(command -v tmux)" ]; then
         tmux attach || tmux new-session
     fi
 fi
-
