@@ -37,6 +37,7 @@ alias ls='ls -F'
 alias ll='ls -lh'
 alias llt='ls -lhtr'
 alias lla='ll -lhtA'
+alias lln='ll -lhtA | grep ^l'
 
 # Confirmation
 alias mv='mv -i'
