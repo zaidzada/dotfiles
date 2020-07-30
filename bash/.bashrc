@@ -46,8 +46,13 @@ alias cp='cp -i'
 alias vi='vim'
 alias df='df -h'
 alias du='du -h'
-alias pgrep='pgrep -fl'
 alias path='echo $PATH | tr ":" "\n"'
+
+# Colors
+alias pgrep='pgrep --color=auto -fl'
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
 
 
 # -----------------------------------------------------------------------------
@@ -57,14 +62,12 @@ alias path='echo $PATH | tr ":" "\n"'
 # Add colors for macos
 if [[ "$(uname)" == "Darwin" ]]; then
 
-    # Add colors
     export CLICOLOR=1;
     export LSCOLORS=GxFxCxDxBxegedabagaced;
 
 elif [[ "$(uname)" == "Linux" ]]; then
 
-    alias ls='ls --color -F -h'
-    alias grep='grep --colour=auto'
+    alias ls='ls --color -F'
 
 fi
 
