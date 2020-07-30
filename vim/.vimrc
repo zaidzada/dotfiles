@@ -80,8 +80,10 @@ nmap <Leader>P :set paste!<CR>
 " Navigation
 nmap <C-J> :tabnext<CR>
 nmap <C-K> :tabprev<CR>
-nnoremap <Tab> :bnext<CR>
-nnoremap <S-Tab> :bprev<CR>
+
+set switchbuf=usetab,newtab
+nnoremap <Tab> :sbnext<CR>
+nnoremap <S-Tab> :sbprev<CR>
 
 " Stay in visual mode when indenting
 vnoremap > >gv
@@ -108,7 +110,9 @@ Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'rafi/awesome-vim-colorschemes'
 Plug 'majutsushi/tagbar'
-" Plug 'SirVer/ultisnips'
+if has('python3')
+    Plug 'SirVer/ultisnips'
+end
 call plug#end()
 
 
@@ -123,11 +127,9 @@ set colorcolumn=80
 " Airline
 let g:airline_theme='minimalist'
 
-" Tagbar
-nmap <silent> <Leader>t :TagbarToggle<CR>
-
 " Git
 nmap <silent> <Leader>g :Git<CR>
+
 
 " -----------------------------------------------------------------------------
 " UltiSnips
@@ -209,6 +211,42 @@ augroup spellChecking
     autocmd!
     autocmd FileType markdown setlocal spell
 augroup END
+
+
+" -----------------------------------------------------------------------------
+" Tagbar
+" -----------------------------------------------------------------------------
+
+nmap <silent> <Leader>t :TagbarToggle<CR>
+let g:airline#extensions#tagbar#enabled = 0
+
+let g:tagbar_type_python = {
+    \ 'kinds' : [
+        \ 'h:heading',
+        \ 'i:imports:1:0',
+        \ 'c:classes',
+        \ 'f:functions',
+        \ 'm:members',
+        \ 'v:variables:0:0',
+        \ '?:unknown',
+    \ ],
+\ }
+
+let g:tagbar_type_make = {
+    \ 'kinds':[
+        \ 'm:macros',
+        \ 't:targets'
+    \ ]
+\}
+
+let g:tagbar_type_markdown = {
+    \ 'ctagstype' : 'markdown',
+    \ 'kinds' : [
+        \ 'h:Heading_L1',
+        \ 'i:Heading_L2',
+        \ 'k:Heading_L3'
+    \ ]
+\ }
 
 
 " -----------------------------------------------------------------------------
