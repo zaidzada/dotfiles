@@ -89,6 +89,8 @@ nnoremap <S-Tab> :sbprev<CR>
 vnoremap > >gv
 vnoremap < <gv
 
+nmap <Leader>c :noh<CR>
+
 " Alias easy mistakes
 command W w
 command Q q
