@@ -113,8 +113,9 @@ export HISTIGNORE='ls:ll:bg:fg:history'
 export HISTTIMEFORMAT='%F %T '
 
 export PS1="\
-$(tput setaf $theme_primary)\u $(tput sgr0)\h \
-$(tput setaf $theme_primary)\W $(tput sgr0)\$ $(tput sgr0)";
+\[$(tput setaf $theme_primary)\]\u \[$(tput sgr0)\]\h \
+\[$(tput setaf $theme_primary)\]\W \[$(tput sgr0)\]\$ \
+\[$(tput sgr0)\]";
 
 
 # -----------------------------------------------------------------------------
