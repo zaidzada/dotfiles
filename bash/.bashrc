@@ -8,14 +8,18 @@ export EDITOR="vim"
 export PATH=$HOME/.bin:$PATH
 export HOMEBREW_NO_ANALYTICS=1
 
-# Set colors for less
-export LESS_TERMCAP_mb=$(tput bold; tput setaf 2) # green
-export LESS_TERMCAP_md=$(tput bold; tput setaf 6) # cyan
+# Use the theme color if available
+theme_primary=${ZTHEME_PRM_COL:-7}
+
+# Set colors for less. See `man termcap`.
+export LESS_TERMCAP_mb=$(tput bold; tput setaf $theme_primary)
+export LESS_TERMCAP_md=$(tput bold; tput setaf $theme_primary)
 export LESS_TERMCAP_me=$(tput sgr0)
-export LESS_TERMCAP_so=$(tput bold; tput setaf 3; tput setab 4) # yellow on blue
+export LESS_TERMCAP_so=$(tput bold; tput setaf 0; tput setab $theme_primary)
 export LESS_TERMCAP_se=$(tput rmso; tput sgr0)
-export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 7) # white
+export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 7)
 export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
+
 export LESS_TERMCAP_mr=$(tput rev)
 export LESS_TERMCAP_mh=$(tput dim)
 export LESS_TERMCAP_ZN=$(tput ssubm)
@@ -108,7 +112,9 @@ export HISTCONTROL=ignoreboth
 export HISTIGNORE='ls:ll:bg:fg:history'
 export HISTTIMEFORMAT='%F %T '
 
-export PS1="\[\e[38;5;011m\]\u \[\e[38;5;255m\]\h \[\e[38;5;011m\]\W \[\e[38;5;255m\]\$ \[\e[m\]";
+export PS1="\
+$(tput setaf $theme_primary)\u $(tput sgr0)\h \
+$(tput setaf $theme_primary)\W $(tput sgr0)\$ $(tput sgr0)";
 
 
 # -----------------------------------------------------------------------------
