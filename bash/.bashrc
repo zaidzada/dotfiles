@@ -68,7 +68,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
 
 elif [[ "$(uname)" == "Linux" ]]; then
 
-    alias ls='ls --color=auto -F'
+    alias ls='ls --color=auto -F -X --group-directories-first'
 
 fi
 

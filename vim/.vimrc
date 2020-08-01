@@ -156,7 +156,7 @@ let g:ale_linters = {
 
 let g:ale_fixers = {
 \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-\   'python': ['autopep8', 'isort'],
+\   'python': ['yapf', 'isort'],
 \}
 
 " Completion
@@ -197,22 +197,12 @@ nmap ga <Plug>(EasyAlign)
 nnoremap <c-f>b :Buffers<CR>
 nnoremap <c-f>c :Colors<CR>
 nnoremap <c-f>g :Ag<CR>
-nnoremap <c-f>t :Tags<CR>
+nnoremap <c-f>t :BTags<CR>
 nnoremap <c-f>h :Helptags<CR>
 nnoremap <c-f>l :Lines<CR>
 nnoremap <c-f>n :GFiles<CR>
 nnoremap <c-f>f :Files<CR>
 nnoremap <c-f>s :Snippets<CR>
-
-
-" -----------------------------------------------------------------------------
-" Set auto commands
-" -----------------------------------------------------------------------------
-
-augroup spellChecking
-    autocmd!
-    autocmd FileType markdown setlocal spell
-augroup END
 
 
 " -----------------------------------------------------------------------------
@@ -224,7 +214,7 @@ let g:airline#extensions#tagbar#enabled = 0
 
 let g:tagbar_type_python = {
     \ 'kinds' : [
-        \ 'h:heading',
+        \ 'h:headers',
         \ 'i:imports:1:0',
         \ 'c:classes',
         \ 'f:functions',
@@ -236,19 +226,32 @@ let g:tagbar_type_python = {
 
 let g:tagbar_type_make = {
     \ 'kinds':[
+        \ 'h:headers',
         \ 'm:macros',
-        \ 't:targets'
-    \ ]
+        \ 't:targets',
+    \ ],
+    \ 'sort': 0
 \}
 
 let g:tagbar_type_markdown = {
     \ 'ctagstype' : 'markdown',
     \ 'kinds' : [
-        \ 'h:Heading_L1',
-        \ 'i:Heading_L2',
-        \ 'k:Heading_L3'
+        \ 'h:headers',
+        \ 'i:subheaders',
+        \ 'k:sub-subheaders'
     \ ]
 \ }
+
+
+" -----------------------------------------------------------------------------
+" Set auto commands
+" -----------------------------------------------------------------------------
+
+augroup spellChecking
+    autocmd!
+    autocmd FileType markdown setlocal spell
+    autocmd FileType tex setlocal spell
+augroup END
 
 
 " -----------------------------------------------------------------------------
