@@ -67,6 +67,8 @@ alias fgrep='fgrep --color=auto'
 # Add colors for macos
 if [[ "$(uname)" == "Darwin" ]]; then
 
+    alias dircolors='gdircolors'
+
     if [ -x "$(command -v gls)" ]; then
         alias ls='gls --color=auto -F -X --group-directories-first'
     else
@@ -80,6 +82,13 @@ elif [[ "$(uname)" == "Linux" ]]; then
 
 fi
 
+
+# ls colors
+if [[ -f ~/.dircolors ]]; then
+    eval "$(dircolors ~/.dircolors)"
+else
+    eval "$(dircolors)"
+fi
 
 # -----------------------------------------------------------------------------
 # functions

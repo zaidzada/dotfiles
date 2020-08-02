@@ -4,3 +4,4 @@ backups/
 *.tgz
 vim/.vim/plugged
 vim/.vim/autoload/plug.vim*
+vim/.vim/.netrwhist

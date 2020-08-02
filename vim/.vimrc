@@ -137,8 +137,8 @@ set termguicolors
 
 " Choose theme
 set background=dark
-colorscheme one
-let g:airline_theme='one'
+colorscheme tender
+let g:airline_theme='tender'
 
 set colorcolumn=80
 
