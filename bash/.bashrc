@@ -39,9 +39,9 @@ alias ...='cd ../..'
 # Listing
 alias ls='ls -F'
 alias ll='ls -lh'
-alias llt='ls -lhtr'
-alias lla='ll -lhtA'
-alias lln='ll -lhtA | grep ^l'
+alias lt='ls -lhtr'
+alias la='ll -lhtA'
+alias ln='ll -lhtA | grep ^l'
 
 # Confirmation
 alias mv='mv -i'
