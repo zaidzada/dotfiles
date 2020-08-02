@@ -67,8 +67,12 @@ alias fgrep='fgrep --color=auto'
 # Add colors for macos
 if [[ "$(uname)" == "Darwin" ]]; then
 
-    export CLICOLOR=1;
-    export LSCOLORS=GxFxCxDxBxegedabagaced;
+    if [ -x "$(command -v gls)" ]; then
+        alias ls='gls --color=auto -F -X --group-directories-first'
+    else
+        alais ls='ls -F -G'
+        export LSCOLORS=GxFxCxDxBxegedabagaced;
+    fi
 
 elif [[ "$(uname)" == "Linux" ]]; then
 

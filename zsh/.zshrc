@@ -37,9 +37,11 @@ bindkey "^K" history-search-backward
 # Prompt
 # -----------------------------------------------------------------------------
 
-# Colors: https://gist.github.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263
-export PROMPT="%F{214}%n %F{255}%m %F{214}%2~ %F{255}%# %f"
-
+theme_primary=${ZTHEME_PRM_COL:-7}
+export PROMPT="\
+%F{$theme_primary}%n \
+%F{255}%m %F{$theme_primary}%2~ \
+%F{255}%# %f"
 
 # -----------------------------------------------------------------------------
 # Initialization

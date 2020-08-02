@@ -53,7 +53,7 @@ set softtabstop=4       " Insert this many spaces instead of a tab
 set autoindent          " Use the indent of the previous line on the new line
 set backspace=2         " Allow backspacing over indent, eol, and start
 
-syntax on               " Use syntax highlighting
+syntax enable           " Use syntax highlighting
 filetype indent on      " Use filetype-specific indentation
 filetype plugin on      " Use filetype-specific plugins
 
@@ -77,13 +77,15 @@ map <Leader>S :set spell!<CR>
 " Toggle paste mode
 nmap <Leader>P :set paste!<CR>
 
+" Git
+nmap <silent> <Leader>g :Git<CR>
+
 " Navigation
 nmap <C-J> :tabnext<CR>
 nmap <C-K> :tabprev<CR>
 
-set switchbuf=usetab,newtab
-nnoremap <Tab> :sbnext<CR>
-nnoremap <S-Tab> :sbprev<CR>
+nnoremap <Tab> :bnext<CR>
+nnoremap <S-Tab> :bprev<CR>
 
 " Stay in visual mode when indenting
 vnoremap > >gv
@@ -104,17 +106,23 @@ call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
+" Plug 'airblade/vim-gitgutter'
 Plug 'dense-analysis/ale'
 Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-easy-align'
-Plug 'rafi/awesome-vim-colorschemes'
 Plug 'majutsushi/tagbar'
 if has('python3')
     Plug 'SirVer/ultisnips'
 end
+
+" Color schemes
+Plug 'rakr/vim-one'
+Plug 'morhetz/gruvbox'
+Plug 'tomasr/molokai'
+Plug 'jacoborus/tender.vim'
+Plug 'sonph/onehalf', {'rtp': 'vim/'}
 call plug#end()
 
 
@@ -122,15 +130,17 @@ call plug#end()
 " Colors
 " ------
 
-colorscheme solarized8_high
+" See xterm-true-color
+let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
+let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
+set termguicolors
+
+" Choose theme
 set background=dark
+colorscheme one
+let g:airline_theme='one'
+
 set colorcolumn=80
-
-" Airline
-let g:airline_theme='minimalist'
-
-" Git
-nmap <silent> <Leader>g :Git<CR>
 
 
 " -----------------------------------------------------------------------------
@@ -207,7 +217,7 @@ nnoremap <c-f>s :Snippets<CR>
 
 " -----------------------------------------------------------------------------
 " Tagbar
-" -----------------------------------------------------------------------------
+" ------
 
 nmap <silent> <Leader>t :TagbarToggle<CR>
 let g:airline#extensions#tagbar#enabled = 0
