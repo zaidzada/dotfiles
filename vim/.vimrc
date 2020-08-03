@@ -3,6 +3,7 @@
 " -----------------------------------------------------------------------------
 
 set encoding=utf-8      " Use UTF-8
+set hidden
 
 set number              " Display numbering on the left
 set relativenumber      " Numbering is relative to current line
@@ -81,8 +82,8 @@ nmap <Leader>P :set paste!<CR>
 nmap <silent> <Leader>g :Git<CR>
 
 " Navigation
-nmap <C-J> :tabnext<CR>
-nmap <C-K> :tabprev<CR>
+nmap <C-J> :bnext<CR>
+nmap <C-K> :bprev<CR>
 
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprev<CR>
@@ -91,7 +92,8 @@ nnoremap <S-Tab> :bprev<CR>
 vnoremap > >gv
 vnoremap < <gv
 
-nmap <Leader>c :noh<CR>
+nmap <Leader>c :let @/ = ""<CR>
+nmap <Leader>e :NERDTreeToggle<CR>
 
 " Alias easy mistakes
 command W w
@@ -113,6 +115,7 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'majutsushi/tagbar'
+Plug 'preservim/nerdtree'
 if has('python3')
     Plug 'SirVer/ultisnips'
 end
@@ -157,7 +160,6 @@ let g:UltiSnipsSnippetDirectories=['custom_snippets', 'UltiSnips']
 " ALE customization
 " -----------------
 
-let g:airline#extensions#ale#enabled = 1
 let g:ale_sign_column_always = 1
 
 let g:ale_linters = {
@@ -206,13 +208,13 @@ nmap ga <Plug>(EasyAlign)
 
 nnoremap <c-f>b :Buffers<CR>
 nnoremap <c-f>c :Colors<CR>
-nnoremap <c-f>g :Ag<CR>
+nnoremap <c-f>g :GFiles<CR>
 nnoremap <c-f>t :BTags<CR>
 nnoremap <c-f>h :Helptags<CR>
 nnoremap <c-f>l :Lines<CR>
-nnoremap <c-f>n :GFiles<CR>
 nnoremap <c-f>f :Files<CR>
 nnoremap <c-f>s :Snippets<CR>
+nnoremap <c-f>y :History<CR>
 
 
 " -----------------------------------------------------------------------------
@@ -220,7 +222,6 @@ nnoremap <c-f>s :Snippets<CR>
 " ------
 
 nmap <silent> <Leader>t :TagbarToggle<CR>
-let g:airline#extensions#tagbar#enabled = 0
 
 let g:tagbar_type_python = {
     \ 'kinds' : [
@@ -251,6 +252,16 @@ let g:tagbar_type_markdown = {
         \ 'k:sub-subheaders'
     \ ]
 \ }
+
+
+" -----------------------------------------------------------------------------
+" Airline
+" -------
+
+let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#tagbar#enabled = 0
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#bufferline#enabled = 1
 
 
 " -----------------------------------------------------------------------------
