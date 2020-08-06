@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+# Adapted from https://gist.github.com/bradland/1523933
+
+if [[ ! -z "$1" ]] ; then
+    LENGTH=${#1}
+    COUNTER=0
+    until [[ "$COUNTER" -ge "$LENGTH" ]] ; do
+        STR=${1:$COUNTER:1}
+        case $STR in
+            a|A)    OUTPUT="$OUTPUT - alpha" ;;
+            b|B)    OUTPUT="$OUTPUT - bravo" ;;
+            c|C)    OUTPUT="$OUTPUT - charlie" ;;
+            d|D)    OUTPUT="$OUTPUT - delta" ;;
+            e|E)    OUTPUT="$OUTPUT - echo" ;;
+            f|F)    OUTPUT="$OUTPUT - foxtrot" ;;
+            g|G)    OUTPUT="$OUTPUT - golf" ;;
+            h|H)    OUTPUT="$OUTPUT - hotel" ;;
+            i|I)    OUTPUT="$OUTPUT - india" ;;
+            j|J)    OUTPUT="$OUTPUT - juliet" ;;
+            k|K)    OUTPUT="$OUTPUT - kilo" ;;
+            l|L)    OUTPUT="$OUTPUT - lima" ;;
+            m|M)    OUTPUT="$OUTPUT - mike" ;;
+            n|N)    OUTPUT="$OUTPUT - november" ;;
+            o|O)    OUTPUT="$OUTPUT - oscar" ;;
+            p|P)    OUTPUT="$OUTPUT - papa" ;;
+            q|Q)    OUTPUT="$OUTPUT - quebec" ;;
+            r|R)    OUTPUT="$OUTPUT - romeo" ;;
+            s|S)    OUTPUT="$OUTPUT - sierra" ;;
+            t|T)    OUTPUT="$OUTPUT - tango" ;;
+            u|U)    OUTPUT="$OUTPUT - uniform" ;;
+            v|V)    OUTPUT="$OUTPUT - victor" ;;
+            w|W)    OUTPUT="$OUTPUT - whiskey" ;;
+            x|X)    OUTPUT="$OUTPUT - x-ray" ;;
+            y|Y)    OUTPUT="$OUTPUT - yankee" ;;
+            z|Z)    OUTPUT="$OUTPUT - zulu" ;;
+            1)      OUTPUT="$OUTPUT - One" ;;
+            2)      OUTPUT="$OUTPUT - Two" ;;
+            3)      OUTPUT="$OUTPUT - Three" ;;
+            4)      OUTPUT="$OUTPUT - Four" ;;
+            5)      OUTPUT="$OUTPUT - Five" ;;
+            6)      OUTPUT="$OUTPUT - Six" ;;
+            7)      OUTPUT="$OUTPUT - Seven" ;;
+            8)      OUTPUT="$OUTPUT - Eight" ;;
+            9)      OUTPUT="$OUTPUT - Nine" ;;
+            0)      OUTPUT="$OUTPUT - Zero" ;;
+            "!")    OUTPUT="$OUTPUT - Exclamation" ;;
+            "#")    OUTPUT="$OUTPUT - Hash" ;;
+            "?")    OUTPUT="$OUTPUT - Questionmark" ;;
+            "&")    OUTPUT="$OUTPUT - Ampersand" ;;
+            "+")    OUTPUT="$OUTPUT - Plus" ;;
+            "-")    OUTPUT="$OUTPUT - Dash" ;;
+            "|")    OUTPUT="$OUTPUT - Pipe" ;;
+            "$")    OUTPUT="$OUTPUT - Dollar" ;;
+            "_")    OUTPUT="$OUTPUT - Underscore" ;;
+            "/")    OUTPUT="$OUTPUT - Slash" ;;
+            "'\'")  OUTPUT="$OUTPUT - Backslash" ;;
+            "*")    OUTPUT="$OUTPUT - Asterisk" ;;
+            "%")    OUTPUT="$OUTPUT - Percent" ;;
+            "@")    OUTPUT="$OUTPUT - At" ;;
+            "=")    OUTPUT="$OUTPUT - Equals" ;;
+            "(")    OUTPUT="$OUTPUT - Left parenthesis" ;;
+            ")")    OUTPUT="$OUTPUT - Right parenthesis" ;;
+            "[")    OUTPUT="$OUTPUT - Squared bracket open" ;;
+            "]")    OUTPUT="$OUTPUT - Squared bracket closed" ;;
+            "{")    OUTPUT="$OUTPUT - Brace open" ;;
+            "}")    OUTPUT="$OUTPUT - Brace close" ;;
+            ".")    OUTPUT="$OUTPUT - Dot" ;;
+            ",")    OUTPUT="$OUTPUT - Comma" ;;
+            ";")    OUTPUT="$OUTPUT - Semicolon" ;;
+            ":")    OUTPUT="$OUTPUT - Colon" ;;
+            "ü")    OUTPUT="$OUTPUT - übel" ;;
+            "Ü")    OUTPUT="$OUTPUT - Übel" ;;
+            "ö")    OUTPUT="$OUTPUT - öse" ;;
+            "Ö")    OUTPUT="$OUTPUT - Öse" ;;
+            "ä")    OUTPUT="$OUTPUT - ärger" ;;
+            "Ä")    OUTPUT="$OUTPUT - Ärger" ;;
+            esac
+            let COUNTER+=1
+        done
+
+        OUTLEN=${#OUTPUT}
+        echo ${OUTPUT:2:$OUTLEN}
+    else
+        echo "Usage: $0 text"
+        exit 1
+fi
