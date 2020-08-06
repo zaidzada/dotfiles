@@ -51,6 +51,7 @@ alias vi='vim'
 alias df='df -h'
 alias du='du -h'
 alias path='echo $PATH | tr ":" "\n"'
+alias td='tmux detach'
 
 # Colors
 alias pgrep='pgrep --color=auto -fl'
@@ -143,5 +144,6 @@ fi
 if [ -x "$(command -v tmux)" ]; then
     if [ -z "$TMUX" ]; then
         tmux attach || tmux new-session
+        exit
     fi
 fi

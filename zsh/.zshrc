@@ -56,5 +56,6 @@ fi
 if [ -x "$(command -v tmux)" ]; then
     if [ -z "$TMUX" ]; then
         tmux attach || tmux new-session
+        exit
     fi
 fi
