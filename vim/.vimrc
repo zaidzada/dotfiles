@@ -88,6 +88,9 @@ nmap <C-K> :bprev<CR>
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprev<CR>
 
+" Unmap <c-f> from scroll down
+nmap <C-F> <Nop>
+
 " Stay in visual mode when indenting
 vnoremap > >gv
 vnoremap < <gv
@@ -98,6 +101,26 @@ nmap <Leader>e :NERDTreeToggle<CR>
 " Alias easy mistakes
 command W w
 command Q q
+
+
+" -----------------------------------------------------------------------------
+" Functions
+" -----------------------------------------------------------------------------
+
+" Zoom / Restore window.
+function! s:ZoomToggle() abort
+    if exists('t:zoomed') && t:zoomed
+        execute t:zoom_winrestcmd
+        let t:zoomed = 0
+    else
+        let t:zoom_winrestcmd = winrestcmd()
+        resize
+        vertical resize
+        let t:zoomed = 1
+    endif
+endfunction
+command! ZoomToggle call s:ZoomToggle()
+nnoremap <silent> <Leader>z :ZoomToggle<CR>
 
 
 " -----------------------------------------------------------------------------
@@ -213,6 +236,7 @@ nnoremap <c-f>t :BTags<CR>
 nnoremap <c-f>h :Helptags<CR>
 nnoremap <c-f>l :Lines<CR>
 nnoremap <c-f>f :Files<CR>
+nnoremap <c-f>m :Maps<CR>
 nnoremap <c-f>s :Snippets<CR>
 nnoremap <c-f>y :History<CR>
 
