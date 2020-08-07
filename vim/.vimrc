@@ -68,39 +68,45 @@ filetype plugin on      " Use filetype-specific plugins
 
 let mapleader = ","
 
-" .vimrc editing and reloading
-nmap <leader>ve :e $MYVIMRC<CR>
-nmap <leader>vv :source $MYVIMRC<CR>
-
-" Toggle spelling
-map <Leader>S :set spell!<CR>
-
-" Toggle paste mode
-nmap <Leader>P :set paste!<CR>
-
-" Git
-nmap <silent> <Leader>g :Git<CR>
+" Toggle options
+nnoremap cos :set spell!<CR>
+nnoremap cop :set paste!<CR>
+nnoremap col :set list!<CR>
+nnoremap cow :set wrap!<CR>
+nnoremap coi :set ignorecase!<CR>
+nnoremap coh :set hlsearch!<CR>
+nnoremap con :set number!<CR>
+nnoremap cor :set relativenumber!<CR>
+nnoremap coe :set cursorline!<CR>
+nnoremap coc :set cursorcolumn!<CR>
+nnoremap cod :<C-R>=&diff ? "diffoff" : "diffthis"<CR><CR>
+nnoremap cov :set <C-R>=(&virtualedit =~# "all") ? "virtualedit-=all" : "virtualedit+=all"<CR><CR>
+nnoremap cob :set background=<C-R>=&background == "dark" ? "light" : "dark"<CR><CR>
+nnoremap com <ESC>:exec &mouse!=""? "set mouse=" : "set mouse=a"<CR>
 
 " Navigation
-nmap <C-J> :bnext<CR>
-nmap <C-K> :bprev<CR>
-
+nmap W <C-W>
+nnoremap <C-J> :bnext<CR>
+nnoremap <C-K> :bprev<CR>
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprev<CR>
-
-" Unmap <c-f> from scroll down
-nmap <C-F> <Nop>
 
 " Stay in visual mode when indenting
 vnoremap > >gv
 vnoremap < <gv
 
-nmap <Leader>c :let @/ = ""<CR>
-nmap <Leader>e :NERDTreeToggle<CR>
+" Misc
+nnoremap <Leader>c :let @/ = ""<CR>
+nnoremap <silent> [<space> :pu! _<cr>:']+1<cr>
+nnoremap <silent> ]<space> :pu _<cr>:'[-1<cr>
 
-" Alias easy mistakes
-command W w
-command Q q
+" Plugin shortcuts
+nnoremap <silent> gG :Git<CR>
+nnoremap <silent> gE :NERDTreeToggle<CR>
+
+" .vimrc editing and reloading
+nnoremap <leader>ve :e $MYVIMRC<CR>
+nnoremap <leader>vv :source $MYVIMRC<CR>
 
 
 " -----------------------------------------------------------------------------
@@ -120,6 +126,7 @@ function! s:ZoomToggle() abort
     endif
 endfunction
 command! ZoomToggle call s:ZoomToggle()
+
 nnoremap <silent> <Leader>z :ZoomToggle<CR>
 
 
@@ -206,12 +213,12 @@ highlight ALEWarningSign ctermfg=11
 highlight clear SignColumn
 
 " ALE key bindings
-map <silent> <Leader>d <Plug>(ale_go_to_definition)
-map <silent> <Leader>k <Plug>(ale_documentation)
-map <silent> <Leader>n <Plug>(ale_next)
-map <silent> <Leader>p <Plug>(ale_previous)
-map <silent> <Leader>f <Plug>(ale_fix)
-map <silent> <Leader>r <Plug>(ale_find_references)
+nnoremap <silent> <Leader>d <Plug>(ale_go_to_definition)
+nnoremap <silent> <Leader>k <Plug>(ale_documentation)
+nnoremap <silent> <Leader>n <Plug>(ale_next)
+nnoremap <silent> <Leader>p <Plug>(ale_previous)
+nnoremap <silent> <Leader>f <Plug>(ale_fix)
+nnoremap <silent> <Leader>r <Plug>(ale_find_references)
 
 
 " -----------------------------------------------------------------------------
@@ -229,6 +236,7 @@ nmap ga <Plug>(EasyAlign)
 " fzf (https://github.com/junegunn/fzf.vim)
 " -----------------------------------------
 
+nmap <C-F> <Nop>
 nnoremap <c-f>b :Buffers<CR>
 nnoremap <c-f>c :Colors<CR>
 nnoremap <c-f>g :GFiles<CR>
@@ -244,8 +252,8 @@ nnoremap <c-f>y :History<CR>
 " -----------------------------------------------------------------------------
 " Tagbar
 " ------
-
-nmap <silent> <Leader>t :TagbarToggle<CR>
+"
+nnoremap <silent> <Leader>t :TagbarToggle<CR>
 
 let g:tagbar_type_python = {
     \ 'kinds' : [
