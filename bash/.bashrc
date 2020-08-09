@@ -1,23 +1,20 @@
 [[ $- != *i* ]] && return
 
 # -----------------------------------------------------------------------------
-# Environment settings
+# > Environment settings
 # -----------------------------------------------------------------------------
 
 export EDITOR="vim"
 export PATH=$HOME/.bin:$PATH
 export HOMEBREW_NO_ANALYTICS=1
 
-# Use the theme color if available
-theme_primary=${ZTHEME_PRM_COL:-7}
-
 # Set colors for less. See `man termcap`.
-export LESS_TERMCAP_mb=$(tput bold; tput setaf $theme_primary)
-export LESS_TERMCAP_md=$(tput bold; tput setaf $theme_primary)
+export LESS_TERMCAP_md=$(tput bold; tput setaf $pri_bg_xt)  # bold
+export LESS_TERMCAP_mb=$(tput bold; tput setaf $prim_bg_xt)  # blink
+export LESS_TERMCAP_so=$(tput setaf $pri_bg_xt; tput setab $pri_fg_xt)
+export LESS_TERMCAP_us=$(tput smul)  # underline
 export LESS_TERMCAP_me=$(tput sgr0)
-export LESS_TERMCAP_so=$(tput bold; tput setaf 0; tput setab $theme_primary)
 export LESS_TERMCAP_se=$(tput rmso; tput sgr0)
-export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 7)
 export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
 
 export LESS_TERMCAP_mr=$(tput rev)
@@ -29,7 +26,7 @@ export LESS_TERMCAP_ZW=$(tput rsupm)
 
 
 # -----------------------------------------------------------------------------
-# Aliases
+# > Aliases
 # -----------------------------------------------------------------------------
 
 # Navigation
@@ -40,7 +37,8 @@ alias ...='cd ../..'
 alias ls='ls -F'
 alias ll='ls -lh'
 alias lt='ls -lhtr'
-alias la='ll -lhtA'
+alias la='ls -lhtA'
+alias ld='ls -lhtd'
 
 # Confirmation
 alias mv='mv -i'
@@ -61,7 +59,7 @@ alias fgrep='fgrep --color=auto'
 
 
 # -----------------------------------------------------------------------------
-# platform specifics
+# > Platform specifics
 # -----------------------------------------------------------------------------
 
 # Add colors for macos
@@ -91,7 +89,7 @@ else
 fi
 
 # -----------------------------------------------------------------------------
-# functions
+# > Functions
 # -----------------------------------------------------------------------------
 
 mkd() {
@@ -110,7 +108,7 @@ fi
 
 
 # -----------------------------------------------------------------------------
-# bash options
+# > bash options
 # -----------------------------------------------------------------------------
 
 shopt -s cdspell
@@ -125,14 +123,14 @@ export HISTCONTROL=ignoreboth
 export HISTIGNORE='ls:ll:bg:fg:history'
 export HISTTIMEFORMAT='%F %T '
 
-export PS1="\
-\[$(tput setaf $theme_primary)\]\u \[$(tput sgr0)\]\h \
-\[$(tput setaf $theme_primary)\]\W \[$(tput sgr0)\]\$ \
-\[$(tput sgr0)\]";
+
+col="$(tput setaf $pri_bg_xt)"
+res="$(tput sgr0)"
+export PS1="\[$col\]\W \[$res\]\$ ";
 
 
 # -----------------------------------------------------------------------------
-# Initialization
+# > Initialization
 # -----------------------------------------------------------------------------
 
 # Load local settings

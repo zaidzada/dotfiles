@@ -1,7 +1,7 @@
 [[ -f ~/.bashrc ]] && source ~/.bashrc
 
 # -----------------------------------------------------------------------------
-# zsh options
+# > zsh options
 # -----------------------------------------------------------------------------
 
 bindkey -e
@@ -32,19 +32,11 @@ bindkey "^B" backward-word
 bindkey "^J" history-search-forward
 bindkey "^K" history-search-backward
 
+export PROMPT="%F{$pri_bg_xt}%2~ %f%# "
+
 
 # -----------------------------------------------------------------------------
-# Prompt
-# -----------------------------------------------------------------------------
-
-theme_primary=${ZTHEME_PRM_COL:-7}
-export PROMPT="\
-%F{$theme_primary}%n \
-%F{255}%m %F{$theme_primary}%2~ \
-%F{255}%# %f"
-
-# -----------------------------------------------------------------------------
-# Initialization
+# > Initialization
 # -----------------------------------------------------------------------------
 
 # Load local settings
