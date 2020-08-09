@@ -1,0 +1,47 @@
+#!usr/bin/env bash
+
+# Primary
+col_bg='#282c34'
+col_fg='#dcdfe4'
+
+# Secondary
+col_bg_sec='#282c34'
+col_fg_sec='#dcdfe4'
+
+# Inactive background
+col_bg_in='#282c34'
+
+
+# Normal
+black='#282c34'
+red='#e06c75'
+green='#98c379'
+yellow='#e5c07b'
+blue='#61afef'
+magenta='#c678dd'
+cyan='#56b6c2'
+white='#dcdfe4'
+
+# Bold
+black='#282c34'
+red='#e06c75'
+green='#98c379'
+yellow='#e5c07b'
+blue='#61afef'
+magenta='#c678dd'
+cyan='#56b6c2'
+white='#dcdfe4'
+
+# Theme colors defaults
+# pri_bg="$col_gray"
+# pri_fg="$col_white"
+# pri_bg_xt='232'
+# pri_fg_xt='255'
+
+pri_bg="$col_green"
+pri_fg="$col_white"
+pri_bg_xt='34'
+pri_fg_xt='255'
+
+# Source local settings?
+
