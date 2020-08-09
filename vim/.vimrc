@@ -1,5 +1,5 @@
 " -----------------------------------------------------------------------------
-" Basic settings
+" > Basic settings
 " -----------------------------------------------------------------------------
 
 set encoding=utf-8      " Use UTF-8
@@ -41,9 +41,12 @@ set cm=blowfish2        " Strong encryption (7.4.3+)
 " Display unprintable characters (whitespace), npbsp:  
 set list listchars=tab:»·,trail:·,precedes:·,nbsp:⌴
 
+" Mouse on by default
+set mouse=a
+
 
 " -----------------------------------------------------------------------------
-" Indentation
+" > Indentation
 " -----------------------------------------------------------------------------
 
 " This is the default for all our files: use 4 spaces over tabs.
@@ -63,7 +66,7 @@ filetype plugin on      " Use filetype-specific plugins
 
 
 " -----------------------------------------------------------------------------
-" Custom key bindings
+" > Custom key bindings
 " -----------------------------------------------------------------------------
 
 let mapleader = ","
@@ -74,7 +77,7 @@ nnoremap cop :set paste!<CR>
 nnoremap col :set list!<CR>
 nnoremap cow :set wrap!<CR>
 nnoremap coi :set ignorecase!<CR>
-nnoremap coh :set hlsearch!<CR>
+nnoremap coh :noh<CR>
 nnoremap con :set number!<CR>
 nnoremap cor :set relativenumber!<CR>
 nnoremap coe :set cursorline!<CR>
@@ -84,8 +87,11 @@ nnoremap cov :set <C-R>=(&virtualedit =~# "all") ? "virtualedit-=all" : "virtual
 nnoremap cob :set background=<C-R>=&background == "dark" ? "light" : "dark"<CR><CR>
 nnoremap com <ESC>:exec &mouse!=""? "set mouse=" : "set mouse=a"<CR>
 
-" Navigation
-nmap W <C-W>
+" Buffer commands
+noremap gb :buffer<Space>
+noremap gB :ls<CR>:buffer<Space>
+noremap BB :b#<CR>
+nnoremap BD :bd<CR>
 nnoremap <C-J> :bnext<CR>
 nnoremap <C-K> :bprev<CR>
 nnoremap <Tab> :bnext<CR>
@@ -95,10 +101,22 @@ nnoremap <S-Tab> :bprev<CR>
 vnoremap > >gv
 vnoremap < <gv
 
+"Line operations
+nnoremap <silent> dJ :+1d<CR>k
+nnoremap <silent> dK :-1d<CR>
+nnoremap <silent> ]<Space> :pu! _<CR>:']+1<CR>
+nnoremap <silent> [<Space> :pu _<CR>:'[-1<CR>
+
+" Folding
+nnoremap \" :setlocal foldexpr=getline(v:lnum)=~'^\"\ >'?'>1':1 foldmethod=expr<CR>
+nnoremap \# :setlocal foldexpr=getline(v:lnum)=~'^#\ >'?'>1':1 foldmethod=expr<CR>
+nnoremap \z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum)=~@/)\\|\\|(getline(v:lnum)=~@/)?0:1 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
+
 " Misc
+nmap , ;
+nmap W <C-W>
+nnoremap WW :w<CR>
 nnoremap <Leader>c :let @/ = ""<CR>
-nnoremap <silent> [<space> :pu! _<cr>:']+1<cr>
-nnoremap <silent> ]<space> :pu _<cr>:'[-1<cr>
 
 " Plugin shortcuts
 nnoremap <silent> gG :Git<CR>
@@ -110,7 +128,7 @@ nnoremap <leader>vv :source $MYVIMRC<CR>
 
 
 " -----------------------------------------------------------------------------
-" Functions
+" > Functions
 " -----------------------------------------------------------------------------
 
 " Zoom / Restore window.
@@ -131,7 +149,7 @@ nnoremap <silent> <Leader>z :ZoomToggle<CR>
 
 
 " -----------------------------------------------------------------------------
-" Plugin definition and configurations
+" > Plugin definition and configurations
 " -----------------------------------------------------------------------------
 
 call plug#begin('~/.vim/plugged')
@@ -146,6 +164,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'majutsushi/tagbar'
 Plug 'preservim/nerdtree'
+Plug 'kshenoy/vim-signature'
 if has('python3')
     Plug 'SirVer/ultisnips'
 end
@@ -169,9 +188,9 @@ let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
 set termguicolors
 
 " Choose theme
-set background=dark
-colorscheme tender
-let g:airline_theme='tender'
+set background=light
+colorscheme onehalflight
+let g:airline_theme='onehalflight'
 
 set colorcolumn=80
 
@@ -213,6 +232,7 @@ highlight ALEWarningSign ctermfg=11
 highlight clear SignColumn
 
 " ALE key bindings
+nnoremap coa :ALEToggle<CR>
 nnoremap <silent> <Leader>d <Plug>(ale_go_to_definition)
 nnoremap <silent> <Leader>k <Plug>(ale_documentation)
 nnoremap <silent> <Leader>n <Plug>(ale_next)
