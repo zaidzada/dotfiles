@@ -114,7 +114,7 @@ nnoremap \z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum)=~@/)\\|\
 
 " Misc
 nmap , ;
-nmap W <C-W>
+nnoremap Y y$<CR>
 nnoremap WW :w<CR>
 nnoremap <Leader>c :let @/ = ""<CR>
 
