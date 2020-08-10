@@ -41,9 +41,6 @@ set cm=blowfish2        " Strong encryption (7.4.3+)
 " Display unprintable characters (whitespace), npbsp:  
 set list listchars=tab:»·,trail:·,precedes:·,nbsp:⌴
 
-" Mouse on by default
-set mouse=a
-
 
 " -----------------------------------------------------------------------------
 " > Indentation
@@ -116,6 +113,7 @@ nnoremap \z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum)=~@/)\\|\
 nmap , ;
 nmap W <C-W>
 nnoremap WW :w<CR>
+nnoremap dL :%s/\s\+$//e<CR>
 nnoremap <Leader>c :let @/ = ""<CR>
 
 " Plugin shortcuts
