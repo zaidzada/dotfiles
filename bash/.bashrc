@@ -11,7 +11,7 @@ export HOMEBREW_NO_ANALYTICS=1
 # Set colors for less. See `man termcap`.
 export LESS_TERMCAP_md=$(tput bold; tput setaf $pri_bg_xt)  # bold
 export LESS_TERMCAP_mb=$(tput bold; tput setaf $prim_bg_xt)  # blink
-export LESS_TERMCAP_so=$(tput setaf $pri_bg_xt; tput setab $pri_fg_xt)
+export LESS_TERMCAP_so=$(tput setaf $pri_fg_xt; tput setab $pri_bg_xt)
 export LESS_TERMCAP_us=$(tput smul)  # underline
 export LESS_TERMCAP_me=$(tput sgr0)
 export LESS_TERMCAP_se=$(tput rmso; tput sgr0)
