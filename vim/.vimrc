@@ -41,6 +41,12 @@ set cm=blowfish2        " Strong encryption (7.4.3+)
 " Display unprintable characters (whitespace), npbsp:  
 set list listchars=tab:»·,trail:·,precedes:·,nbsp:⌴
 
+" Set cursor style depending on mode
+if &term =~ '^xterm'
+    let &t_SI .= "\<Esc>[4 q"
+    let &t_EI .= "\<Esc>[2 q"
+endif
+
 
 " -----------------------------------------------------------------------------
 " > Indentation
@@ -69,16 +75,16 @@ filetype plugin on      " Use filetype-specific plugins
 let mapleader = ","
 
 " Toggle options
-nnoremap cos :set spell!<CR>
-nnoremap cop :set paste!<CR>
-nnoremap col :set list!<CR>
-nnoremap cow :set wrap!<CR>
-nnoremap coi :set ignorecase!<CR>
-nnoremap coh :noh<CR>
+nnoremap cos :setlocal spell!<CR>
+nnoremap cop :setlocal paste!<CR>
+nnoremap col :setlocal list!<CR>
+nnoremap cow :setlocal wrap!<CR>
+nnoremap coi :setlocal ignorecase!<CR>
 nnoremap con :set number!<CR>
 nnoremap cor :set relativenumber!<CR>
 nnoremap coe :set cursorline!<CR>
 nnoremap coc :set cursorcolumn!<CR>
+nnoremap coh :noh<CR>
 nnoremap cod :<C-R>=&diff ? "diffoff" : "diffthis"<CR><CR>
 nnoremap cov :set <C-R>=(&virtualedit =~# "all") ? "virtualedit-=all" : "virtualedit+=all"<CR><CR>
 nnoremap cob :set background=<C-R>=&background == "dark" ? "light" : "dark"<CR><CR>
