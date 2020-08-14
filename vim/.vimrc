@@ -27,6 +27,7 @@ set splitright          " Split vertically to the right
 set splitbelow          " Split horizontally to the bottom
 
 " Cursor settings
+set cursorline          " Highlight current line with a horizontal line
 set scrolloff=2         " Number of lines to keep above and below the cursor
 set nostartofline       " On movement, keep cursor in same column if possible
 
@@ -114,6 +115,12 @@ nnoremap <silent> [<Space> :pu _<CR>:'[-1<CR>
 nnoremap \" :setlocal foldexpr=getline(v:lnum)=~'^\"\ >'?'>1':1 foldmethod=expr<CR>
 nnoremap \# :setlocal foldexpr=getline(v:lnum)=~'^#\ >'?'>1':1 foldmethod=expr<CR>
 nnoremap \z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum)=~@/)\\|\\|(getline(v:lnum)=~@/)?0:1 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
+
+" Convenient insert mode mappings
+inoremap <silent> <C-A> <C-O>0
+inoremap <silent> <C-E> <C-O>$
+inoremap <silent> <C-F> <C-O>l
+inoremap <silent> <C-B> <C-O>h
 
 " Misc
 nmap , ;
@@ -231,18 +238,18 @@ set omnifunc=ale#completion#OmniFunc
 " Custom symbols
 let g:ale_sign_error = "◉"
 let g:ale_sign_warning = "◉"
-highlight ALEErrorSign ctermfg=9
-highlight ALEWarningSign ctermfg=11
+highlight ALEErrorSign ctermfg=124
+highlight ALEWarningSign ctermfg=33
 highlight clear SignColumn
 
 " ALE key bindings
-nnoremap coa :ALEToggle<CR>
-nnoremap <silent> <Leader>d <Plug>(ale_go_to_definition)
-nnoremap <silent> <Leader>k <Plug>(ale_documentation)
-nnoremap <silent> <Leader>n <Plug>(ale_next)
-nnoremap <silent> <Leader>p <Plug>(ale_previous)
-nnoremap <silent> <Leader>f <Plug>(ale_fix)
-nnoremap <silent> <Leader>r <Plug>(ale_find_references)
+nmap coa :ALEToggle<CR>
+nmap <Leader>d <Plug>(ale_go_to_definition)
+nmap <Leader>k <Plug>(ale_documentation)
+nmap <Leader>n <Plug>(ale_next)
+nmap <Leader>p <Plug>(ale_previous)
+nmap <Leader>f <Plug>(ale_fix)
+nmap <Leader>r <Plug>(ale_find_references)
 
 
 " -----------------------------------------------------------------------------
