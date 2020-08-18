@@ -8,39 +8,47 @@ set hidden
 set number              " Display numbering on the left
 set relativenumber      " Numbering is relative to current line
 
+set autoread            " Re-read buffer if file is changed outside
+set lazyredraw          " Don't redraw when typing macros, commands, etc.
+
 " Status bar settings
 set laststatus=2        " Always display a status bar
 set ruler               " Display current cursor position in status bar
 set showmode            " Display current mode in status bar
 set showcmd             " Display an incomplete command in status bar
 set shortmess+=r        " Use shorter message for [readonly] in status bar
+set wildmenu            " Enable command line completion
 
 " Search and history
 set incsearch           " Display the match of a search pattern while typing it
 set hlsearch            " Highlight matches of the last used search pattern
-set history=100         " Keep 50 commands and search patterns in the history
+set history=1000        " Expand history size
 set ignorecase          " Ignore case on searches
 set smartcase           " Don't ignore case if search includs an uppercase
 
 " Window actions
 set splitright          " Split vertically to the right
 set splitbelow          " Split horizontally to the bottom
+set display+=lastline   " Show as much as possible of the last line
 
 " Cursor settings
 set cursorline          " Highlight current line with a horizontal line
 set scrolloff=2         " Number of lines to keep above and below the cursor
+set sidescrolloff=2     " Number of lines to keep above and below the cursor
 set nostartofline       " On movement, keep cursor in same column if possible
 
 " Text options
 set nowrap              " Disable wrapping of lines
 set nojoinspaces        " Only use one space after . ! and ?
+set ttimeoutlen=0       " Don't wait for escape codes in insert mode
+set formatoptions+=j    " Delete comment character when joining commented lines
 
 " Security and encryption
 set nomodeline          " Disable mode line for security reasons
 set cm=blowfish2        " Strong encryption (7.4.3+)
 
 " Display unprintable characters (whitespace), npbsp:  
-set list listchars=tab:»·,trail:·,precedes:·,nbsp:⌴
+set list listchars=tab:»\ ,trail:·,precedes:·,nbsp:⌴
 
 " Set cursor style depending on mode
 if &term =~ '^xterm'
@@ -60,6 +68,7 @@ set shiftwidth=4        " For <<, >>, and ==. And for autoindent
 set softtabstop=4       " Insert this many spaces instead of a tab
 set autoindent          " Use the indent of the previous line on the new line
 set backspace=2         " Allow backspacing over indent, eol, and start
+set smarttab            " Use 'softtabstop' spaces to insert everywhere but ^
 
 syntax enable           " Use syntax highlighting
 filetype indent on      " Use filetype-specific indentation
@@ -89,7 +98,7 @@ nnoremap coh :noh<CR>
 nnoremap cod :<C-R>=&diff ? "diffoff" : "diffthis"<CR><CR>
 nnoremap cov :set <C-R>=(&virtualedit =~# "all") ? "virtualedit-=all" : "virtualedit+=all"<CR><CR>
 nnoremap cob :set background=<C-R>=&background == "dark" ? "light" : "dark"<CR><CR>
-nnoremap com <ESC>:exec &mouse!=""? "set mouse=" : "set mouse=a"<CR>
+nnoremap com :exec &mouse!=""? "set mouse=" : "set mouse=a"<CR>
 
 " Buffer commands
 noremap gb :buffer<Space>
@@ -104,6 +113,7 @@ nnoremap <S-Tab> :bprev<CR>
 " Stay in visual mode when indenting
 vnoremap > >gv
 vnoremap < <gv
+vnoremap . :normal .<CR>
 
 "Line operations
 nnoremap <silent> dJ :+1d<CR>k
@@ -121,13 +131,29 @@ inoremap <silent> <C-A> <C-O>0
 inoremap <silent> <C-E> <C-O>$
 inoremap <silent> <C-F> <C-O>l
 inoremap <silent> <C-B> <C-O>h
+inoremap <silent> <C-D> <C-O>D
+
+" Quickfix commands
+nnoremap [q :cnext<CR>
+nnoremap ]q :cprevious<CR>
+nnoremap [Q :cfirst<CR>
+nnoremap ]Q :clast<CR>
+nnoremap [l :lnext<CR>
+nnoremap ]l :lprevious<CR>
+nnoremap [L :lfirst<CR>
+nnoremap ]L :llast<CR>
+nnoremap [t :tnext<CR>
+nnoremap ]t :tprevious<CR>
+nnoremap [T :tfirst<CR>
+nnoremap ]T :tlast<CR>
 
 " Misc
-nmap , ;
+nmap Q @@
 nnoremap Y y$<CR>
 nnoremap WW :w<CR>
 nnoremap dL :%s/\s\+$//e<CR>
 nnoremap <Leader>c :let @/ = ""<CR>
+nnoremap <C-L> :let @/ = ""<CR>
 
 " Plugin shortcuts
 nnoremap <silent> gG :Git<CR>
@@ -176,6 +202,7 @@ Plug 'junegunn/vim-easy-align'
 Plug 'majutsushi/tagbar'
 Plug 'preservim/nerdtree'
 Plug 'kshenoy/vim-signature'
+Plug 'junegunn/goyo.vim'
 if has('python3')
     Plug 'SirVer/ultisnips'
 end
@@ -221,6 +248,8 @@ let g:UltiSnipsSnippetDirectories=['custom_snippets', 'UltiSnips']
 " -----------------
 
 let g:ale_sign_column_always = 1
+let g:ale_lint_on_insert_leave = 1
+let g:ale_lint_on_text_changed = 0
 
 let g:ale_linters = {
 \   'python': ['flake8', 'pyls']
@@ -243,11 +272,15 @@ highlight ALEWarningSign ctermfg=33
 highlight clear SignColumn
 
 " ALE key bindings
-nmap coa :ALEToggle<CR>
+nmap coa <Plug>(ale_toggle)
+nmap [w <Plug>(ale_next_wrap_warning)
+nmap ]w <Plug>(ale_previous_wrap_warning)
+nmap [e <Plug>(ale_next_wrap_error)
+nmap ]e <Plug>(ale_previous_wrap_error)
+nmap [E <Plug>(ale_first)
+nmap ]E <Plug>(ale_last)
 nmap <Leader>d <Plug>(ale_go_to_definition)
 nmap <Leader>k <Plug>(ale_documentation)
-nmap <Leader>n <Plug>(ale_next)
-nmap <Leader>p <Plug>(ale_previous)
 nmap <Leader>f <Plug>(ale_fix)
 nmap <Leader>r <Plug>(ale_find_references)
 
