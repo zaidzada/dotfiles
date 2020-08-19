@@ -74,12 +74,26 @@ syntax enable           " Use syntax highlighting
 filetype indent on      " Use filetype-specific indentation
 filetype plugin on      " Use filetype-specific plugins
 
-" File specific settings go here:
-" autocmd FileType python setlocal shiftwidth=4 softtabstop=4
+
+" -----------------------------------------------------------------------------
+" > File specifics
+" -----------------------------------------------------------------------------
+
+augroup markdown
+    autocmd!
+    autocmd FileType markdown setlocal spell wrap
+    autocmd FileType markdown nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
+    autocmd FileType markdown nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
+augroup END
+
+augroup tex
+    autocmd!
+    autocmd FileType tex setlocal spell
+augroup END
 
 
 " -----------------------------------------------------------------------------
-" > Custom key bindings
+" > Key bindings
 " -----------------------------------------------------------------------------
 
 let mapleader = ","
@@ -149,6 +163,7 @@ nnoremap ]T :tlast<CR>
 
 " Misc
 nmap Q @@
+nmap H ^
 nnoremap Y y$<CR>
 nnoremap WW :w<CR>
 nnoremap dL :%s/\s\+$//e<CR>
@@ -358,17 +373,6 @@ let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#tagbar#enabled = 0
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#bufferline#enabled = 1
-
-
-" -----------------------------------------------------------------------------
-" Set auto commands
-" -----------------------------------------------------------------------------
-
-augroup spellChecking
-    autocmd!
-    autocmd FileType markdown setlocal spell
-    autocmd FileType tex setlocal spell
-augroup END
 
 
 " -----------------------------------------------------------------------------
