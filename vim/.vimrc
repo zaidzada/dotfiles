@@ -86,6 +86,11 @@ augroup markdown
     autocmd FileType markdown nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 augroup END
 
+augroup make
+    autocmd!
+    autocmd FileType make setlocal foldexpr=getline(v:lnum)=~'^[a-z0-9\-_]'?'>1':1 foldmethod=expr
+augroup END
+
 augroup tex
     autocmd!
     autocmd FileType tex setlocal spell
@@ -136,9 +141,11 @@ nnoremap <silent> ]<Space> :pu! _<CR>:']+1<CR>
 nnoremap <silent> [<Space> :pu _<CR>:'[-1<CR>
 
 " Folding
+vnoremap <Space> zf
+nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
 nnoremap \" :setlocal foldexpr=getline(v:lnum)=~'^\"\ >'?'>1':1 foldmethod=expr<CR>
 nnoremap \# :setlocal foldexpr=getline(v:lnum)=~'^#\ >'?'>1':1 foldmethod=expr<CR>
-nnoremap \z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum)=~@/)\\|\\|(getline(v:lnum)=~@/)?0:1 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
+nnoremap \z :setlocal foldexpr=(getline(v:lnum)=~@/)?'>1':1 foldmethod=expr<CR>
 
 " Convenient insert mode mappings
 inoremap <silent> <C-A> <C-O>0
