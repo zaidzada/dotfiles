@@ -109,20 +109,20 @@ nnoremap cop :setlocal paste!<CR>
 nnoremap col :setlocal list!<CR>
 nnoremap cow :setlocal wrap!<CR>
 nnoremap coi :setlocal ignorecase!<CR>
-nnoremap con :set number!<CR>
-nnoremap cor :set relativenumber!<CR>
+nnoremap con :setlocal number!<CR>
+nnoremap cor :setlocal relativenumber!<CR>
+nnoremap coh :setlocal hlsearch!<CR>
 nnoremap coe :set cursorline!<CR>
 nnoremap coc :set cursorcolumn!<CR>
-nnoremap coh :noh<CR>
 nnoremap cod :<C-R>=&diff ? "diffoff" : "diffthis"<CR><CR>
 nnoremap cov :set <C-R>=(&virtualedit =~# "all") ? "virtualedit-=all" : "virtualedit+=all"<CR><CR>
 nnoremap cob :set background=<C-R>=&background == "dark" ? "light" : "dark"<CR><CR>
 nnoremap com :exec &mouse!=""? "set mouse=" : "set mouse=a"<CR>
 
 " Buffer commands
-noremap gb :buffer<Space>
-noremap gB :ls<CR>:buffer<Space>
-noremap BB :b#<CR>
+nnoremap gb :buffer<Space>
+nnoremap gB :ls<CR>:buffer<Space>
+nnoremap BB :b#<CR>
 nnoremap BD :bd<CR>
 nnoremap <C-J> :bnext<CR>
 nnoremap <C-K> :bprev<CR>
@@ -141,6 +141,8 @@ nnoremap <silent> ]<Space> :pu! _<CR>:']+1<CR>
 nnoremap <silent> [<Space> :pu _<CR>:'[-1<CR>
 
 " Folding
+nnoremap <silent> [z zj
+nnoremap <silent> ]z zk
 vnoremap <Space> zf
 nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
 nnoremap \" :setlocal foldexpr=getline(v:lnum)=~'^\"\ >'?'>1':1 foldmethod=expr<CR>
@@ -168,14 +170,20 @@ nnoremap ]t :tprevious<CR>
 nnoremap [T :tfirst<CR>
 nnoremap ]T :tlast<CR>
 
+" Matching tools
+nnoremap <silent> Mw :match Search /<C-R><C-W>/<CR>
+nnoremap <silent> Mc :match none<CR>
+
 " Misc
 nmap Q @@
 nmap H ^
 nnoremap Y y$<CR>
-nnoremap WW :w<CR>
+nnoremap U :update<CR>
 nnoremap dL :%s/\s\+$//e<CR>
-nnoremap <Leader>c :let @/ = ""<CR>
+nnoremap <Leader>c :noh<CR>
 nnoremap <C-L> :let @/ = ""<CR>
+inoremap <C-L> :let @/ = ""<CR>
+nnoremap <silent> - s<C-R>=tr(@", 'aeioucnAEIOUCNáéíóúçñÁÉÍÓÚÇÑ', 'áéíóúçñÁÉÍÓUÇÑaeioucnAEIOUCN')<CR><ESC>
 
 " Plugin shortcuts
 nnoremap <silent> gG :Git<CR>
