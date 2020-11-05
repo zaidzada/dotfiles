@@ -17,8 +17,18 @@ set visible-stats on
 # Completed names which are symbolic links to directories have a slash appended
 set mark-symlinked-directories on
 
+# Perform partial completion on the first Tab press,
+# only start cycling full results on the second Tab press
+set menu-complete-display-prefix on
+
 # Custom keybindings
 "\C-f": forward-word
 "\C-b": backward-word
 "\C-j": next-history
 "\C-k": previous-history
+
+TAB: menu-complete
+"\e[Z": menu-complete-backward
+
+"\e[A": history-search-backward
+"\e[B": history-search-forward

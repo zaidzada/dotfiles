@@ -40,7 +40,7 @@
     co = checkout
     st = status
 
-    l = log --pretty=oneline -n 20 --graph --abbrev-commit
+    l = log --decorate --pretty=oneline -n 20 --graph --abbrev-commit
     ll = log --date=relative -10 --pretty=format:'%h  %>(12)%ad  %<(7)%aN %d %s'
     lol = log --graph --decorate --pretty=oneline --abbrev-commit
     lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
