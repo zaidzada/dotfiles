@@ -27,12 +27,28 @@ autoload -U select-word-style
 select-word-style bash
 
 # Key bindings
-bindkey "^F" forward-word
-bindkey "^B" backward-word
-bindkey "^J" history-search-forward
-bindkey "^K" history-search-backward
+# Look at `man zshzle` and `bindkey -l` and `zle -al`
+bindkey -v
+bindkey -v "^A" beginning-of-line
+bindkey -v "^E" end-of-line
+bindkey -v "^F" forward-char
+bindkey -v "^B" backward-char
+bindkey -v "^P" history-search-backward
+bindkey -v "^N" history-search-forward
+bindkey -v "^K" kill-line
 
 export PROMPT="%F{$pri_bg_xt}%2~ %f%# "
+
+function zle-line-init zle-keymap-select {
+  case $KEYMAP in
+    vicmd) printf '\033[2 q';;
+    viins|main) printf '\033[4 q';;
+  esac
+  zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
 
 
 # -----------------------------------------------------------------------------
