@@ -42,6 +42,7 @@ set nowrap              " Disable wrapping of lines
 set nojoinspaces        " Only use one space after . ! and ?
 set ttimeoutlen=0       " Don't wait for escape codes in insert mode
 set formatoptions+=j    " Delete comment character when joining commented lines
+set synmaxcol=800       " Column limit for syntaxing lines
 
 " Security and encryption
 set nomodeline          " Disable mode line for security reasons
@@ -135,6 +136,9 @@ vnoremap < <gv
 vnoremap . :normal .<CR>
 
 "Line operations
+nnoremap H ^
+nnoremap L $
+nnoremap Y y$<CR>
 nnoremap <silent> dJ :+1d<CR>k
 nnoremap <silent> dK :-1d<CR>
 nnoremap <silent> ]<Space> :pu! _<CR>:']+1<CR>
@@ -169,21 +173,29 @@ nnoremap [t :tnext<CR>
 nnoremap ]t :tprevious<CR>
 nnoremap [T :tfirst<CR>
 nnoremap ]T :tlast<CR>
+nnoremap <silent> <leader>/ :execute 'vimgrep /'.@/.'/g %'<CR>:copen<CR>
 
 " Matching tools
-nnoremap <silent> Mw :match Search /<C-R><C-W>/<CR>
-nnoremap <silent> Mc :match none<CR>
+nmap MM M1
+nnoremap <silent> M1 :match InterestingWord1 /<C-R><C-W>/<CR>
+nnoremap <silent> M2 :2match InterestingWord2 /<C-R><C-W>/<CR>
+nnoremap <silent> M3 :3match InterestingWord3 /<C-R><C-W>/<CR>
+nnoremap <silent> Mcc :call clearmatches()<CR>
+nnoremap <silent> Mc1 :match none<CR>
+nnoremap <silent> Mc2 :2match none<CR>
+nnoremap <silent> Mc3 :3match none<CR>
 
 " Misc
-nmap Q @@
-nmap H ^
-nnoremap Y y$<CR>
+nnoremap * *<C-O>
+nnoremap Q @@
+nnoremap V v$
 nnoremap U :update<CR>
 nnoremap dL :%s/\s\+$//e<CR>
+
+" Highlighting
 nnoremap <Leader>c :noh<CR>
 nnoremap <C-L> :let @/ = ""<CR>
-inoremap <C-L> :let @/ = ""<CR>
-nnoremap <silent> - s<C-R>=tr(@", 'aeioucnAEIOUCNáéíóúçñÁÉÍÓÚÇÑ', 'áéíóúçñÁÉÍÓUÇÑaeioucnAEIOUCN')<CR><ESC>
+inoremap <C-L> <C-O>:let @/ = ""<CR>
 
 " Plugin shortcuts
 nnoremap <silent> gG :Git<CR>
