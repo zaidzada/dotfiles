@@ -36,6 +36,7 @@ bindkey -v "^B" backward-char
 bindkey -v "^P" history-search-backward
 bindkey -v "^N" history-search-forward
 bindkey -v "^K" kill-line
+bindkey -v "^R" history-incremental-search-backward
 
 export PROMPT="%F{$pri_bg_xt}%2~ %f%# "
 
