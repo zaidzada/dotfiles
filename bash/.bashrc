@@ -52,7 +52,6 @@ alias path='echo $PATH | tr ":" "\n"'
 alias td='tmux detach'
 
 # Colors
-alias pgrep='pgrep --color=auto -fl'
 alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
