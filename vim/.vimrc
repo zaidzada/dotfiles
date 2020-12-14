@@ -51,6 +51,11 @@ set cm=blowfish2        " Strong encryption (7.4.3+)
 " Display unprintable characters (whitespace), npbsp:  
 set list listchars=tab:»\ ,trail:·,precedes:·,nbsp:⌴
 
+" Set location of swap files and backups
+set backupdir=~/.vim/backups//, 
+set directory=~/.vim/swapfiles//, 
+
+
 " Set cursor style depending on mode
 if &term =~ '^xterm'
     let &t_SI .= "\<Esc>[4 q"
