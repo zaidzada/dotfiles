@@ -2,6 +2,9 @@
 #
 # readline configuration
 
+# Use `bind -p` to look at current bindings.
+set editing-mode vi
+
 # readline performs filename matching and completion in a case-insensitive
 # fashion.
 set completion-ignore-case on
@@ -21,14 +24,32 @@ set mark-symlinked-directories on
 # only start cycling full results on the second Tab press
 set menu-complete-display-prefix on
 
-# Custom keybindings
-"\C-f": forward-word
-"\C-b": backward-word
-"\C-j": next-history
-"\C-k": previous-history
 
+# Custom keybindings
 TAB: menu-complete
 "\e[Z": menu-complete-backward
 
 "\e[A": history-search-backward
 "\e[B": history-search-forward
+
+# pipe current command to less
+"\e\C-l": "\C-e | less\C-m"
+
+$if mode=vi
+    set keymap vi-command
+        Control-l: clear-screen
+        "gg": beginning-of-history
+        "G": end-of-history
+    set keymap vi-insert
+        Control-l: clear-screen
+        Control-a: beginning-of-line
+        Control-e: end-of-line
+        Control-f: forward-char
+        Control-b: backward-char
+        Control-k: kill-line
+        Control-p: history-search-backward
+        Control-n: history-search-forward
+        Control-d: delete-char
+        "\ef": forward-word
+        "\eb": backward-word
+$endif
