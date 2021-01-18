@@ -4,8 +4,7 @@
 # > Environment settings
 # -----------------------------------------------------------------------------
 
-export EDITOR="vim"
-export PATH=$HOME/.bin:$PATH
+export PATH=$HOME/.bin:/usr/local/sbin:$PATH
 export HOMEBREW_NO_ANALYTICS=1
 
 # Set colors for less. See `man termcap`.
@@ -24,6 +23,13 @@ export LESS_TERMCAP_ZV=$(tput rsubm)
 export LESS_TERMCAP_ZO=$(tput ssupm)
 export LESS_TERMCAP_ZW=$(tput rsupm)
 
+if [[ -x $(command -v nvim) ]]; then
+    export EDITOR="nvim"
+elif [[ -x $(command -v vim) ]]; then
+    export EDITOR="vim"
+else
+    export EDITOR="vi"
+fi
 
 # -----------------------------------------------------------------------------
 # > Aliases
@@ -45,7 +51,7 @@ alias mv='mv -i'
 alias cp='cp -i'
 
 # Misc
-alias vi='vim'
+alias vi="$EDITOR"
 alias df='df -h'
 alias du='du -h'
 alias path='echo $PATH | tr ":" "\n"'

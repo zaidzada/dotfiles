@@ -46,7 +46,9 @@ set synmaxcol=800       " Column limit for syntaxing lines
 
 " Security and encryption
 set nomodeline          " Disable mode line for security reasons
+if !has('nvim')
 set cm=blowfish2        " Strong encryption (7.4.3+)
+endif
 
 " Display unprintable characters (whitespace), npbsp:  
 set list listchars=tab:»\ ,trail:·,precedes:·,nbsp:⌴

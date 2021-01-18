@@ -23,6 +23,21 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ```
 
+## AppImage installations
+
+```shell
+curl -Lo ~/.bin/nvim --create-dirs \
+    https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
+chmod u+x ~/.bin/nvim
+```
+
+Note, `tmux` does not automatically create an AppImage with every release, yet.
+```shell
+curl -Lo ~/.bin/tmux --create-dirs \
+    https://github.com/tmux/tmux/releases/download/3.1b/tmux-3.1b-x86_64.AppImage
+chmod u+x ~/.bin/tmux
+```
+
 
 ## Resources
 
