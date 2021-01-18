@@ -1,0 +1,115 @@
+#!/usr/bin/env python
+'''
+Calculate statistics of a list of numbers that can be piped to this script.
+'''
+
+from __future__ import print_function
+
+from argparse import ArgumentParser
+from math import sqrt
+from sys import stdin
+
+try:
+    import numpy as np
+    has_numpy = True
+except ImportError:
+    has_numpy = False
+
+try:
+    import pandas as pd
+    has_pandas = True
+except ImportError:
+    has_pandas = False
+
+
+def get_numbers():
+    numbers = []
+    for line in stdin:
+        try:
+            numbers.append(float(line.strip()))
+        except ValueError as e:
+            print(e)
+    return numbers
+
+
+def describe_p2(numbers):
+    print('p2')
+    count = len(numbers)
+    total = sum(numbers)
+    mean = total / count
+    std = sqrt(sum((n - mean)**2 for n in numbers) / count)
+
+    return {
+        'mean': mean,
+        'std': std,
+        'min': min(numbers),
+        'max': max(numbers),
+        'sum': total,
+        'count': count,
+    }
+
+
+def describe_numpy(numbers):
+    print('numpy')
+    numbers = np.array(numbers)
+    return {
+        'mean': numbers.mean(),
+        'std': numbers.std(),
+        'min': numbers.min(),
+        'max': numbers.max(),
+        'sum': numbers.sum(),
+        'count': numbers.size,
+        '25%': np.quantile(numbers, 0.25),
+        '50%': np.median(numbers),
+        '75%': np.quantile(numbers, 0.75)
+    }
+
+
+def describe_pandas(numbers):
+    return pd.Series(numbers)
+
+
+def pretty_print(results):
+    order = ['count', 'mean', 'std', 'min', '25%', '50%', '75%', 'max', 'sum']
+    if isinstance(results, dict):
+        for key in order:
+            if key in results:
+                print('{:<9}{:.5f}'.format(key, results[key]))
+    else:
+        print(type(results))
+        print(results.describe())
+
+
+def main(args):
+    numbers = get_numbers()
+    func = describe_p2
+    if has_numpy and not args.native:
+        func = describe_numpy
+    if has_pandas and args.pandas:
+        func = describe_pandas
+
+    if args.json:
+        print(func(numbers))
+    else:
+        pretty_print(func(numbers))
+
+
+if __name__ == '__main__':
+    parser = ArgumentParser()
+    parser.add_argument(
+            '--json',
+            action='store_true',
+            help='Output summary as JSON')
+    parser.add_argument(
+        '--native',
+        action='store_true',
+        help='Force usage of only native processing (no libraries)')
+    parser.add_argument('--pandas',
+                        action='store_true',
+                        help='Force usage of pandas')
+    args = parser.parse_args()
+
+    if args.pandas and not has_pandas:
+        print('pandas requested but not available.')
+
+    main(args)
