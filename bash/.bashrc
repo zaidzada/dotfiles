@@ -98,11 +98,20 @@ fi
 # -----------------------------------------------------------------------------
 
 mkd() {
-  mkdir -p "$@" && cd "$@"
+  mkdir -p "$@" && cd "$@" || return
 }
 
 bkp() {
-  cp "$@" $(date +%Y%m%d_%s_)"$@"
+  cp "$1" "$(date +%Y%m%d_%s_)$1"
+}
+
+timer() {
+    for i in $(seq "$1" 1)
+    do
+       printf '%d \r' "$i"
+       sleep 1
+    done
+   # [ -n "$(command -v osascript)" ] && osascript -e beep
 }
 
 
