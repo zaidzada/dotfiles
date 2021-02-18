@@ -38,6 +38,9 @@ curl -Lo ~/.bin/tmux --create-dirs \
 chmod u+x ~/.bin/tmux
 ```
 
+Other:
+- https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+- https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
 
 ## Resources
 
