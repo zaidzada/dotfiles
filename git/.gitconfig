@@ -37,6 +37,7 @@
     t = tag -l
 
     cm = commit -m
+    cam = commit -am
     co = checkout
     st = status
 
