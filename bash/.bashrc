@@ -151,11 +151,3 @@ export PS1="\[$col\]\W \[$res\]\$ ";
 if [[ -f ~/.bashrc.local ]]; then
     source ~/.bashrc.local
 fi
-
-# Auto-attach a tmux session
-if [ -x "$(command -v tmux)" ]; then
-    if [ -z "$TMUX" ]; then
-        tmux attach || tmux new-session
-        exit
-    fi
-fi
