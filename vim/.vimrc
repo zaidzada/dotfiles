@@ -134,6 +134,8 @@ nnoremap BB :b#<CR>
 nnoremap BD :bd<CR>
 nnoremap <C-J> :bnext<CR>
 nnoremap <C-K> :bprev<CR>
+inoremap <C-J> <C-O>:bnext<CR>
+inoremap <C-K> <C-O>:bprev<CR>
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprev<CR>
 
@@ -270,9 +272,11 @@ call plug#end()
 " ------
 
 " See xterm-true-color
-let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
-let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
-set termguicolors
+if has('termguicolors')
+    set termguicolors
+    let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
+    let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
+end
 
 " Choose theme
 set background=light
