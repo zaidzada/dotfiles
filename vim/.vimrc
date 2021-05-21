@@ -254,6 +254,7 @@ Plug 'majutsushi/tagbar'
 Plug 'preservim/nerdtree'
 Plug 'kshenoy/vim-signature'
 Plug 'junegunn/goyo.vim'
+Plug 'jpalardy/vim-slime'
 if has('python3')
     Plug 'SirVer/ultisnips'
 end
@@ -365,6 +366,14 @@ nnoremap <c-f>m :Maps<CR>
 nnoremap <c-f>s :Snippets<CR>
 nnoremap <c-f>y :History<CR>
 
+
+" -----------------------------------------------------------------------------
+" vim-slime
+" -----------------
+
+let g:slime_target = 'tmux'
+let g:slime_default_config = {'socket_name': 'default', 'target_pane': '{last}'}
+let g:slime_dont_ask_default = 1
 
 " -----------------------------------------------------------------------------
 " Tagbar
