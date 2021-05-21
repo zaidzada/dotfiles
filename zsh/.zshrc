@@ -29,14 +29,17 @@ select-word-style bash
 # Key bindings
 # Look at `man zshzle` and `bindkey -l` and `zle -al`
 bindkey -v
-bindkey -v "^A" beginning-of-line
-bindkey -v "^E" end-of-line
-bindkey -v "^F" forward-char
-bindkey -v "^B" backward-char
-bindkey -v "^P" history-search-backward
-bindkey -v "^N" history-search-forward
-bindkey -v "^K" kill-line
-bindkey -v "^R" history-incremental-search-backward
+bindkey -M viins "^D" delete-char
+bindkey -M viins "^H" backward-delete-char
+bindkey -M viins "^A" beginning-of-line
+bindkey -M viins "^E" end-of-line
+bindkey -M viins "^F" forward-char
+bindkey -M viins "^B" backward-char
+bindkey -M viins "^P" history-search-backward
+bindkey -M viins "^N" history-search-forward
+bindkey -M viins "^K" kill-line
+bindkey -M viins "^U" backward-kill-line
+bindkey -M viins "^R" history-incremental-search-backward
 
 export PROMPT="%F{$pri_bg_xt}%2~ %f%# "
 
