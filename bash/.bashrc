@@ -46,6 +46,9 @@ alias lt='ls -lhtr'
 alias la='ls -lhtA'
 alias ld='ls -lhtd'
 
+# Paging
+alias less='less -S'
+
 # Confirmation
 alias mv='mv -i'
 alias cp='cp -i'
@@ -101,6 +104,20 @@ mkd() {
   mkdir -p "$@" && cd "$@" || return
 }
 
+function cd() {
+  if [[ ${#} -eq 0 ]]; then
+      builtin cd
+      return
+  fi
+
+  if [[ -f ${1} ]]; then
+      builtin cd $(dirname ${1})
+  else
+      builtin cd ${1}
+  fi
+
+}
+
 bkp() {
   cp "$1" "$(date +%Y%m%d_%s_)$1"
 }
@@ -125,6 +142,7 @@ fi
 # > bash options
 # -----------------------------------------------------------------------------
 
+shopt -s autocd
 shopt -s cdspell
 shopt -s cmdhist
 shopt -s histappend
