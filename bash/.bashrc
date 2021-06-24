@@ -121,6 +121,14 @@ mkd() {
   mkdir -p "$@" && cd "$@" || return
 }
 
+lc() {
+  column -s',' -t "$@" | less -S
+}
+
+lnb() {
+    find . -type l -exec sh -c 'file -b "$1" | grep -q ^broken' sh {} \; -print
+}
+
 function cd() {
   if [[ ${#} -eq 0 ]]; then
       builtin cd

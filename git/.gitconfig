@@ -41,10 +41,10 @@
     co = checkout
     st = status
 
-    l = log --decorate --pretty=oneline -n 20 --graph --abbrev-commit
-    ll = log --date=relative -10 --pretty=format:'%h  %>(12)%ad  %<(7)%aN %d %s'
-    lol = log --graph --decorate --pretty=oneline --abbrev-commit
-    lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+    l = log --graph --oneline --decorate -n20
+    ll = log --graph --oneline --decorate --branches --tags
+    lll = log --graph --oneline --decorate --all
+    lgb = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset%n' --abbrev-commit --date=relative --branches
 
 [init]
 	defaultBranch = main

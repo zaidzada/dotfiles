@@ -247,7 +247,7 @@ Plug 'tpope/vim-commentary'
 " Plug 'airblade/vim-gitgutter'
 Plug 'dense-analysis/ale'
 Plug 'vim-airline/vim-airline'
-Plug 'junegunn/fzf'
+ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'majutsushi/tagbar'
