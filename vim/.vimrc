@@ -316,6 +316,7 @@ let g:ale_fixers = {
 
 " Completion
 let g:ale_completion_enabled = 1
+let g:ale_completion_autoimport = 1
 set omnifunc=ale#completion#OmniFunc
 
 " Custom symbols
@@ -337,6 +338,7 @@ nmap <Leader>d <Plug>(ale_go_to_definition)
 nmap <Leader>k <Plug>(ale_documentation)
 nmap <Leader>f <Plug>(ale_fix)
 nmap <Leader>r <Plug>(ale_find_references)
+nmap <Leader>h <Plug>(ale_hover)
 
 
 " -----------------------------------------------------------------------------

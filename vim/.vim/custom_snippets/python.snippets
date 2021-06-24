@@ -28,6 +28,25 @@ snippet from "from module import name" b
 from ${1:module} import ${2:Stuff}
 endsnippet
 
+snippet init "common boilerplate"
+'''Short description of program
+'''
+import argparse
+
+
+def main(args):
+    pass
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--verbose', action='store_true')
+
+    args = parser.parse_args()
+    print(args)
+    main(args)
+endsnippet
+
 
 # -----------------------------------------------------------------------------
 # Classes and methods (and functions)
@@ -91,4 +110,3 @@ snippet pdr "Pandas Read CSV"
 pd.read_csv('${1:filename}', ${2}')
 $0
 endsnippet
-

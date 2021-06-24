@@ -65,6 +65,23 @@ alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 
+# Shortcuts
+alias l='ls -lhtr'
+alias c='cd'
+alias b='cat'
+alias g='grep'
+alias d='diff'
+alias f='find'
+
+# Modern unix
+# alias l='exa -ls modified --group-directories-first'
+# alias t='exa -T'  # https://github.com/ogham/exa
+# alias c='z'  # https://github.com/ajeetdsouza/zoxide
+# alias b='bat'  # https://github.com/sharkdp/bat
+# alias g='rg'  # https://github.com/BurntSushi/ripgrep
+# # alias f='fd'  # https://github.com/sharkdp/fd
+# # alias d='delta'  # https://github.com/dandavison/delta
+# alias z='fzf'  # https://github.com/junegunn/fzf
 
 # -----------------------------------------------------------------------------
 # > Platform specifics
@@ -123,14 +140,12 @@ bkp() {
 }
 
 timer() {
-    for i in $(seq "$1" 1)
-    do
-       printf '%d \r' "$i"
-       sleep 1
+    while true
+    do sleep "$1"
+        osascript -e beep
+        echo "$(date '+%H:%M:%S')" beep
     done
-   # [ -n "$(command -v osascript)" ] && osascript -e beep
 }
-
 
 # NOTE - Only continue if on bash
 if [[ -z "$BASH_VERSION" ]]; then
