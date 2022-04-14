@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+
+import argparse
+import csv
+import mailbox
+from sys import stdout
+
+# TODO
+# - fix size column for mulitpart
+# - read only n rows? skip rows?
+# - parse date datetime.strptime(message['Date'], '%a, %d %b %Y %H:%M:%S %z')
+#   - save as iso
+
+
+def get_message_dict(message, args):
+    record = {key: message.get(key) for key in args.keys}
+    record['Has-Attachment'] = message.is_multipart()
+    record['Flags'] = message.get_flags()
+    record['Size'] = len(message.get_payload())
+    if record.get('To') is not None:
+        record['To'] = record['To'].replace('\n', ' ')
+    return record
+
+
+def main(args):
+
+    fieldnames = args.keys + ['Has-Attachment', 'Flags', 'Size']
+    writer = csv.DictWriter(args.output, fieldnames=fieldnames)
+    writer.writeheader()
+
+    mail = mailbox.mbox(args.mailbox)
+    for key, message in mail.items():
+        record = get_message_dict(message, args)
+        writer.writerow(record)
+
+    args.output.close()
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('mailbox', type=str)
+    parser.add_argument('output', type=argparse.FileType('w'), default=stdout)
+    args = parser.parse_args()
+
+    args.keys = [
+        'Message-ID', 'Date', 'From', 'Delivered-To', 'To', 'In-Reply-To',
+        'Subject', 'Content-Type', 'X-Gmail-Labels'
+    ]
+
+    main(args)
