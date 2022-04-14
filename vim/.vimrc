@@ -160,6 +160,7 @@ vnoremap <Space> zf
 nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
 nnoremap \" :setlocal foldexpr=getline(v:lnum)=~'^\"\ >'?'>1':1 foldmethod=expr<CR>
 nnoremap \# :setlocal foldexpr=getline(v:lnum)=~'^#\ >'?'>1':1 foldmethod=expr<CR>
+nnoremap \% :setlocal foldexpr=getline(v:lnum)=~'^%\ >'?'>1':1 foldmethod=expr<CR>
 nnoremap \z :setlocal foldexpr=(getline(v:lnum)=~@/)?'>1':1 foldmethod=expr<CR>
 
 " Convenient insert mode mappings
@@ -360,6 +361,7 @@ nmap <C-F> <Nop>
 nnoremap <c-f>b :Buffers<CR>
 nnoremap <c-f>c :Colors<CR>
 nnoremap <c-f>g :GFiles<CR>
+nnoremap <c-f>r :Rg<CR>
 nnoremap <c-f>t :BTags<CR>
 nnoremap <c-f>h :Helptags<CR>
 nnoremap <c-f>l :Lines<CR>

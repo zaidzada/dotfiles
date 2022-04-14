@@ -54,7 +54,6 @@ alias mv='mv -i'
 alias cp='cp -i'
 
 # Misc
-alias vi="$EDITOR"
 alias df='df -h'
 alias du='du -h'
 alias path='echo $PATH | tr ":" "\n"'
@@ -72,16 +71,17 @@ alias b='cat'
 alias g='grep'
 alias d='diff'
 alias f='find'
+alias v="$EDITOR"
 
 # Modern unix
-# alias l='exa -ls modified --group-directories-first'
-# alias t='exa -T'  # https://github.com/ogham/exa
-# alias c='z'  # https://github.com/ajeetdsouza/zoxide
-# alias b='bat'  # https://github.com/sharkdp/bat
-# alias g='rg'  # https://github.com/BurntSushi/ripgrep
-# # alias f='fd'  # https://github.com/sharkdp/fd
-# # alias d='delta'  # https://github.com/dandavison/delta
-# alias z='fzf'  # https://github.com/junegunn/fzf
+alias l='exa -ls modified --group-directories-first'
+alias t='exa -T'  # https://github.com/ogham/exa
+alias c='z'  # https://github.com/ajeetdsouza/zoxide
+alias b='bat'  # https://github.com/sharkdp/bat
+alias g='rg'  # https://github.com/BurntSushi/ripgrep
+# alias f='fd'  # https://github.com/sharkdp/fd
+# alias d='delta'  # https://github.com/dandavison/delta
+alias z='fzf'  # https://github.com/junegunn/fzf
 
 # -----------------------------------------------------------------------------
 # > Platform specifics
@@ -153,6 +153,10 @@ timer() {
         osascript -e beep
         echo "$(date '+%H:%M:%S')" beep
     done
+}
+
+recipe() {
+    pandoc -f html -t markdown_strict-escaped_line_breaks "https://www.plainoldrecipe.com/recipe?url=$1"
 }
 
 # NOTE - Only continue if on bash
