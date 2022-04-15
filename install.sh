@@ -66,5 +66,5 @@ else
 fi
 
 for fn in $dotfiles; do
-    $dryrun ln -sf "$fn $HOME/$(basename $fn)"
+    $dryrun ln -sfv "$fn" "$HOME/$(basename $fn)"
 done
