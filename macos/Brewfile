@@ -1,0 +1,28 @@
+# > Taps
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/core"
+
+# > Command line
+brew "coreutils"
+brew "exa"
+brew "ffmpeg"
+brew "fzf"
+brew "ripgrep"
+brew "tmux"
+brew "neovim"
+brew "youtube-dl"
+
+# > Casks
+cask "brewlet"
+cask "google-drive"
+cask "iterm2"
+cask "miniconda"
+cask "slack"
+cask "toggl-track"
+cask "vlc"
+cask "zoom"
+cask "zotero"
+cask "1Password"
+
+# mas "AdGuard for Safari", id=1440147259
