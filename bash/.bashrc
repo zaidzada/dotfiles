@@ -74,14 +74,14 @@ alias f='find'
 alias v="$EDITOR"
 
 # Modern unix
-alias l='exa -ls modified --group-directories-first'
-alias t='exa -T'  # https://github.com/ogham/exa
-alias c='z'  # https://github.com/ajeetdsouza/zoxide
-alias b='bat'  # https://github.com/sharkdp/bat
-alias g='rg'  # https://github.com/BurntSushi/ripgrep
-# alias f='fd'  # https://github.com/sharkdp/fd
-# alias d='delta'  # https://github.com/dandavison/delta
-alias z='fzf'  # https://github.com/junegunn/fzf
+[[ -x "$(command -v exa)" ]] && alias l='exa -ls modified --group-directories-first'
+[[ -x "$(command -v exa)" ]] && alias t='exa -T'  # https://github.com/ogham/exa
+[[ -x "$(command -v z)" ]] && alias c='z'         # https://github.com/ajeetdsouza/zoxide
+[[ -x "$(command -v bat)" ]] && alias b='bat'     # https://github.com/sharkdp/bat
+[[ -x "$(command -v rg)" ]] && alias g='rg'       # https://github.com/BurntSushi/ripgrep
+[[ -x "$(command -v fd)" ]] && alias f='fd'       # https://github.com/sharkdp/fd
+[[ -x "$(command -v delta)" ]] && alias d='delta' # https://github.com/dandavison/delta
+[[ -x "$(command -v fzf)" ]] && alias z='fzf'     # https://github.com/junegunn/fzf
 
 # -----------------------------------------------------------------------------
 # > Platform specifics
@@ -95,7 +95,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
     if [ -x "$(command -v gls)" ]; then
         alias ls='gls --color=auto -F -X --group-directories-first'
     else
-        alais ls='ls -F -G'
+        alias ls='ls -F -G'
         export LSCOLORS=GxFxCxDxBxegedabagaced;
     fi
 
