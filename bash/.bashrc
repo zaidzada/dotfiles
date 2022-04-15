@@ -66,6 +66,7 @@ alias fgrep='fgrep --color=auto'
 
 # Shortcuts
 alias l='ls -lhtr'
+alias t='tree'
 alias c='cd'
 alias b='cat'
 alias g='grep'
