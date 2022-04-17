@@ -10,6 +10,8 @@ cd dotfiles
 bash install.sh
 ```
 
+Install `brew` then use `brew bundle` to install from Brewfile.
+
 ## Vim
 
 ```shell

@@ -1,0 +1,46 @@
+/* ~/Library/KeyBindings/DefaultKeyBinding.dict */
+
+/*
+    https://ss64.com/osx/syntax-keybindings.html
+    https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/EventOverview/TextDefaultsBindings/TextDefaultsBindings.html
+    https://developer.apple.com/documentation/appkit/nsstandardkeybindingresponding?language=objc
+
+    Key Modifiers
+    ^ : Ctrl
+    $ : Shift
+    ~ : Option (Alt)
+    @ : Command (Apple)
+    # : Numeric Keypad
+
+    Non-Printable Key Codes
+
+    Up Arrow:     \UF700        Backspace:    \U0008        F1:           \UF704
+    Down Arrow:   \UF701        Tab:          \U0009        F2:           \UF705
+    Left Arrow:   \UF702        Escape:       \U001B        F3:           \UF706
+    Right Arrow:  \UF703        Enter:        \U000A        ...
+    Insert:       \UF727        Page Up:      \UF72C
+    Delete:       \UF728        Page Down:    \UF72D
+    Home:         \UF729        Print Screen: \UF72E
+    End:          \UF72B        Scroll Lock:  \UF72F
+    Break:        \UF732        Pause:        \UF730
+    SysReq:       \UF731        Menu:         \UF735
+    Help:         \UF746
+    */
+
+{
+    /* Additional Emacs bindings */
+    "~f" = "moveWordForward:";
+    "~b" = "moveWordBackward:";
+    "~<" = "moveToBeginningOfDocument:";
+    "~>" = "moveToEndOfDocument:";
+    "~v" = "pageUp:";
+    "~d" = "deleteWordForward:";
+    "~^h" = "deleteWordBackward:";
+    "~\010" = "deleteWordBackward:";  /* Option-backspace */
+    "~\177" = "deleteWordBackward:";  /* Option-delete */
+
+    "^c" = "cancelOperation:";
+
+    /* Escape should really be complete: */
+    "\033" = "complete:";  /* Escape */
+}
