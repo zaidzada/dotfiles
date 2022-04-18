@@ -1,4 +1,4 @@
-[[ -f ~/.bashrc ]] && source ~/.bashrc
+[[ -f ~/.config/bash/bashrc ]] && source ~/.config/bash/bashrc
 
 # -----------------------------------------------------------------------------
 # > zsh options
@@ -15,7 +15,7 @@ setopt hist_ignore_all_dups
 setopt hist_ignore_space
 HISTSIZE=5000
 SAVEHIST=5000
-HISTFILE=~/.zsh_history
+export HISTFILE="$XDG_STATE_HOME"/zsh/history
 
 # Completion
 zmodload -i zsh/complist

@@ -12,17 +12,17 @@ bash install.sh
 
 Install `brew` then use `brew bundle` to install from Brewfile.
 
-## Vim
+### Vim
 
 ```shell
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+curl -fLo ~/.config/vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 ```
 
-## Tmux
+### Tmux
 
 ```shell
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
 ```
 
 ## AppImage installations
@@ -44,7 +44,10 @@ Other:
 - https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 - https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
 
+
 ## Resources
 
+- https://github.com/jimeh/tmux-themepack
+- https://wiki.archlinux.org/title/XDG_Base_Directory
 - https://dotfiles.github.io/inspiration/
 - https://github.com/rupa/z

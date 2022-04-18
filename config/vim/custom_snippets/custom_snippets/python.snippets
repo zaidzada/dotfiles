@@ -1,0 +1,129 @@
+# -----------------------------------------------------------------------------
+# Misc
+# -----------------------------------------------------------------------------
+
+snippet ifmain "ifmain" b
+if __name__ == '__main__':
+	${1:${VISUAL:main()}}
+endsnippet
+
+snippet with "with" b
+with ${1:expr} as ${2:var}:
+	${3:${VISUAL:pass}}
+$0
+endsnippet
+
+snippet witho "with" b
+with open('${1:expr}', '${2:var}') as fp:
+	${3:${VISUAL:pass}}
+$0
+endsnippet
+
+snippet for "for loop" b
+for ${1:item} in ${2:iterable}:
+	${3:${VISUAL:pass}}
+endsnippet
+
+snippet from "from module import name" b
+from ${1:module} import ${2:Stuff}
+endsnippet
+
+snippet init "common boilerplate"
+"""A one line summary of the module or program, terminated by a period.
+
+Leave one blank line.  The rest of this docstring should contain an
+overall description of the module or program.  Optionally, it may also
+contain a brief description of exported classes and functions and/or usage
+examples.
+
+  Typical usage example:
+
+  foo = ClassFoo()
+  bar = foo.FunctionBar()
+"""
+import argparse
+
+
+def main(args):
+    """Summary of function.
+
+    Longer description of this function.
+
+    Args:
+        args: the parsed arguments from argparse.
+    """
+    pass
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--verbose', action='store_true')
+
+    args = parser.parse_args()
+    print(args)
+    main(args)
+endsnippet
+
+
+# -----------------------------------------------------------------------------
+# Classes and methods (and functions)
+# -----------------------------------------------------------------------------
+
+snippet class "class with docstrings" b
+class ${1:MyClass}(${2:object}):
+	'''${3:docs}'''
+
+	def __init__(self$4):
+		'''${5:TODO: write class docs.}'''
+		$0
+endsnippet
+
+snippet defm "class method"
+def ${1:MethodName}(self, ${2:args}):
+	'''${3:TODO: write method docs}'''
+	$0
+endsnippet
+
+snippet def "class method"
+def ${1:function}(${2:args}):
+	'''${3:TODO: write function docs}'''
+	$0
+endsnippet
+
+
+# -----------------------------------------------------------------------------
+# Logging
+# -----------------------------------------------------------------------------
+
+snippet p "print"
+print('$0')
+endsnippet
+
+snippet pf "print formatted string"
+print(f'${1}')
+endsnippet
+
+snippet log "log setup"
+logging.basicConfig(level=logging.${1:DEBUG})
+$0
+endsnippet
+
+snippet l "log"
+logging.info("${1}")
+endsnippet
+
+
+# -----------------------------------------------------------------------------
+# Data science
+# -----------------------------------------------------------------------------
+
+snippet dsi "Data science imports"
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+endsnippet
+
+snippet pdr "Pandas Read CSV"
+pd.read_csv('${1:filename}', ${2}')
+$0
+endsnippet
