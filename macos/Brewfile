@@ -8,10 +8,11 @@ brew "coreutils"
 brew "exa"
 brew "ffmpeg"
 brew "fzf"
+brew "neovim"
 brew "ripgrep"
+brew "texlive"
 brew "tmux"
 brew "tree"
-brew "neovim"
 brew "youtube-dl"
 
 # > Casks
