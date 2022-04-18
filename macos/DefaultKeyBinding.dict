@@ -40,7 +40,4 @@
     "~\177" = "deleteWordBackward:";  /* Option-delete */
 
     "^c" = "cancelOperation:";
-
-    /* Escape should really be complete: */
-    "\033" = "complete:";  /* Escape */
 }
