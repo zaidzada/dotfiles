@@ -1,5 +1,10 @@
 # dotfiles
 
+TODO redo install script
+TODO make tmux resurrect use .cache
+TODO use tmux package for color theme
+TODO local folders still in $HOME
+
 My .files
 
 ## Installation
