@@ -1,37 +1,6 @@
 [[ $- != *i* ]] && return
 
 # -----------------------------------------------------------------------------
-# > Environment settings
-# -----------------------------------------------------------------------------
-
-export PATH=$HOME/.bin:/usr/local/sbin:$PATH
-export HOMEBREW_NO_ANALYTICS=1
-
-# Set colors for less. See `man termcap`.
-export LESS_TERMCAP_md=$(tput bold; tput setaf $pri_bg_xt)  # bold
-export LESS_TERMCAP_mb=$(tput bold; tput setaf $prim_bg_xt)  # blink
-export LESS_TERMCAP_so=$(tput setaf $pri_fg_xt; tput setab $pri_bg_xt)
-export LESS_TERMCAP_us=$(tput smul)  # underline
-export LESS_TERMCAP_me=$(tput sgr0)
-export LESS_TERMCAP_se=$(tput rmso; tput sgr0)
-export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
-
-export LESS_TERMCAP_mr=$(tput rev)
-export LESS_TERMCAP_mh=$(tput dim)
-export LESS_TERMCAP_ZN=$(tput ssubm)
-export LESS_TERMCAP_ZV=$(tput rsubm)
-export LESS_TERMCAP_ZO=$(tput ssupm)
-export LESS_TERMCAP_ZW=$(tput rsupm)
-
-if [[ -x $(command -v nvim) ]]; then
-    export EDITOR="nvim"
-elif [[ -x $(command -v vim) ]]; then
-    export EDITOR="vim"
-else
-    export EDITOR="vi"
-fi
-
-# -----------------------------------------------------------------------------
 # > Aliases
 # -----------------------------------------------------------------------------
 
