@@ -8,14 +8,15 @@ bindkey -e
 setopt autocd
 setopt correct
 
-# History
+# History (see `man zshoptions`)
 setopt append_history
 setopt inc_append_history
 setopt hist_ignore_all_dups
 setopt hist_ignore_space
-HISTSIZE=5000
-SAVEHIST=5000
+export HISTSIZE=50000  # the number of items for the internal history list
+export SAVEHIST=50000  # maximum number of items for the history file
 export HISTFILE="$XDG_STATE_HOME"/zsh/history
+mkdir -p "$XDG_STATE_HOME"/zsh
 
 # Completion
 zmodload -i zsh/complist
@@ -56,10 +57,10 @@ zle -N zle-keymap-select
 
 
 # -----------------------------------------------------------------------------
-# > Initialization
+# > Custom initializations
 # -----------------------------------------------------------------------------
 
 # Load local settings
-if [[ -f ~/.zshrc.local ]]; then
-    source ~/.zshrc.local
+if [[ -f "$XDG_CONFIG_HOME"/zsh/zshrc.local ]]; then
+    source "$XDG_CONFIG_HOME"/zsh/zshrc.local
 fi
