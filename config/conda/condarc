@@ -1,1 +1,16 @@
-env_prompt: '({name})'
+# https://conda.io/projects/conda/en/latest/configuration.html
+
+# env_prompt (str)
+#   Template for prompt modification based on the active environment.
+#   Currently supported template variables are '{prefix}', '{name}', and
+#   '{default_env}'. '{prefix}' is the absolute path to the active
+#   environment. '{name}' is the basename of the active environment
+#   prefix. '{default_env}' holds the value of '{name}' if the active
+#   environment is a conda named environment ('-n' flag), or otherwise
+#   holds the value of '{prefix}'. Templating uses python's str.format()
+#   method.
+env_prompt: '({name}) '
+
+# auto_activate_base (bool)
+#   Automatically activate the base environment during shell initialization.
+auto_activate_base: false
