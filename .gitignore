@@ -2,6 +2,7 @@
 .DS_Store
 *.swp
 *.tgz
+*.local
 backups/
 
 config/conda/environments.txt
@@ -15,3 +16,6 @@ config/zsh/.zsh_history
 config/zsh/.zsh_sessions
 
 config/tmux/plugins/
+
+local/share
+local/state
