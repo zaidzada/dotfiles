@@ -1,6 +1,7 @@
 /* ~/Library/KeyBindings/DefaultKeyBinding.dict */
 
 /*
+    http://xahlee.info/kbd/osx_keybinding.html
     https://ss64.com/osx/syntax-keybindings.html
     https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/EventOverview/TextDefaultsBindings/TextDefaultsBindings.html
     https://developer.apple.com/documentation/appkit/nsstandardkeybindingresponding?language=objc
@@ -28,6 +29,11 @@
     */
 
 {
+    "^d" = "deleteBackward:";
+    "^f" = "deleteForward:";
+    "^e" = "deleteWordBackward:";
+    "^r" = "deleteWordForward:";
+
     /* Additional Emacs bindings */
     "~f" = "moveWordForward:";
     "~b" = "moveWordBackward:";
