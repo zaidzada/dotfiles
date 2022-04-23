@@ -1,70 +1,21 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
-# Safe bash
-set -euo pipefail
-IFS=$'\n\t'
+# TODO - make idempotent, interactive?
 
-dryrun=
-target=""
+# mv $HOME/.local $HOME/.config.old
+ln -sfv $PWD/config ${XDG_CONFIG_HOME:-$HOME}/.config
+ln -sfv $PWD/config/zsh/zshenv $HOME/.zshenv
 
-# Parse args
-while getopts ":hnt:" opt; do
-  case ${opt} in
-    t )
-      target=$OPTARG
-      if ! [[ -d "$target" ]]; then
-          echo "Target '$target' is not a directory"
-          exit 1
-      fi
-      ;;
-    n )
-      dryrun="echo"
-      ;;
-    h )
-      echo "Usage:"
-      echo "    install -n                  Dry run. Print the commands."
-      echo "    install -t target           Only install $(target) folder."
-      echo "    install -h                  Display this help message."
-      exit 0
-      ;;
-    \? )
-      echo "Invalid Option: -$OPTARG" 1>&2
-      exit 1
-      ;;
-  esac
-done
-shift $((OPTIND -1))
+# mv $HOME/.local $HOME/.local.old
+ln -sfv $PWD/local $HOME/.local
+mkdir -p "${XDG_DATA_HOME}"
+mkdir -p "${XDG_STATE_HOME}"
 
+# Install plugin managers
+curl -fLo ~/.config/vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-if [[ -n "$dryrun" ]]; then
-    echo "Just a dry run! No commands will be executed."
-fi
+git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
 
-# Backup existing files
-if ! [[ -d backups ]]; then
-    $dryrun mkdir backups
-fi
-
-for df in $(git ls-files "${target:-.}"); do
-    if [[ -f $HOME/${df#*/} ]]; then
-        $dryrun cp "$HOME/${df#*/}" backups/
-    fi
-done
-
-# archive backups
-$dryrun tar czf "backups-$(date +%Y%m%d_%s).tgz" backups
-$dryrun rm -r backups
-
-
-# Set up symlinks
-
-# Choose which directory, or all
-if [[ -z "$target" ]]; then
-    dotfiles=$(find "$PWD" -maxdepth 2 -mindepth 2 -name '.*')
-else
-    dotfiles=$(ls -1A "$target")
-fi
-
-for fn in $dotfiles; do
-    $dryrun ln -sfv "$fn" "$HOME/$(basename $fn)"
-done
+# TODO - install plugins dynamically?
+# ~/.tmux/plugins/tpm/bin/install_plugins

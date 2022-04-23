@@ -11,7 +11,7 @@ fi
 
 # > XDG support
 
-export PATH="$PATH:$HOME/.local/bin"
+export PATH="$HOME/.local/bin:$PATH"
 
 # Main paths
 export XDG_CACHE_HOME="$HOME/.cache"
