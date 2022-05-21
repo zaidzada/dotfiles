@@ -13,14 +13,16 @@ brew "sox"
 brew "texlive"
 brew "youtube-dl"
 
-# > Casks
-cask "calibre"
+# > utilities
 cask "google-drive"
 cask "inkscape"
 cask "slack"
 cask "toggl-track"
 cask "visual-studio-code"
 cask "vlc"
+
+# > Personal
+cask "calibre"
 cask "adobe-digital-editions"
 cask "gramps"
 cask "gnucash"

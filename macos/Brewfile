@@ -1,28 +1,25 @@
 # Only the essential packages
 
-# > Taps
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/core"
 
-# > Command line
+brew "tmux"
+brew "neovim"
+cask "iterm2"
+# Install these with the app store:
+# cask "1Password"
+# mas "AdGuard for Safari", id=1440147259
+
 brew "coreutils"
 brew "fzf"
 brew "htop"
 brew "jq"
-brew "neovim"
 brew "ripgrep"
-brew "tmux"
 brew "tree"
 
-# > Casks
 cask "brewlet"
 cask "google-cloud-sdk"
-cask "iterm2"
 cask "miniconda"
 cask "zoom"
 cask "zotero"
-
-# > App store
-# cask "1Password"
-# mas "AdGuard for Safari", id=1440147259
