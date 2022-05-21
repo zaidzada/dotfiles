@@ -1,2 +1,30 @@
+# zsh file Load order.
+# each file is first loaded from /etc/ then from $ZDOTDIR, except for logout
+# which /etc/ is last.
+# +----------------+-----------+-----------+------+
+# |                |Interactive|Interactive|Script|
+# |                |login      |non-login  |      |
+# +----------------+-----------+-----------+------+
+# |   zshenv       |    A      |    A      |  A   |
+# +----------------+-----------+-----------+------+
+# |   zprofile     |    B      |           |      |
+# +----------------+-----------+-----------+------+
+# |   zshrc        |    C      |    B      |      |
+# +----------------+-----------+-----------+------+
+# |   zlogin       |    D      |           |      |
+# +----------------+-----------+-----------+------+
+# |   zlogout      |    E      |           |      |
+# +----------------+-----------+-----------+------+
+
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+
 # Set dotfile location
-export ZDOTDIR=${XDG_CONFIG_HOME:-$HOME}/.config/zsh
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+
+# Load custom zshenv
+if [[ -f "$XDG_CONFIG_HOME"/zsh/zshenv.local ]]; then
+    source "$XDG_CONFIG_HOME"/zsh/zshenv.local
+fi
