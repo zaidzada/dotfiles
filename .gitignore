@@ -4,6 +4,8 @@
 # But not these files
 !.gitignore
 !README.md
+!local/bin/README.md
+!macos/README.md
 !init
 !config/bash/bashrc
 !config/conda/condarc
