@@ -1,6 +1,8 @@
 #!/usr/bin/env zsh
 # .zprofile is only loaded for login shells
 
+export PATH="$HOME/.local/bin:$PATH"
+
 if [[ -x $(command -v nvim) ]]; then
     export EDITOR="nvim"
 elif [[ -x $(command -v vim) ]]; then
@@ -10,8 +12,6 @@ else
 fi
 
 # > XDG support
-
-export PATH="$HOME/.local/bin:$PATH"
 
 # Main paths
 export XDG_CACHE_HOME="$HOME/.cache"
