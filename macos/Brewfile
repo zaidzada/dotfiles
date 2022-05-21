@@ -1,3 +1,5 @@
+# Only the essential packages
+
 # > Taps
 tap "homebrew/bundle"
 tap "homebrew/cask"
@@ -5,44 +7,22 @@ tap "homebrew/core"
 
 # > Command line
 brew "coreutils"
-brew "exa"
-brew "ffmpeg"
 brew "fzf"
 brew "htop"
-brew "imagemagick"
 brew "jq"
 brew "neovim"
-brew "pandoc"
 brew "ripgrep"
-brew "sox"
-brew "texlive"
 brew "tmux"
 brew "tree"
-brew "youtube-dl"
 
 # > Casks
 cask "brewlet"
-cask "calibre"
-cask "google-drive"
 cask "google-cloud-sdk"
-cask "inkscape"
 cask "iterm2"
 cask "miniconda"
-cask "slack"
-cask "toggl-track"
-cask "visual-studio-code"
-cask "vlc"
 cask "zoom"
 cask "zotero"
-cask "1Password"
 
-# > Optional casks
-cask "adobe-digital-editions"
-cask "gramps"
-# Gaming
-cask "discord"
-cask "epic-games"
-cask "openemu"
-cask "steam"
-
+# > App store
+# cask "1Password"
 # mas "AdGuard for Safari", id=1440147259

@@ -44,5 +44,6 @@
 !local/bin/printcolorramp
 !local/bin/word2nato
 !macos/Brewfile
+!macos/Brewfile-extras
 !macos/DefaultKeyBinding.dict
 !macos/macos

@@ -1,0 +1,32 @@
+# All other packages
+
+# > Taps
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/core"
+
+# > Command line
+brew "ffmpeg"
+brew "imagemagick"
+brew "pandoc"
+brew "sox"
+brew "texlive"
+brew "youtube-dl"
+
+# > Casks
+cask "calibre"
+cask "google-drive"
+cask "inkscape"
+cask "slack"
+cask "toggl-track"
+cask "visual-studio-code"
+cask "vlc"
+cask "adobe-digital-editions"
+cask "gramps"
+cask "gnucash"
+
+# >  Gaming
+cask "discord"
+cask "epic-games"
+cask "openemu"
+cask "steam"
