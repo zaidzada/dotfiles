@@ -6,12 +6,19 @@ tap "homebrew/cask"
 tap "homebrew/core"
 
 # > Command line
-brew "ffmpeg"
-brew "imagemagick"
-brew "pandoc"
 brew "sox"
 brew "texlive"
-brew "youtube-dl"
+brew "tig"
+brew "shellcheck"
+brew "htop"
+brew "fzf"
+brew "jq"
+brew "ripgrep"
+brew "htop"
+brew "fzf"
+brew "jq"
+brew "ripgrep"
+brew "nvim"
 
 # > utilities
 cask "google-drive"
@@ -19,7 +26,9 @@ cask "inkscape"
 cask "slack"
 cask "toggl-track"
 cask "visual-studio-code"
+cask "google-cloud-sdk"
 cask "vlc"
+cask "zoom"
 
 # > Personal
 cask "calibre"

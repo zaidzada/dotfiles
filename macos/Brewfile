@@ -4,22 +4,18 @@ tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/core"
 
+brew "coreutils"
+brew "tree"
 brew "tmux"
-brew "neovim"
-cask "iterm2"
+brew "ffmpeg"
+brew "imagemagick"
+brew "pandoc"
+brew "youtube-dl"
+
 # Install these with the app store:
-# cask "1Password"
 # mas "AdGuard for Safari", id=1440147259
 
-brew "coreutils"
-brew "fzf"
-brew "htop"
-brew "jq"
-brew "ripgrep"
-brew "tree"
-
+cask "iterm2"
 cask "brewlet"
-cask "google-cloud-sdk"
 cask "miniconda"
-cask "zoom"
 cask "zotero"
