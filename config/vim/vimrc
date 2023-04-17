@@ -57,7 +57,7 @@ set splitbelow          " Split horizontally to the bottom
 set display+=lastline   " Show as much as possible of the last line
 
 " Cursor settings
-set cursorline          " Highlight current line with a horizontal line
+" set cursorline          " Highlight current line with a horizontal line
 set scrolloff=2         " Number of lines to keep above and below the cursor
 set sidescrolloff=2     " Number of lines to keep above and below the cursor
 set nostartofline       " On movement, keep cursor in same column if possible
@@ -220,7 +220,7 @@ nnoremap <silent> Mc3 :3match none<CR>
 nnoremap * *<C-O>
 nnoremap Q @@
 nnoremap V v$
-nnoremap U :update<CR>
+nnoremap U :update<CR><CR>
 nnoremap dL :%s/\s\+$//e<CR>
 
 " Highlighting
@@ -263,193 +263,8 @@ nnoremap <silent> <Leader>z :ZoomToggle<CR>
 " -----------------------------------------------------------------------------
 
 call plug#begin($XDG_DATA_HOME.'/vim/plugged')
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-commentary'
-" Plug 'airblade/vim-gitgutter'
-Plug 'dense-analysis/ale'
-Plug 'vim-airline/vim-airline'
- Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'junegunn/vim-easy-align'
-Plug 'majutsushi/tagbar'
-Plug 'preservim/nerdtree'
-Plug 'kshenoy/vim-signature'
-Plug 'junegunn/goyo.vim'
-Plug 'jpalardy/vim-slime'
-if has('python3')
-    Plug 'SirVer/ultisnips'
-end
 
-" Color schemes
-Plug 'rakr/vim-one'
-Plug 'morhetz/gruvbox'
-Plug 'tomasr/molokai'
-Plug 'jacoborus/tender.vim'
-Plug 'sonph/onehalf', {'rtp': 'vim/'}
 call plug#end()
-
-
-" -----------------------------------------------------------------------------
-" Colors
-" ------
-
-" See xterm-true-color
-if has('termguicolors')
-    set termguicolors
-    let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
-    let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
-end
-
-" Choose theme
-set background=light
-colorscheme onehalflight
-let g:airline_theme='onehalflight'
-
-set colorcolumn=80
-
-
-" -----------------------------------------------------------------------------
-" UltiSnips
-" -----------------
-
-let g:UltiSnipsEditSplit = 'vertical'
-let g:UltiSnipsJumpBackwardTrigger = '<c-p>'
-let g:UltiSnipsJumpForwardTrigger  = '<c-n>'
-let g:UltiSnipsSnippetDirectories=['custom_snippets', 'UltiSnips']
-
-
-" -----------------------------------------------------------------------------
-" ALE customization
-" -----------------
-
-let g:ale_sign_column_always = 1
-let g:ale_lint_on_insert_leave = 1
-let g:ale_lint_on_text_changed = 0
-
-let g:ale_linters = {
-\   'python': ['flake8', 'pyls']
-\}
-
-let g:ale_fixers = {
-\   '*': ['remove_trailing_lines', 'trim_whitespace'],
-\   'python': ['yapf', 'isort'],
-\}
-
-" Completion
-let g:ale_completion_enabled = 1
-let g:ale_completion_autoimport = 1
-set omnifunc=ale#completion#OmniFunc
-
-" Custom symbols
-let g:ale_sign_error = "◉"
-let g:ale_sign_warning = "◉"
-highlight ALEErrorSign ctermfg=124
-highlight ALEWarningSign ctermfg=33
-highlight clear SignColumn
-
-" ALE key bindings
-nmap coa <Plug>(ale_toggle)
-nmap [w <Plug>(ale_next_wrap_warning)
-nmap ]w <Plug>(ale_previous_wrap_warning)
-nmap [e <Plug>(ale_next_wrap_error)
-nmap ]e <Plug>(ale_previous_wrap_error)
-nmap [E <Plug>(ale_first)
-nmap ]E <Plug>(ale_last)
-nmap <Leader>d <Plug>(ale_go_to_definition)
-nmap <Leader>k <Plug>(ale_documentation)
-nmap <Leader>f <Plug>(ale_fix)
-nmap <Leader>r <Plug>(ale_find_references)
-nmap <Leader>h <Plug>(ale_hover)
-
-
-" -----------------------------------------------------------------------------
-" vim-easy-align
-" --------------
-
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
-
-
-" -----------------------------------------------------------------------------
-" fzf (https://github.com/junegunn/fzf.vim)
-" -----------------------------------------
-
-nmap <C-F> <Nop>
-nnoremap <c-f>b :Buffers<CR>
-nnoremap <c-f>c :Colors<CR>
-nnoremap <c-f>g :GFiles<CR>
-nnoremap <c-f>r :Rg<CR>
-nnoremap <c-f>t :BTags<CR>
-nnoremap <c-f>h :Helptags<CR>
-nnoremap <c-f>l :Lines<CR>
-nnoremap <c-f>f :Files<CR>
-nnoremap <c-f>m :Maps<CR>
-nnoremap <c-f>s :Snippets<CR>
-nnoremap <c-f>y :History<CR>
-
-
-" -----------------------------------------------------------------------------
-" vim-slime
-" -----------------
-
-let g:slime_target = 'tmux'
-let g:slime_default_config = {'socket_name': 'default', 'target_pane': '{last}'}
-let g:slime_dont_ask_default = 1
-
-" -----------------------------------------------------------------------------
-" Tagbar
-" ------
-"
-nnoremap <silent> <Leader>t :TagbarToggle<CR>
-
-let g:tagbar_type_python = {
-    \ 'kinds' : [
-        \ 'h:headers',
-        \ 'i:imports:1:0',
-        \ 'c:classes',
-        \ 'f:functions',
-        \ 'm:members',
-        \ 'v:variables:0:0',
-        \ '?:unknown',
-    \ ],
-\ }
-
-let g:tagbar_type_make = {
-    \ 'kinds':[
-        \ 'h:headers',
-        \ 'm:macros',
-        \ 't:targets',
-    \ ],
-    \ 'sort': 0
-\}
-
-let g:tagbar_type_markdown = {
-    \ 'ctagstype' : 'markdown',
-    \ 'kinds' : [
-        \ 'h:headers',
-        \ 'i:subheaders',
-        \ 'k:sub-subheaders'
-    \ ]
-\ }
-
-
-" -----------------------------------------------------------------------------
-" Airline
-" -------
-
-let g:airline#extensions#ale#enabled = 1
-let g:airline#extensions#tagbar#enabled = 0
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#bufferline#enabled = 1
-
-
-" -----------------------------------------------------------------------------
-" Load local settings
-" -----------------------------------------------------------------------------
 
 if filereadable(expand("~/.vimrc.local"))
     source ~/.vimrc.local
