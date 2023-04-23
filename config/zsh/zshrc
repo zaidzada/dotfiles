@@ -42,14 +42,12 @@ bindkey -M viins "^K" kill-line
 bindkey -M viins "^U" backward-kill-line
 bindkey -M viins "^R" history-incremental-search-backward
 
-export PROMPT="%F{$pri_bg_xt}%2~ %f%# "
+export PROMPT="%2~ %# "
 
+# https://unix.stackexchange.com/questions/547/make-my-zsh-prompt-show-mode-in-vi-mode
 function zle-line-init zle-keymap-select {
-  case $KEYMAP in
-    vicmd) printf '\033[2 q';;
-    viins|main) printf '\033[4 q';;
-  esac
-  zle reset-prompt
+    PROMPT="%(?.●.○) %2~ ${${KEYMAP/vicmd/█}/(main|viins)/%#} "
+    zle reset-prompt
 }
 
 zle -N zle-line-init
