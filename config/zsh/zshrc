@@ -53,6 +53,9 @@ zle -N zle-keymap-select
 
 autoload -U vcs_info
 autoload -Uz add-zsh-hook
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:git*' formats " [%b]%u%c"
+zstyle ':vcs_info:*' check-for-staged-changes true
 
 vcs_precmd() {
     vcs_info
@@ -65,12 +68,12 @@ conda_precmd() {
     psvar[2]=""
     if [[ -n $CONDA_PREFIX ]]; then
         # psvar[2]="($(basename $CONDA_PREFIX)) "
-        psvar[2]="($CONDA_DEFAULT_ENV)"
+        psvar[2]=" ($CONDA_DEFAULT_ENV)"
     fi
 }
 add-zsh-hook precmd conda_precmd
 
-export PS1="%(?.●.○) %2v%1v%2~ %# "
+export PS1="%(?.●.○)%2v%1v%2~ %# "
 
 # https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html#Conditional-Substrings-in-Prompts
 

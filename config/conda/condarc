@@ -11,6 +11,8 @@
 #   method.
 env_prompt: '({name}) '
 
+changeps1: False
+
 # auto_activate_base (bool)
 #   Automatically activate the base environment during shell initialization.
 auto_activate_base: false
