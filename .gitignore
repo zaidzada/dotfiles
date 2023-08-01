@@ -38,6 +38,7 @@
 !local/bin/calc
 !local/bin/mbox2csv
 !local/bin/mbox2files
+!local/bin/abtools
 !local/bin/print24bitcolors
 !local/bin/print256colors
 !local/bin/printcolorgrid

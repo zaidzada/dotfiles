@@ -1,0 +1,185 @@
+#!/usr/bin/env python3
+"""AudioBook tools
+
+Commands:
+   - con[cat]enate audio files
+   - generate [chapters] file
+   - convert chapters to [ffmeta]data
+
+Goal: **Converting multiple audio files to one audiobook file**
+
+# 1. Concatenate all audio files
+
+abtools cat $DIR
+
+uses:
+`ffmpeg -f concat -safe 0 -i <(for f in $DIR/*.m4a; do echo "file '$PWD/$f'"; done) -c copy book.m4a`
+
+## 1.1 [optional] convert formats
+
+afconvert book.m4a book.caf -d 0 -f caff --soundcheck-generate -v
+afconvert book.caf -d aac -f m4af --soundcheck-read -b 256000 -q 127 -s 2 book2.m4a -v
+
+Audio: aac (LC) (aavd / 0x64766161), 22050 Hz, stereo, fltp, 62 kb/s (default)
+
+# 2. Generate chapters metadata
+
+## 2.0 [optional] create a chapters file
+
+abtools chapters $DIR
+
+## 2.2 [optional] verify timings in audicity
+
+python3 abtools.py --audacity $DIR/chapters.txt book.m4a
+
+# 2. Add metadata to audio file
+
+Use your favorite application, then verify with:
+
+ffprobe -v quiet -of json -show_entries format book.m4a
+ffprobe -v quiet -of json -show_entries format_tags book.m4a
+
+# 2.0 Add chapter-data to audio file
+
+ffmpeg -i output.m4a -i FFMETADATAFILE -map_metadata 1 -codec copy book.m4b
+
+References:
+- Adapted from https://apple.stackexchange.com/a/426095
+- https://podcasters.apple.com/support/893-audio-requirements
+- https://discussions.apple.com/thread/2422463
+- https://www.headphonesty.com/2019/07/sample-rate-bit-depth-bit-rate/
+- https://blog.superuser.com/2012/02/24/ffmpeg-the-ultimate-video-and-audio-manipulation-tool/
+- https://www.apple.com/apple-music/apple-digital-masters/docs/apple-digital-masters.pdf
+"""
+
+import re
+import glob
+import datetime
+import os
+import subprocess
+
+
+def concatenate_files(args):
+
+   # Find all files and sort them
+   files = list(glob.glob(f"{args.dir}/**/*.{args.extension}"))
+   files.sort()
+   if not len(files):
+      print("No files found!")
+      return
+
+   with open('filelist.txt', 'w') as f:
+      for filename in files:
+         f.write(f"file '{filename}'\n")
+
+   command = f'ffmpeg -f concat -safe 0 -i filelist.txt -c copy book.m4a'
+
+   result = subprocess.check_output(command, shell=True).decode()
+   print(result)
+
+
+def create_chapters(args):
+   # Find all files and sort them
+   files = list(glob.glob(f"{args.dir}/**/*.{args.extension}"))
+   files.sort()
+   if not len(files):
+      print("No files found!")
+      return
+
+   chapters = []
+   currentTimestamp = 0 # in seconds
+   for file in files:
+      title = os.path.splitext(file)[0].split('/')[-1]
+      time = str(datetime.timedelta(seconds=currentTimestamp)) + '.000'
+      audioLength = get_file_dur(file)
+      currentTimestamp = int(currentTimestamp + audioLength)
+      chapters.append(time + ' ' + title)
+
+   with open(f"{args.dir}/chapters.txt", "w") as chaptersFile:
+      for chapter in chapters:
+         chaptersFile.write(chapter + "\n")
+
+
+def convert_chapters(args):
+
+   chapters = read_chapters(args.chapterfile, args.audiofile)
+
+   text = ";FFMETADATA1\n"
+   audtext = ""
+   for i in range(len(chapters)-1):
+      chap = chapters[i]
+      title = chap['title']
+      start = chap['startTime']
+      end = chapters[i+1]['startTime']-1
+      text += f"[CHAPTER]\nTIMEBASE=1/1000\nSTART={start}\nEND={end}\ntitle={title}\n"
+      audtext += f"{start/1000}\t{start/1000}\t{title}\n"
+
+   with open("FFMETADATAFILE", "w") as myfile:
+       myfile.write(text)
+
+   if args.audacity:
+      with open("label.tsv", "w") as myfile:
+         myfile.write(audtext)
+
+
+def read_chapters(chapterfile: str, audiofile: str) -> dict:
+   # import chapters and create ffmetadatafile
+   chapters = list()
+   with open(chapterfile, 'r') as f:
+      for line in f:
+         x = re.match(r"(\d*):(\d{2}):(\d{2}).(\d{3}) (.*)", line)
+         hrs = int(x.group(1))
+         mins = int(x.group(2))
+         secs = int(x.group(3))
+         title = x.group(5)
+
+         minutes = (hrs * 60) + mins
+         seconds = secs + (minutes * 60)
+         timestamp = (seconds * 1000)
+         chap = {
+            "title": title,
+            "startTime": timestamp
+         }
+         chapters.append(chap)
+
+   duration = get_file_dur(audiofile)
+   chapters.append({
+      "title": "end",
+      "startTime": duration * 1000
+   })
+
+   return chapters
+
+
+def get_file_dur(filename):
+    result = subprocess.check_output(
+            f'ffprobe -v quiet -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "{filename}"',
+            shell=True).decode()
+    return float(result)
+
+
+if __name__ == "__main__":
+   from argparse import ArgumentParser
+   parser = ArgumentParser()
+   subparsers = parser.add_subparsers(required=True)
+
+   parser_cat = subparsers.add_parser('cat')
+   parser_cat.add_argument("dir", type=str)
+   parser_cat.add_argument("-e", "--extension", type=str, default="m4a")
+   parser_cat.set_defaults(func=concatenate_files)
+
+   parser_chapter = subparsers.add_parser('chapters')
+   parser_chapter.add_argument("dir", type=str)
+   parser_chapter.add_argument("-e", "--extension", type=str, default="m4a")
+   parser_chapter.set_defaults(func=create_chapters)
+
+   parser_ffmeta = subparsers.add_parser('ffmeta')
+   parser_ffmeta.add_argument("chapterfile", type=str)
+   parser_ffmeta.add_argument("audiofile", type=str)
+   parser_ffmeta.add_argument("-a", "--audacity", action="store_true")
+   parser_ffmeta.set_defaults(func=convert_chapters)
+
+   args = parser.parse_args()
+   args.func(args)
+
+   # main(args)
