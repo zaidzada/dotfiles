@@ -1,6 +1,4 @@
 {
-  "~-" = "lowercaseWord:";
-  "~=" = "capitalizeWord:";
   "~f" = "moveWordForward:";
   "~b" = "moveWordBackward:";
   "^u" = "deleteToBeginningOfLine:";
@@ -12,21 +10,4 @@
   "~p" = "pageUp:";
   "~<" = "moveToBeginningOfDocument:";
   "~>" = "moveToEndOfDocument:";
-
-  // bookmark
-  "~1" = (setMark:);
-  "~2" = (swapWithMark:,centerSelectionInVisibleArea:);
-
-  // Commenting commands
-  "^@c" = {
-      // comment with "//"
-      "/" = (moveToBeginningOfParagraph:, insertText:, "// ", moveToEndOfParagraph:, moveForward:);
-      // comment with "#"
-      "\\" = (moveToBeginningOfParagraph:, insertText:, "# ", moveToEndOfParagraph:, moveForward:);
-      // HTML commenting
-      "!" = (setMark:, swapWithMark:, delete:, insertText:, "<!-- ", yank:, insertText:, " -->", swapWithMark:, moveRight:, moveRight:, moveRight:, moveRight:, moveRight:);
-      // Css Commenting
-      "*" = (setMark:, swapWithMark:, delete:, insertText:, "/* ", yank:, insertText:, " */", swapWithMark:, moveRight:, moveRight:, moveRight:);
-  };
-
 }
