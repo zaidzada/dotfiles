@@ -1,0 +1,173 @@
+#!/usr/bin/env python
+'''
+Utility to parse csv. Depends on pandas.
+
+Functionality to add:
+    - group by
+    - filtering and slicing
+    - value counts
+'''
+
+from __future__ import print_function
+
+import sys
+import pickle
+import argparse
+
+import pandas as pd
+
+
+def load_pickle(args):
+    with open(args.file, 'rb') as fp:
+        obj = pickle.load(fp)
+    df = pd.DataFrame.from_records(obj)
+    return df
+
+
+def load_csv(args):
+    df = pd.read_csv(args.file,
+                     sep=args.sep,
+                     index_col=args.index_col,
+                     skiprows=args.skiprows,
+                     nrows=args.nrows,
+                     parse_dates=args.parse_dates,
+                     usecols=args.usecols)
+    return df
+
+
+def command_print(df, args):
+    print(df)
+
+
+def command_tocsv(df, args):
+    df.to_csv(sys.stdout)
+
+
+def command_cut(df, args):
+    locs = eval(args.cut)
+    df = df.iloc[:, locs]
+    return df
+
+
+def main(args):
+    load_func = load_pickle if args.pickle else load_csv
+    df = load_func(args)
+
+    for time_col in args.parse_times:
+        if isinstance(time_col, int):
+            time_col = df.columns[time_col]
+        df[time_col] = pd.to_timedelta(df[time_col])
+
+    if args.print_columns:
+        dfd = pd.DataFrame(df.dtypes)
+        dfd['index'] = range(len(dfd))
+        print(dfd)
+        exit()
+
+    for arg in args._order:
+        value = getattr(args, arg)
+        if arg == 'sort' and args.sort:
+            if isinstance(args.sort, list):
+                ids = [df.columns[i] if isinstance(i, int) else i for i in args.sort]
+                df = df.sort_values(by=ids)
+            else:
+                df = df.sort_index()
+        elif arg == 'cut' and args.cut is not None:
+            df = command_cut(df, args)
+        elif arg == 'groupby' and args.groupby is not None:
+            df = df.groupby(by=args.groupby)
+        elif arg == 'value_count' and args.value_count:
+            # Value counts  # TODO - specify column?
+            if df.ndim > 1:
+                df = fd.iloc[:, 0]
+            df = df.value_counts()
+        elif arg == 'describe' and args.describe:
+            df = df.describe()
+        elif arg == 'count' and args.count:
+            df = df.count()  # group by count
+
+    # Print
+    if args.to_csv:
+        command_tocsv(df, args)
+    elif not args.no_print:
+        command_print(df, args)
+
+    # Interact
+    if args.interact:
+        breakpoint()
+
+
+def try_parse_str(values, true_on_empty=False):
+    if isinstance(values, list):
+        if len(values) == 0 and true_on_empty:
+            return True
+        else:
+            return [int(s) if s.isnumeric() else s for s in values]
+
+    return values
+
+
+class OrderedNamespace(argparse.Namespace):
+    def __init__(self, **kwargs):
+        self.__dict__["_order"] = [None]
+        self.on = True
+        super().__init__(**kwargs)
+
+    def __setattr__(self, attr, value):
+        super().__setattr__(attr, value)
+        if self.on:
+            if attr in self._order:
+                self.__dict__["_order"].clear()
+            self.__dict__["_order"].append(attr)
+
+    # def ordered(self):
+    #     if self._order and self._order[0] is None:
+    #         self._order.clear()
+    #     return ((attr, getattr(self, attr)) for attr in self._order)
+
+
+if __name__ == '__main__':
+    # Look at subparsers for commands
+    # Look at using ordered parser https://stackoverflow.com/a/38427086
+    parser = argparse.ArgumentParser()
+
+    # CSV file arguments
+    parser.add_argument('-f', '--file', nargs='?', type=str, default=sys.stdin)
+    parser.add_argument('-s', '--sep', type=str, default=',')
+    parser.add_argument('-k', '--skiprows', type=int, default=None)
+    parser.add_argument('-n', '--nrows', type=int, default=None)
+    parser.add_argument('-i', '--index-col', type=int, default=None)
+    parser.add_argument('-u', '--usecols', nargs='+', type=str, default=None)
+    parser.add_argument('-d', '--parse-dates', nargs='*', default=False)
+    parser.add_argument('-t', '--parse-times', nargs='*', default=[])
+
+    # output args:
+    parser.add_argument('--print-columns', action='store_true')
+    parser.add_argument('--value-count', action='store_true')
+    parser.add_argument('--no-print', action='store_true')
+
+    parser.add_argument('--cut', type=str, default=None)
+    parser.add_argument('-g', '--groupby', nargs='+', type=str, default=None)
+    parser.add_argument('--count', action='store_true')
+    parser.add_argument('-r', '--sort', nargs='*', type=str, default=False)
+
+    parser.add_argument('--describe', action='store_true')
+    parser.add_argument('--to-csv', action='store_true')
+    parser.add_argument('--interact', action='store_true')
+
+    parser.add_argument('--pickle',
+                        action='store_true',
+                        help='Load file as a pickle.')
+    namespace = OrderedNamespace()
+    args = parser.parse_args(namespace=namespace)
+    namespace.on = False # TODO - change these into actions:
+
+    args.parse_dates = try_parse_str(args.parse_dates, true_on_empty=True)
+    args.usecols = try_parse_str(args.usecols)
+    args.parse_times = try_parse_str(args.parse_times)
+    args.sort = try_parse_str(args.sort, true_on_empty=True)
+
+    pd.set_option('display.max_rows', None)
+    pd.set_option('display.max_columns', None)
+
+    main(args)
