@@ -15,7 +15,7 @@ brew "youtube-dl"
 # Install these with the app store:
 # mas "AdGuard for Safari", id=1440147259
 
-cask "iterm2"
 cask "brewlet"
 cask "miniconda"
 cask "zotero"
+cask "inkscape"
