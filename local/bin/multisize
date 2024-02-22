@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Check if filename argument is provided
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 <filename.svg> <width1> [<width2> ...]"
+    exit 1
+fi
+
+# Extract filename
+filename=$1
+shift
+
+# Check if the file exists
+if [ ! -f "$filename" ]; then
+    echo "File $filename not found!"
+    exit 1
+fi
+
+# Check if Inkscape is installed
+if ! command -v inkscape &> /dev/null; then
+    echo "Inkscape is not installed. Please install it before running this script."
+    exit 1
+fi
+
+# Iterate over each provided width
+for width in "$@"; do
+    # Ensure width is a positive integer
+    if ! [[ "$width" =~ ^[0-9]+$ ]] || [ "$width" -le 0 ]; then
+        echo "Width must be a positive integer: $width"
+        continue
+    fi
+
+    # Convert PNG with specified width
+    png_filename="${filename%.*}_${width}px.png"
+    if [[ "$filename" == *.svg ]]; then
+        inkscape --export-type="png" -w "$width" -h "$width" icon.svg --export-filename="$png_filename"
+    else
+        sips --resampleWidth "$width" "$filename" --out "$png_filename"
+        # convert "$filename" -resize "${width}x${width}^" -gravity center -extent "${width}x${width}" -transparent white -background transparent "$png_filename"
+    fi
+
+    # Check if conversion was successful
+    if [ $? -eq 0 ]; then
+        echo "Converted $filename to PNG with width $width"
+    else
+        echo "Failed to convert $filename to PNG with width $width"
+    fi
+done
+

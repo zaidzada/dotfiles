@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+
+from PIL import Image
+
+
+def merge(im1, im2):
+    w = max(im1.size[0], im2.size[0])
+    h = im1.size[1] + im2.size[1]
+    im = Image.new("RGBA", (w, h))
+
+    print(im1.size, im2.size)
+
+    im.paste(im1)
+    im.paste(im2, (im1.size[0]//2 - im2.size[0]//2, im1.size[1]))
+
+    return im
+
+if __name__ == '__main__':
+    import sys
+    infile1 = sys.argv[1]
+    infile2 = sys.argv[2]
+
+    im1 = Image.open(infile1)
+    im2 = Image.open(infile2)
+
+    newim = merge(im1, im2)
+    newim.save(infile1.replace('.png', '-merged.png'))

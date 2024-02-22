@@ -95,7 +95,7 @@ def create_chapters(args):
       currentTimestamp = int(currentTimestamp + audioLength)
       chapters.append(time + ' ' + title)
 
-   with open(f"{args.dir}/chapters.txt", "w") as chaptersFile:
+   with open(f"chapters.txt", "w") as chaptersFile:
       for chapter in chapters:
          chaptersFile.write(chapter + "\n")
 
@@ -181,5 +181,3 @@ if __name__ == "__main__":
 
    args = parser.parse_args()
    args.func(args)
-
-   # main(args)

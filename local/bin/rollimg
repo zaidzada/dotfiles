@@ -1,0 +1,35 @@
+#!/usr/bin/env python
+
+from PIL import Image
+
+
+def roll(im, delta=None):
+    """Roll an image sideways."""
+    xsize, ysize = im.size
+
+    if delta is None:
+        delta = im.size[0] // 2
+
+    delta = delta % xsize
+    if delta == 0:
+        return im
+
+    part1 = im.crop((0, 0, delta, ysize))
+    part2 = im.crop((delta, 0, xsize, ysize))
+    im.paste(part1, (xsize - delta, 0, xsize, ysize))
+    im.paste(part2, (0, 0, xsize - delta, ysize))
+
+    return im
+
+
+if __name__ == '__main__':
+    import sys
+    for infile in sys.argv[1:]:
+        try:
+            with Image.open(infile) as im:
+                print(infile, im.format, f"{im.size}x{im.mode}")
+                newim = roll(im, im.size[0]//2)
+                newim.save(infile.replace('.png', '-rolled.png'))
+        except OSError as e:
+            print(e)
+            pass
