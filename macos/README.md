@@ -2,14 +2,21 @@
 
 ## for a new mac
 
-- sign in to iCloud
-- git clone https://github.com/zkokaja/dotfiles.git
-- ./dotfiles/macOS/macos
-- configure keyboard modifiers manually for now in System Prefs
-- TODO scroll direction?
-- mkdir -p Library/KeyBindings/ && ln -s $PWD/macos/DefaultKeyBinding.dict $HOME/Library/KeyBindings
-- /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-- but see this next time https://stackoverflow.com/a/55021458 and use XDG dirs probably
-- brew bundle install --file dotfiles/macos/Brewfile (may want to comment out some casks depending on usage)
-
-sudo sed -i -- '2s/^/auth sufficient pam_tid.so\n/' /etc/pam.d/sudo
+- [ ] sign in to iCloud
+- [ ] git clone https://github.com/zkokaja/dotfiles.git
+- [ ] ./dotfiles/macOS/macos
+- [ ] configure keyboard modifiers 
+- [ ] mkdir -p $HOME/Library/KeyBindings/ && ln -s $PWD/macos/DefaultKeyBinding.dict $HOME/Library/KeyBindings
+- [ ] install homebrew package
+- [ ] brew bundle install --file dotfiles/macos/Brewfile
+- [ ] download certain apps from the app store (see Brewfile)
+- [ ] sudo sed -i -- '2s/^/auth sufficient pam_tid.so\n/' /etc/pam.d/sudo
+- [ ] add internet accounts
+- [ ] manually configure dock, ssh config
+- [ ] install xcode and xcode-select --install
+- [ ] github ssh keys (ssh-keygen)
+- [ ] ssh-copy-id
+- [ ] terminal profile
+- [ ] add internet accounts
+- [ ] custom colors (PMS) (save somewhere? and create matplotlib?)
+- [ ] check keyboard shortcuts

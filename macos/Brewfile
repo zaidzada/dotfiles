@@ -1,21 +1,31 @@
-# Only the essential packages
-
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/core"
 
 brew "coreutils"
-brew "tree"
-brew "tmux"
 brew "ffmpeg"
+brew "fzf"
+brew "htop"
+brew "htop"
 brew "imagemagick"
+brew "jq"
 brew "pandoc"
-brew "youtube-dl"
+brew "ripgrep"
+# brew "texlive"
+brew "tmux"
+brew "tree"
+brew "yt-dlp"
 
-# Install these with the app store:
-# mas "AdGuard for Safari", id=1440147259
-
+# cask "adobe-digital-editions"
 cask "brewlet"
-cask "miniconda"
-cask "zotero"
+cask "calibre"
+cask "google-chrome"
+cask "iina"
 cask "inkscape"
+cask "miniconda"
+# cask "openemu"
+# cask "discord"
+# cask "steam"
+cask "visual-studio-code"
+cask "zoom"
+cask "zotero"

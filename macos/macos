@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # ~/.macos — https://mths.be/macos
+# https://macos-defaults.com
 
 # Close any open System Preferences panes, to prevent them from overriding
 # settings we’re about to change
@@ -29,14 +30,31 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool
 # Disable “natural” (Lion-style) scrolling
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
 
+defaults write -g AppleFontSmoothing -int 0
+
+# Change the whitespace settings value
+defaults -currentHost write -globalDomain NSStatusItemSelectionPadding -int 6
+defaults -currentHost write -globalDomain NSStatusItemSpacing -int 6
+
 # > Keyboard
 
 # Enable full keyboard access for all controls
 # (e.g. enable Tab in modal dialogs)
 defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 
-# Show language menu in the top right corner of the boot screen
-sudo defaults write /Library/Preferences/com.apple.loginwindow showInputMenu -bool true
+# Global shortcuts
+defaults write -g NSUserKeyEquivalents -dict-add "Move Window to Left Side of Screen" -string "@^e"
+defaults write -g NSUserKeyEquivalents -dict-add "Move Window to Right Side of Screen" -string "@^r"
+defaults write -g NSUserKeyEquivalents -dict-add "Strikethrough" -string "@^x"
+defaults write -g NSUserKeyEquivalents -dict-add "Zoom" -string "@^z"
+
+# App shortcuts
+# mdls /Applications/"$app".app | grep kMDItemCF
+defaults write com.apple.iWork.Keynote NSUserKeyEquivalents -dict-add "Group" -string "@g"
+defaults write com.apple.iWork.Keynote NSUserKeyEquivalents -dict-add "Ungroup" -string "@$g"
+defaults write com.apple.iWork.Keynote NSUserKeyEquivalents -dict-add "Next slide" -string "@^n"
+defaults write com.apple.iWork.Keynote NSUserKeyEquivalents -dict-add "Previous slide" -string "@^p"
+
 
 # > Battery
 
@@ -57,7 +75,7 @@ defaults write com.apple.finder QuitMenuItem -bool true
 
 # Set Desktop as the default location for new Finder windows
 # For other paths, use `PfLo` and `file:///full/path/here/`
-defaults write com.apple.finder NewWindowTarget -string "PfDe"
+defaults write com.apple.finder NewWindowTarget -string "PfLo"
 defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
 
 # Show icons for hard drives, servers, and removable media on the desktop

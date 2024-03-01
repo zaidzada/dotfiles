@@ -262,9 +262,8 @@ nnoremap <silent> <Leader>z :ZoomToggle<CR>
 " > Plugin definition and configurations
 " -----------------------------------------------------------------------------
 
-call plug#begin($XDG_DATA_HOME.'/vim/plugged')
-
-call plug#end()
+" call plug#begin($XDG_DATA_HOME.'/vim/plugged')
+" call plug#end()
 
 if filereadable(expand("~/.vimrc.local"))
     source ~/.vimrc.local

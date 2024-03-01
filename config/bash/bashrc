@@ -77,11 +77,11 @@ fi
 
 
 # ls colors
-if [[ -f ~/.dircolors ]]; then
-    eval "$(dircolors ~/.dircolors)"
-else
-    eval "$(dircolors)"
-fi
+# if [[ -f ~/.dircolors ]]; then
+#     eval "$(dircolors ~/.dircolors)"
+# else
+#     eval "$(dircolors)"
+# fi
 
 # -----------------------------------------------------------------------------
 # > Functions
