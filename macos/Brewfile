@@ -19,13 +19,24 @@ brew "yt-dlp"
 # cask "adobe-digital-editions"
 cask "brewlet"
 cask "calibre"
+cask "gimp"
 cask "google-chrome"
 cask "iina"
 cask "inkscape"
 cask "miniconda"
+# cask "musescore"
 # cask "openemu"
 # cask "discord"
+cask "sf-symbols"
 # cask "steam"
 cask "visual-studio-code"
 cask "zoom"
 cask "zotero"
+
+# Download through app store when possible:
+# AdGuard for Safari, Hush
+# XCode
+# WhatSApp
+# Slack
+# Remarkable
+# Reeder 5
