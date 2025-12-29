@@ -1,11 +1,7 @@
 #!/usr/bin/env zsh
 # .zprofile is only loaded for login shells
 
-export PATH="$HOME/.local/bin:$PATH"
-
-if [[ -x $(command -v nvim) ]]; then
-    export EDITOR="nvim"
-elif [[ -x $(command -v vim) ]]; then
+if [[ -x $(command -v vim) ]]; then
     export EDITOR="vim"
 else
     export EDITOR="vi"
@@ -18,17 +14,6 @@ fi
 # vim
 export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
 
-# less
-export LESSHISTFILE="${XDG_CONFIG_HOME}/less/history"
-export LESSKEY="${XDG_CONFIG_HOME}/less/keys"
-
-# jupyter
-export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME"/jupyter
-
-# dircolors
-# eval $(dircolors "$XDG_CONFIG_HOME"/dircolors/dircolors)
-
-
 # > Misc apps
 
 export HOMEBREW_NO_ANALYTICS=1
@@ -39,3 +24,19 @@ export HOMEBREW_NO_ANALYTICS=1
 if [[ -f "$XDG_CONFIG_HOME"/zsh/zprofile.local ]]; then
     source "$XDG_CONFIG_HOME"/zsh/zprofile.local
 fi
+
+# these should come after local changes that may modify XDG paths
+
+# add XDG bin to PATH
+export PATH="$XDG_BIN_HOME:$PATH"
+
+# less
+export LESSHISTFILE="${XDG_CONFIG_HOME}/less/history"
+export LESSKEY="${XDG_CONFIG_HOME}/less/keys"
+
+# jupyter
+export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME"/jupyter
+
+# dircolors
+# eval $(dircolors "$XDG_CONFIG_HOME"/dircolors/dircolors)
+
