@@ -48,3 +48,5 @@
 
 [init]
 	defaultBranch = main
+[http]
+	sslVerify = true
