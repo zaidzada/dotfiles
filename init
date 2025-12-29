@@ -5,6 +5,12 @@
 # TODO: make idempotent, interactive
 # TODO: move old config/local into new location
 
+# ensure dirs exist
+mkdir -p "$XDG_DATA_HOME"
+mkdir -p "$XDG_CACHE_HOME"
+mkdir -p "$XDG_STATE_HOME"
+mkdir -p "$XDG_BIN_HOME"
+
 ln -sfv $PWD/config/zsh/zshenv $HOME/.zshenv
 source $HOME/.zshenv
 
@@ -16,11 +22,6 @@ source "$XDG_CONFIG_HOME"/zsh/zprofile
 # setup local home
 mv "$HOME"/.local "$HOME/local.old"
 ln -sfv "$PWD"/local "$HOME/.local"
-
-# ensure dirs exist
-mkdir -p "$XDG_DATA_HOME"
-mkdir -p "$XDG_CACHE_HOME"
-mkdir -p "$XDG_STATE_HOME"
 
 # Install plugin managers
 # curl -fLo "$XDG_CONFIG_HOME"/vim/autoload/plug.vim --create-dirs \
