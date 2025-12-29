@@ -42,6 +42,8 @@ alias g='grep'
 alias d='diff'
 alias f='find'
 alias v="$EDITOR"
+alias ffmpeg="ffmpeg -hide_banner" 
+alias ffprobe="ffprobe -hide_banner" 
 
 # -----------------------------------------------------------------------------
 # > Platform specifics
