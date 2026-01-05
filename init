@@ -2,8 +2,22 @@
 
 # Make sure your XDG paths are set before running this
 
-# TODO: make idempotent, interactive
-# TODO: move old config/local into new location
+ln -sfv $PWD/config/zsh/zshenv $HOME/.zshenv
+source $HOME/.zshenv
+
+# Print XDG paths for verification and confirm before continuing
+printf "XDG paths:\n"
+printf "  XDG_CONFIG_HOME=%s\n" "${XDG_CONFIG_HOME:-$HOME/.config}"
+printf "  XDG_DATA_HOME  =%s\n" "${XDG_DATA_HOME:-$HOME/.local/share}"
+printf "  XDG_STATE_HOME =%s\n" "${XDG_STATE_HOME:-$HOME/.local/state}"
+printf "  XDG_CACHE_HOME =%s\n" "${XDG_CACHE_HOME:-$HOME/.cache}"
+printf "  XDG_BIN_HOME   =%s\n" "${XDG_BIN_HOME:-$HOME/.local/bin}"
+printf "\nProceed with these values? [y/N] "
+read ans
+case "$ans" in
+    y|Y|yes|Yes|YES) ;;
+    *) printf "Aborted.\n"; exit 1;;
+esac
 
 # ensure dirs exist
 mkdir -p "$XDG_DATA_HOME"
@@ -11,16 +25,13 @@ mkdir -p "$XDG_CACHE_HOME"
 mkdir -p "$XDG_STATE_HOME"
 mkdir -p "$XDG_BIN_HOME"
 
-ln -sfv $PWD/config/zsh/zshenv $HOME/.zshenv
-source $HOME/.zshenv
-
 # setup config home
-mv $HOME/.config $HOME/config.old
+mv $HOME/.config $HOME/.config.old
 ln -sfv "$PWD"/config "$XDG_CONFIG_HOME"
 source "$XDG_CONFIG_HOME"/zsh/zprofile
 
 # setup local home
-mv "$HOME"/.local "$HOME/local.old"
+mv "$HOME"/.local "$HOME/.local.old"
 ln -sfv "$PWD"/local "$HOME/.local"
 
 # Install plugin managers
