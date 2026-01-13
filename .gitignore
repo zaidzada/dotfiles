@@ -1,25 +1,13 @@
-# Ignore everything
-*
-
-# But not these files
-!.gitignore
-!README.md
-!init
-
-# But descend into directories
-!*/
-
-# Allow macos dir (recursively)
-!/macos/**
 /macos/*.lock.json
 
-# Allow custom binaries
-!/local/bin/*
-/local/bin/rmapi
-
-# Ignore these specific files
 /config/tmux/*.local
 /config/tmux/plugins
+
 /config/vim/pack
+/config/vim/autoload
+
 /config/zsh/.zcompdump
+/config/zsh/.zsh_sessions
 /config/zsh/*.local
+
+.DS_STORE

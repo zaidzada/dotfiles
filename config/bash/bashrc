@@ -1,129 +1,8 @@
 [[ $- != *i* ]] && return
 
-# -----------------------------------------------------------------------------
-# > Aliases
-# -----------------------------------------------------------------------------
-
-# Navigation
-alias ..='cd ..'
-alias ...='cd ../..'
-
-# Listing
-alias ls='ls -F'
-alias ll='ls -lh'
-alias lt='ls -lhtr'
-alias la='ls -lhtA'
-alias ld='ls -lhtd'
-
-# Paging
-alias less='less -S'
-
-# Confirmation
-alias mv='mv -i'
-alias cp='cp -i'
-
-# Misc
-alias df='df -h'
-alias du='du -h'
-alias path='echo $PATH | tr ":" "\n"'
-alias td='tmux detach'
-
-# Colors
-alias grep='grep --color=auto'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
-
-# Shortcuts
-alias l='ls -lhtr'
-alias t='tree'
-alias c='cd'
-alias b='cat'
-alias g='grep'
-alias d='diff'
-alias f='find'
-alias v="$EDITOR"
-alias ffmpeg="ffmpeg -hide_banner" 
-alias ffprobe="ffprobe -hide_banner" 
-
-# -----------------------------------------------------------------------------
-# > Platform specifics
-# -----------------------------------------------------------------------------
-
-# Add colors for macos
-if [[ "$(uname)" == "Darwin" ]]; then
-
-    alias dircolors='gdircolors'
-
-    if [ -x "$(command -v gls)" ]; then
-        alias ls='gls --color=auto -F -X --group-directories-first'
-    else
-        alias ls='ls -F -G'
-        export LSCOLORS=GxFxCxDxBxegedabagaced;
-    fi
-
-elif [[ "$(uname)" == "Linux" ]]; then
-
-    alias ls='ls --color=auto -F -X --group-directories-first'
-
-fi
-
-
-# ls colors
-# if [[ -f ~/.dircolors ]]; then
-#     eval "$(dircolors ~/.dircolors)"
-# else
-#     eval "$(dircolors)"
-# fi
-
-# -----------------------------------------------------------------------------
-# > Functions
-# -----------------------------------------------------------------------------
-
-mkd() {
-  mkdir -p "$@" && cd "$@" || return
-}
-
-lc() {
-  column -s',' -t "$@" | less -S
-}
-
-lnb() {
-    find . -type l -exec sh -c 'file -b "$1" | grep -q ^broken' sh {} \; -print
-}
-
-function cd() {
-  if [[ ${#} -eq 0 ]]; then
-      builtin cd
-      return
-  fi
-
-  if [[ -f ${1} ]]; then
-      builtin cd $(dirname ${1})
-  else
-      builtin cd ${1}
-  fi
-
-}
-
-bkp() {
-  cp "$1" "$(date +%Y%m%d_%s_)$1"
-}
-
-timer() {
-    while true
-    do sleep "$1"
-        osascript -e beep
-        echo "$(date '+%H:%M:%S')" beep
-    done
-}
-
-recipe() {
-    pandoc -f html -t markdown_strict-escaped_line_breaks "https://www.plainoldrecipe.com/recipe?url=$1"
-}
-
-# NOTE - Only continue if on bash
-if [[ -z "$BASH_VERSION" ]]; then
-    return
+# Load Common Aliases and Functions
+if [[ -f "$XDG_CONFIG_HOME"/shell/aliases ]]; then
+    source "$XDG_CONFIG_HOME/shell/aliases"
 fi
 
 
@@ -131,24 +10,19 @@ fi
 # > bash options
 # -----------------------------------------------------------------------------
 
-shopt -s autocd
 shopt -s cdspell
 shopt -s cmdhist
 shopt -s histappend
 shopt -s nocaseglob
 shopt -s checkwinsize
 
-export HISTFILESIZE=1000000
-export HISTSIZE=1000000
-export HISTCONTROL=ignoreboth
+export HISTFILESIZE=50000
+export HISTSIZE=50000
+export HISTCONTROL=ignoreboth:erasedups
 export HISTIGNORE='ls:ll:bg:fg:history'
 export HISTTIMEFORMAT='%F %T '
 
-
-col="$(tput setaf $pri_bg_xt)"
-res="$(tput sgr0)"
-export PS1="\[$col\]\W \[$res\]\$ ";
-
+export PS1='$( [ $? -eq 0 ] && echo "●" || echo "○" ) \W \$ '
 
 # -----------------------------------------------------------------------------
 # > Initialization

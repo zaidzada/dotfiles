@@ -1,26 +1,30 @@
-[[ -f ~/.config/bash/bashrc ]] && source ~/.config/bash/bashrc
-
 # https://unix.stackexchange.com/questions/547/make-my-zsh-prompt-show-mode-in-vi-mode
 # https://zsh.sourceforge.io/Doc/Release/User-Contributions.html#Version-Control-Information
 # https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html#Conditional-Substrings-in-Prompts
-#
+
+# Load Common Aliases and Functions
+if [[ -f "$XDG_CONFIG_HOME"/shell/aliases ]]; then
+    source "$XDG_CONFIG_HOME/shell/aliases"
+fi
+
+
 # -----------------------------------------------------------------------------
 # > zsh options
 # -----------------------------------------------------------------------------
 
-bindkey -e
 setopt autocd
 setopt correct
 
 # History (see `man zshoptions`)
 setopt append_history
+setopt share_history
 setopt inc_append_history
 setopt hist_ignore_all_dups
 setopt hist_ignore_space
 export HISTSIZE=50000  # the number of items for the internal history list
 export SAVEHIST=50000  # maximum number of items for the history file
-export HISTFILE="$XDG_STATE_HOME"/zsh/history
-mkdir -p "$XDG_STATE_HOME"/zsh
+export HISTFILE="${XDG_STATE_HOME:=$HOME/.local/state}/zsh/history"
+mkdir -p "$(dirname "$HISTFILE")"
 
 # Completion
 zmodload -i zsh/complist
@@ -31,8 +35,12 @@ compinit
 autoload -U select-word-style
 select-word-style bash
 
-# Key bindings
+
+# -----------------------------------------------------------------------------
+# > Key bindings (Vi Mode with Emacs insertion)
+# -----------------------------------------------------------------------------
 # Look at `man zshzle` and `bindkey -l` and `zle -al`
+
 bindkey -v
 bindkey -M viins "^D" delete-char
 bindkey -M viins "^H" backward-delete-char
@@ -46,16 +54,14 @@ bindkey -M viins "^K" kill-line
 bindkey -M viins "^U" backward-kill-line
 bindkey -M viins "^R" history-incremental-search-backward
 
-function zle-line-init zle-keymap-select {
-    RPS1="${${KEYMAP/vicmd/█}/(main|viins)/}"
-    RPS2=$RPS1
-    zle reset-prompt
-}
-zle -N zle-line-init
-zle -N zle-keymap-select
+# -----------------------------------------------------------------------------
+# > Prompt & VCS
+# -----------------------------------------------------------------------------
 
 autoload -U vcs_info
 autoload -Uz add-zsh-hook
+
+# Git settings
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:git*' formats " [%r-%b]%u%c"
 zstyle ':vcs_info:*' check-for-staged-changes true
@@ -66,15 +72,22 @@ vcs_precmd() {
 }
 add-zsh-hook precmd vcs_precmd
 
-# Determines prompt modifier if and when a conda environment is active
 conda_precmd() {
     psvar[2]=""
-    if [[ -n $CONDA_PREFIX ]]; then
-        psvar[2]=" ($(basename $CONDA_PREFIX))"
-        # psvar[2]=" ($CONDA_DEFAULT_ENV)"
+    if [[ -n "$CONDA_PREFIX" ]]; then
+        # psvar[2]=" ($(basename $CONDA_PREFIX))"
+        psvar[2]=" %F{green}($(basename $CONDA_PREFIX))%f"
     fi
 }
 add-zsh-hook precmd conda_precmd
+
+# Vi Mode Indicator (Right Prompt)
+function zle-line-init zle-keymap-select {
+    RPS1="${${KEYMAP/vicmd/%F{red\}█%f}/(main|viins)/}"
+    zle reset-prompt
+}
+zle -N zle-line-init
+zle -N zle-keymap-select
 
 export PS1="%(?.●.○)%2v%1v%2~ %# "
 

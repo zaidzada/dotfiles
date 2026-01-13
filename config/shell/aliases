@@ -1,0 +1,111 @@
+# -----------------------------------------------------------------------------
+# > Aliases
+# -----------------------------------------------------------------------------
+
+# Navigation
+alias ..='cd ..'
+alias ...='cd ../..'
+
+# Listing
+alias ll='ls -lh'
+alias lt='ls -lhtr'
+alias la='ls -lhtA'
+alias ld='ls -lhtd'
+
+# Paging
+alias less='less -S'
+
+# Confirmation
+alias mv='mv -i'
+alias cp='cp -i'
+
+# Misc
+alias df='df -h'
+alias du='du -h'
+alias path='echo $PATH | tr ":" "\n"'
+alias td='tmux detach'
+
+# Colors
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+
+# Shortcuts
+alias l='ls -lhtr'
+alias t='tree'
+alias c='cd'
+alias g='grep'
+alias d='diff'
+alias f='find'
+alias ffmpeg="ffmpeg -hide_banner" 
+alias ffprobe="ffprobe -hide_banner" 
+
+v() { ${EDITOR:-vi} "$@"; }
+
+# -----------------------------------------------------------------------------
+# > Platform specifics
+# -----------------------------------------------------------------------------
+
+# Add colors for macos
+if [[ "$(uname)" == "Darwin" ]]; then
+
+    alias dircolors='gdircolors'
+
+    if [ -x "$(command -v gls)" ]; then
+        alias ls='gls --color=auto -F -X --group-directories-first'
+    else
+        alias ls='ls -F -G'
+        export LSCOLORS=GxFxCxDxBxegedabagaced;
+    fi
+
+elif [[ "$(uname)" == "Linux" ]]; then
+
+    alias ls='ls --color=auto -F -X --group-directories-first'
+
+fi
+
+
+# ls colors
+# if [[ -f ~/.dircolors ]]; then
+#     eval "$(dircolors ~/.dircolors)"
+# else
+#     eval "$(dircolors)"
+# fi
+
+# -----------------------------------------------------------------------------
+# > Functions
+# -----------------------------------------------------------------------------
+
+mkd() {
+  mkdir -p "$@" && cd "$@" || return
+}
+
+lc() {
+  column -s',' -t "$@" | less -S
+}
+
+# broken symlink finder
+lnb() {
+    find . -type l ! -exec test -e {} \; -print
+}
+
+function cd() {
+  if [ "$#" -eq 0 ]; then
+    builtin cd
+    return
+  fi
+
+  if [ -f "$1" ]; then
+    builtin cd -- "$(dirname -- "$1")" || return
+  else
+    builtin cd -- "$1" || return
+  fi
+}
+
+bkp() {
+  cp "$1" "$(date +%Y%m%d_%s_)$1"
+}
+
+recipe() {
+    pandoc -f html -t markdown_strict-escaped_line_breaks "https://www.plainoldrecipe.com/recipe?url=$1"
+}
