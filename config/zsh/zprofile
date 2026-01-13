@@ -40,3 +40,5 @@ export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME"/jupyter
 # dircolors
 # eval $(dircolors "$XDG_CONFIG_HOME"/dircolors/dircolors)
 
+export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
+export CONDARC="$XDG_CONFIG_HOME/conda/condarc"
