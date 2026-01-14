@@ -1,3 +1,10 @@
+# ==============================================================================
+# DOTFILES BOOTSTRAPPER
+# Organizes environment using XDG Base Directory Specification.
+# ==============================================================================
+
+# --- 1. PATH DEFINITIONS ---
+# Use ?= to allow environment overrides
 XDG_CONFIG_HOME ?= $(HOME)/.config
 XDG_CACHE_HOME  ?= $(HOME)/.cache
 XDG_DATA_HOME   ?= $(HOME)/.local/share
@@ -6,58 +13,71 @@ XDG_BIN_HOME    ?= $(HOME)/.local/bin
 
 DIRS := $(XDG_CONFIG_HOME) $(XDG_DATA_HOME) $(XDG_CACHE_HOME) $(XDG_STATE_HOME) $(XDG_BIN_HOME)
 
-.PHONY: all xdg vim tmux links
+# --- 2. FILE DISCOVERY ---
+# Dynamically find what needs to be linked
+CONFIG_SOURCES := $(wildcard config/*)
+CONFIG_TARGETS := $(patsubst config/%,$(XDG_CONFIG_HOME)/%,$(CONFIG_SOURCES))
 
-all: doctor xdg ${HOME}/.zshenv link_configs link_bins
+BIN_SOURCES    := $(wildcard local/bin/*)
+BIN_TARGETS    := $(patsubst local/bin/%,$(XDG_BIN_HOME)/%,$(BIN_SOURCES))
 
-REQUIRED_BINS := git curl
-OPTIONAL_BINS := zsh vim
-doctor:
-	@echo "Checking system dependencies..."
-	@for bin in $(REQUIRED_BINS); do \
-		command -v $$bin >/dev/null 2>&1 || { echo "ERROR: $$bin is not installed."; exit 1; }; \
-	done
-	@for bin in $(OPTIONAL_BINS); do \
-		command -v $$bin >/dev/null 2>&1 || { echo "WARNING: $$bin is not installed (optional)."; }; \
-	done
-	@echo "System check passed!"
-
-# Create XDG directories
-$(DIRS):
-	mkdir -p $@
-
-xdg: $(DIRS)
-	@echo "XDG_CONFIG_HOME= " "${XDG_CONFIG_HOME}"
-	@echo "XDG_DATA_HOME  = " "${XDG_DATA_HOME}"
-	@echo "XDG_STATE_HOME = " "${XDG_STATE_HOME}"
-	@echo "XDG_CACHE_HOME = " "${XDG_CACHE_HOME}"
-	@echo "XDG_BIN_HOME   = " "${XDG_BIN_HOME}"
-
-# Link zshenv
-${HOME}/.zshenv:
-	ln -sfv ${PWD}/config/zsh/zshenv ${HOME}/.zshenv
-
-# Get a list of every directory inside config folder
-ALL_CONFIGS := $(notdir $(wildcard $(PWD)/config/*))
-link_configs: | $(DIRS)
-	@for dir in $(ALL_CONFIGS); do \
-		ln -sfvn $(PWD)/config/$$dir $(XDG_CONFIG_HOME)/$$dir; \
-	done
-
-# Get a list of every directory inside config folder
-ALL_BINS := $(notdir $(wildcard $(PWD)/local/bin/*))
-link_bins: | $(DIRS)
-	@for bin in $(ALL_BINS); do \
-		ln -sfvn $(PWD)/local/bin/$$bin $(XDG_BIN_HOME)/$$bin; \
-	done
-
-# Vim plugins
 VIM_PLUG := $(XDG_CONFIG_HOME)/vim/autoload/plug.vim
+
+# --- 3. CORE TARGETS ---
+.PHONY: all vim tmux
+
+all: $(DIRS) ${HOME}/.zshenv $(CONFIG_TARGETS) $(BIN_TARGETS)
+
+help:
+	@echo "Usage: make [all|info|vim|tmux]"
+
+# --- 4. INSTALLATION RULES ---
+
+# Ensure XDG base directories exist
+$(DIRS):
+	@mkdir -p $@
+
+# Bootstraps the Zsh environment
+${HOME}/.zshenv:
+	@ln -sfv ${PWD}/config/zsh/zshenv ${HOME}/.zshenv
+
+# Static pattern rule for config folders
+$(CONFIG_TARGETS): $(XDG_CONFIG_HOME)/%: config/%
+	@mkdir -p $(dir $@)
+	@ln -sfvn $(abspath $<) $@
+
+# Static pattern rule for local binaries
+$(BIN_TARGETS): $(XDG_BIN_HOME)/%: local/bin/%
+	@mkdir -p $(dir $@)
+	@ln -sfvn $(abspath $<) $@
+
+# Installs vim-plug for plugin management
 $(VIM_PLUG):
 	curl -fLo $@ --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 vim: $(VIM_PLUG)
 
+# Clones Tmux Plugin Manager and installs plugins
 tmux:
 	git clone https://github.com/tmux-plugins/tpm "${XDG_CONFIG_HOME}"/tmux/plugins/tpm
 	"${XDG_CONFIG_HOME}"/tmux/plugins/tpm/bin/install_plugins
+
+# --- 5. DIAGNOSTICS ---
+info:
+	@echo "--- Environment Configuration ---"
+	@printf "%-20s %s\n" "DOTFILES_DIR:" "$(PWD)"
+	@printf "%-20s %s\n" "XDG_CONFIG_HOME:" "$(XDG_CONFIG_HOME)"
+	@printf "%-20s %s\n" "XDG_CACHE_HOME:" "$(XDG_CACHE_HOME)"
+	@printf "%-20s %s\n" "XDG_BIN_HOME:" "$(XDG_BIN_HOME)"
+	@printf "%-20s %s\n" "XDG_DATA_HOME:" "$(XDG_DATA_HOME)"
+	@printf "%-20s %s\n" "XDG_STATE_HOME:" "$(XDG_STATE_HOME)"
+	@echo ""
+	@echo "--- Detected Config Folders ---"
+	@echo "$(CONFIG_SOURCES)" | tr ' ' '\n' | sed 's/^/  - /'
+	@echo ""
+	@echo "--- Detected Binaries ---"
+	@echo "$(BIN_SOURCES)" | tr ' ' '\n' | sed 's/^/  - /'
+	@echo ""
+	@echo "--- Symlink Mappings (Sample) ---"
+	@echo "Example Config: $(firstword $(CONFIG_TARGETS))"
+	@echo "Example Bin:    $(firstword $(BIN_TARGETS))"
