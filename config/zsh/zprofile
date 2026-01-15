@@ -9,23 +9,10 @@ fi
 
 # > XDG support
 
-# Main paths
-
 # vim
 export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
 
-# > Misc apps
-
 export HOMEBREW_NO_ANALYTICS=1
-
-
-# > Load local config
-
-if [[ -f "$XDG_CONFIG_HOME"/zsh/zprofile.local ]]; then
-    source "$XDG_CONFIG_HOME"/zsh/zprofile.local
-fi
-
-# these should come after local changes that may modify XDG paths
 
 # add XDG bin to PATH
 export PATH="$XDG_BIN_HOME:$PATH"
@@ -42,3 +29,9 @@ export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME"/jupyter
 
 export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
 export CONDARC="$XDG_CONFIG_HOME/conda/condarc"
+
+# > Load local config
+
+if [[ -f "$XDG_CONFIG_HOME"/zsh/zprofile.local ]]; then
+    source "$XDG_CONFIG_HOME"/zsh/zprofile.local
+fi
