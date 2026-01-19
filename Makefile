@@ -24,7 +24,7 @@ BIN_TARGETS    := $(patsubst local/bin/%,$(XDG_BIN_HOME)/%,$(BIN_SOURCES))
 VIM_PLUG := $(XDG_CONFIG_HOME)/vim/autoload/plug.vim
 
 # --- 3. CORE TARGETS ---
-.PHONY: all vim tmux
+.PHONY: all vim tmux brew
 
 all: $(DIRS) ${HOME}/.zshenv $(CONFIG_TARGETS) $(BIN_TARGETS)
 
@@ -54,8 +54,19 @@ $(BIN_TARGETS): $(XDG_BIN_HOME)/%: local/bin/%
 # Installs vim-plug for plugin management
 $(VIM_PLUG):
 	curl -fLo $@ --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	vim +PlugInstall +qall
 
 vim: $(VIM_PLUG)
+
+brew:
+ifeq ($(shell which brew),)
+	@printf "Homebrew not detected; running install script\\n"
+	NONINTERACTIVE=1 /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+else
+	@printf "Homebrew already installed; skipping installation\\n"
+endif
+	brew bundle --file=macos/Brewfile
+	brew analytics off
 
 # Clones Tmux Plugin Manager and installs plugins
 tmux:
