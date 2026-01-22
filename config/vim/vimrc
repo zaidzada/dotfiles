@@ -115,11 +115,6 @@ augroup markdown
     autocmd FileType markdown nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 augroup END
 
-augroup make
-    autocmd!
-    autocmd FileType make setlocal foldexpr=getline(v:lnum)=~'^[a-z0-9\-_]'?'>1':1 foldmethod=expr
-augroup END
-
 augroup tex
     autocmd!
     autocmd FileType tex setlocal spell
