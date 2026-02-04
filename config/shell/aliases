@@ -23,7 +23,6 @@ alias cp='cp -i'
 alias df='df -h'
 alias du='du -h'
 alias path='echo $PATH | tr ":" "\n"'
-alias td='tmux detach'
 
 # Colors
 alias grep='grep --color=auto'
