@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+set -e
+
+# 1. Enable 'nullglob' to handle empty directories gracefully
+shopt -s nullglob
+
+# 2. Get the directory to organize (defaults to current directory if not provided)
+TARGET_DIR="${1:-.}"
+
+# Check if directory exists
+if [ ! -d "$TARGET_DIR" ]; then
+    echo "Error: Directory '$TARGET_DIR' does not exist."
+    exit 1
+fi
+
+echo "Organizing files in: $TARGET_DIR"
+echo "-----------------------------------"
+
+# 3. Loop through all files in the target directory
+for file in "$TARGET_DIR"/*; do
+    
+    # Skip if it is a directory or if it is the script itself
+    if [ -d "$file" ] || [ "$file" == "$0" ]; then
+        continue
+    fi
+
+    # 4. Extract the date (Format: YYYY-MM-DD)
+    # Note: We use modification time because 'creation' time is not standard on Linux.
+    # 'date -r' works on both Linux (GNU) and macOS (BSD).
+    if date --version >/dev/null 2>&1; then
+        # GNU date (Linux)
+        file_date=$(date -r "$file" +%Y-%m-%d)
+    else
+        # BSD date (macOS)
+        file_date=$(date -r "$file" +%Y-%m-%d)
+    fi
+
+    # 5. Create the directory if it doesn't exist
+    # We combine the Target Directory with the Date
+    dest_folder="$TARGET_DIR/$file_date"
+    mkdir -p "$dest_folder"
+
+    # 6. Move the file securely
+    # -n (no-clobber) prevents overwriting if a file with the same name exists
+    mv -n "$file" "$dest_folder/"
+
+    # Check if the move was successful (file no longer in source)
+    if [ -f "$file" ]; then
+        echo "⚠️  Skipped (Duplicate name): $(basename "$file")"
+    else
+        echo "Moved: $(basename "$file") -> $file_date/"
+    fi
+
+done
+
+echo "-----------------------------------"
+echo "Organization complete!"
