@@ -91,7 +91,3 @@ info:
 	@echo ""
 	@echo "--- Detected Binaries ---"
 	@echo "$(BIN_SOURCES)" | tr ' ' '\n' | sed 's/^/  - /'
-	@echo ""
-	@echo "--- Symlink Mappings (Sample) ---"
-	@echo "Example Config: $(firstword $(CONFIG_TARGETS))"
-	@echo "Example Bin:    $(firstword $(BIN_TARGETS))"
