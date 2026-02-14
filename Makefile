@@ -22,6 +22,7 @@ BIN_SOURCES    := $(wildcard local/bin/*)
 BIN_TARGETS    := $(patsubst local/bin/%,$(XDG_BIN_HOME)/%,$(BIN_SOURCES))
 
 VIM_PLUG := $(XDG_CONFIG_HOME)/vim/autoload/plug.vim
+TMUX_PLUG := ${XDG_CONFIG_HOME}/tmux/plugins/tpm
 
 # --- 3. CORE TARGETS ---
 .PHONY: all vim tmux brew
@@ -69,9 +70,11 @@ endif
 	brew analytics off
 
 # Clones Tmux Plugin Manager and installs plugins
-tmux:
+$(TMUX_PLUG):
 	git clone https://github.com/tmux-plugins/tpm "${XDG_CONFIG_HOME}"/tmux/plugins/tpm
 	"${XDG_CONFIG_HOME}"/tmux/plugins/tpm/bin/install_plugins
+
+tmux: $(TMUX_PLUG)
 
 # --- 5. DIAGNOSTICS ---
 info:
