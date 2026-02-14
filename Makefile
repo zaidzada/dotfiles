@@ -59,15 +59,15 @@ $(VIM_PLUG):
 
 vim: $(VIM_PLUG)
 
-brew:
-ifeq ($(shell which brew),)
-	@printf "Homebrew not detected; running install script\\n"
-	NONINTERACTIVE=1 /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-else
-	@printf "Homebrew already installed; skipping installation\\n"
-endif
-	brew bundle --file=macos/Brewfile
-	brew analytics off
+# brew:
+# ifeq ($(shell which brew),)
+# 	@printf "Homebrew not detected; running install script\\n"
+# 	NONINTERACTIVE=1 /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# else
+# 	@printf "Homebrew already installed; skipping installation\\n"
+# endif
+# 	brew bundle --file=macos/Brewfile
+# 	brew analytics off
 
 # Clones Tmux Plugin Manager and installs plugins
 $(TMUX_PLUG):
