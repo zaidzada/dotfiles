@@ -152,8 +152,8 @@ nnoremap <C-J> :bnext<CR>
 nnoremap <C-K> :bprev<CR>
 inoremap <C-J> <C-O>:bnext<CR>
 inoremap <C-K> <C-O>:bprev<CR>
-nnoremap <Tab> :bnext<CR>
-nnoremap <S-Tab> :bprev<CR>
+nnoremap <Tab> :tabnext<CR>
+nnoremap <S-Tab> :tabprevious<CR>
 
 " Stay in visual mode when indenting
 vnoremap > >gv
@@ -173,11 +173,11 @@ nnoremap <silent> [<Space> :pu _<CR>:'[-1<CR>
 nnoremap <silent> [z zj
 nnoremap <silent> ]z zk
 vnoremap <Space> zf
-nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
 nnoremap \" :setlocal foldexpr=getline(v:lnum)=~'^\"\ >'?'>1':1 foldmethod=expr<CR>
 nnoremap \# :setlocal foldexpr=getline(v:lnum)=~'^#\ >'?'>1':1 foldmethod=expr<CR>
 nnoremap \% :setlocal foldexpr=getline(v:lnum)=~'^%\ >'?'>1':1 foldmethod=expr<CR>
 nnoremap \z :setlocal foldexpr=(getline(v:lnum)=~@/)?'>1':1 foldmethod=expr<CR>
+
 
 " Convenient insert mode mappings
 inoremap <silent> <C-A> <C-O>0
@@ -185,6 +185,25 @@ inoremap <silent> <C-E> <C-O>$
 inoremap <silent> <C-F> <C-O>l
 inoremap <silent> <C-B> <C-O>h
 inoremap <silent> <C-D> <C-O>D
+
+" Completion (:h ins-completion)
+function! CleverTab()
+    if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+        return "\<Tab>"
+    else
+        return "\<C-X><C-O>"
+    endif
+endfunction
+
+inoremap <Tab> <C-R>=CleverTab()<CR>
+
+if has("autocmd") && exists("+omnifunc")
+    autocmd Filetype *
+        \ if &omnifunc == "" |
+        \ setlocal omnifunc=syntaxcomplete#Complete |
+        \ endif
+endif
+
 
 " Quickfix commands
 nnoremap [q :cnext<CR>
@@ -219,16 +238,11 @@ nnoremap U :update<CR><CR>
 nnoremap dL :%s/\s\+$//e<CR>
 
 " Highlighting
-nnoremap <Leader>c :noh<CR>
 nnoremap <C-L> :let @/ = ""<CR>
 inoremap <C-L> <C-O>:let @/ = ""<CR>
 
-" Plugin shortcuts
-nnoremap <silent> gG :Git<CR>
-nnoremap <silent> gE :NERDTreeToggle<CR>
-
 " .vimrc editing and reloading
-nnoremap <leader>ve :e $MYVIMRC<CR>
+nnoremap <leader>ve :tabnew $MYVIMRC<CR>
 nnoremap <leader>vv :source $MYVIMRC<CR>
 
 
