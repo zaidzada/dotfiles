@@ -21,16 +21,15 @@ CONFIG_TARGETS := $(patsubst config/%,$(XDG_CONFIG_HOME)/%,$(CONFIG_SOURCES))
 BIN_SOURCES    := $(wildcard local/bin/*)
 BIN_TARGETS    := $(patsubst local/bin/%,$(XDG_BIN_HOME)/%,$(BIN_SOURCES))
 
-VIM_PLUG := $(XDG_CONFIG_HOME)/vim/autoload/plug.vim
 TMUX_PLUG := ${XDG_CONFIG_HOME}/tmux/plugins/tpm
 
 # --- 3. CORE TARGETS ---
-.PHONY: all vim tmux brew
+.PHONY: all tmux brew
 
 all: $(DIRS) ${HOME}/.zshenv $(CONFIG_TARGETS) $(BIN_TARGETS)
 
 help:
-	@echo "Usage: make [all|info|vim|tmux]"
+	@echo "Usage: make [all|info|tmux]"
 
 # --- 4. INSTALLATION RULES ---
 
@@ -51,13 +50,6 @@ $(CONFIG_TARGETS): $(XDG_CONFIG_HOME)/%: config/%
 $(BIN_TARGETS): $(XDG_BIN_HOME)/%: local/bin/%
 	@mkdir -p $(dir $@)
 	@ln -sfvn $(abspath $<) $@
-
-# Installs vim-plug for plugin management
-$(VIM_PLUG):
-	curl -fLo $@ --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-	vim +PlugInstall +qall
-
-vim: $(VIM_PLUG)
 
 # brew:
 # ifeq ($(shell which brew),)
