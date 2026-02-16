@@ -204,6 +204,19 @@ if has("autocmd") && exists("+omnifunc")
         \ endif
 endif
 
+"  Commenting blocks of code.
+autocmd FileType c,cpp,java,scala let b:comment_leader = '//'
+autocmd FileType sh,ruby,python   let b:comment_leader = '#'
+autocmd FileType conf,fstab       let b:comment_leader = '#'
+autocmd FileType tex              let b:comment_leader = '%'
+autocmd FileType mail             let b:comment_leader = '>'
+autocmd FileType vim              let b:comment_leader = '"'
+function! CommentToggle()
+    execute ':silent! s/\([^ ]\)/' . escape(b:comment_leader,'\/') . ' \1/'
+    execute ':silent! s/^\( *\)' . escape(b:comment_leader,'\/') . ' \?' . escape(b:comment_leader,'\/') . ' \?/\1/'
+endfunction
+nnoremap <leader>cc :call CommentToggle()<CR>
+vnoremap <leader>cc :call CommentToggle()<CR>
 
 " Quickfix commands
 nnoremap [q :cnext<CR>
