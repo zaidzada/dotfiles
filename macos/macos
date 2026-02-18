@@ -1,28 +1,38 @@
 #!/usr/bin/env bash
 
-# ~/.macos — https://mths.be/macos
-# https://macos-defaults.com
+# ==============================================================================
+# macOS defaults
+# Resources:
+#   https://mths.be/macos
+#   https://macos-defaults.com
+# ==============================================================================
+
 
 # Close any open System Preferences panes, to prevent them from overriding
-# settings we’re about to change
+# settings we're about to change
 osascript -e 'tell application "System Preferences" to quit'
 
 # Ask for the administrator password upfront
 sudo -v
 
-# Keep-alive: update existing `sudo` time stamp until `.macos` has finished
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
-
-
-# > General preferences
+Keep-alive: update existing `sudo` time stamp until `.macos` has finished
+# while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 # Disable the sound effects on boot
 sudo nvram SystemAudioVolume=" "
 
+
+# -----------------------------------------------------------------------------
+# > General preferences
+# -----------------------------------------------------------------------------
+
 # Automatically switch between light/dark styles
 defaults write -g AppleInterfaceStyleSwitchesAutomatically -bool true
 
+
+# -----------------------------------------------------------------------------
 # > Trackpad
+# -----------------------------------------------------------------------------
 
 # Tap to click
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
@@ -33,20 +43,23 @@ defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
 defaults write -g AppleFontSmoothing -int 0
 
 # Change the whitespace settings value
+defaults -currentHost write -globalDomain NSStatusItemSpacing          -int 6
 defaults -currentHost write -globalDomain NSStatusItemSelectionPadding -int 6
-defaults -currentHost write -globalDomain NSStatusItemSpacing -int 6
 
+
+# -----------------------------------------------------------------------------
 # > Keyboard
+# -----------------------------------------------------------------------------
 
 # Enable full keyboard access for all controls
 # (e.g. enable Tab in modal dialogs)
 defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 
 # Global shortcuts
-defaults write -g NSUserKeyEquivalents -dict-add "Move Window to Left Side of Screen" -string "@^e"
+defaults write -g NSUserKeyEquivalents -dict-add "Move Window to Left Side of Screen"  -string "@^e"
 defaults write -g NSUserKeyEquivalents -dict-add "Move Window to Right Side of Screen" -string "@^r"
-defaults write -g NSUserKeyEquivalents -dict-add "Strikethrough" -string "@^x"
-defaults write -g NSUserKeyEquivalents -dict-add "Zoom" -string "@^z"
+defaults write -g NSUserKeyEquivalents -dict-add "Strikethrough"                       -string "@^x"
+defaults write -g NSUserKeyEquivalents -dict-add "Zoom"                                -string "@^z"
 
 # App shortcuts
 # mdls /Applications/"$app".app | grep kMDItemCF
@@ -56,7 +69,9 @@ defaults write com.apple.iWork.Keynote NSUserKeyEquivalents -dict-add "Next slid
 defaults write com.apple.iWork.Keynote NSUserKeyEquivalents -dict-add "Previous slide" -string "@^p"
 
 
+# -----------------------------------------------------------------------------
 # > Battery
+# -----------------------------------------------------------------------------
 
 # Sleep the display after 15 minutes
 sudo pmset -a displaysleep 15
@@ -64,7 +79,10 @@ sudo pmset -a displaysleep 15
 # Disable machine sleep while charging
 sudo pmset -c sleep 0
 
+
+# -----------------------------------------------------------------------------
 # > Finder
+# -----------------------------------------------------------------------------
 
 # Use list view in all Finder windows by default
 # Four-letter codes for the other view modes: `icnv`, `clmv`, `glyv`
@@ -104,18 +122,21 @@ defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 chflags nohidden ~/Library
 sudo chflags nohidden /Volumes
 
+
+# -----------------------------------------------------------------------------
 # > Dock and hot corners
+# -----------------------------------------------------------------------------
 
 # Automatically hide and show the Dock
 defaults write com.apple.dock autohide -bool true
 
-# Minimize windows into their application’s icon
+# Minimize windows into their application's icon
 defaults write com.apple.dock minimize-to-application -bool true
 
 # Show indicator lights for open applications in the Dock
 defaults write com.apple.dock show-process-indicators -bool true
 
-# Don’t show recent applications in Dock
+# Don't show recent applications in Dock
 defaults write com.apple.dock show-recents -bool false
 
 # Hot corners
@@ -144,7 +165,10 @@ defaults write com.apple.dock wvous-bl-modifier -int 0
 defaults write com.apple.dock wvous-bl-corner -int 2
 defaults write com.apple.dock wvous-bl-modifier -int 0
 
+
+# -----------------------------------------------------------------------------
 # > Safari
+# -----------------------------------------------------------------------------
 
 # Show status bar
 defaults write com.apple.Safari ShowStatusBar -boolean true
@@ -153,7 +177,7 @@ defaults write com.apple.Safari ShowStatusBar -boolean true
 defaults write com.apple.Safari WebKitTabToLinksPreferenceKey -bool true
 defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2TabsToLinks -bool true
 
-# Prevent Safari from opening ‘safe’ files automatically after downloading
+# Prevent Safari from opening 'safe' files automatically after downloading
 defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
 
 # Disable AutoFill
@@ -168,7 +192,10 @@ defaults write com.apple.Safari WarnAboutFraudulentWebsites -bool true
 # Enable “Do Not Track”
 defaults write com.apple.Safari SendDoNotTrackHTTPHeader -bool true
 
+
+# -----------------------------------------------------------------------------
 # > TextEdit
+# -----------------------------------------------------------------------------
 
 # Use plain text mode for new TextEdit documents
 defaults write com.apple.TextEdit RichText -int 0
@@ -176,11 +203,17 @@ defaults write com.apple.TextEdit RichText -int 0
 defaults write com.apple.TextEdit PlainTextEncoding -int 4
 defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
 
+
+# -----------------------------------------------------------------------------
 # > Messages
+# -----------------------------------------------------------------------------
 
 defaults write com.apple.MobileSMS PlaySoundsKey 0
 
+
+# -----------------------------------------------------------------------------
 # > App Store and Updates
+# -----------------------------------------------------------------------------
 
 # Enable the automatic update check
 defaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true
@@ -197,7 +230,10 @@ defaults write com.apple.SoftwareUpdate CriticalUpdateInstall -int 1
 # Turn on app auto-update
 defaults write com.apple.commerce AutoUpdate -bool true
 
+
+# -----------------------------------------------------------------------------
 # > Kill affected applications
+# -----------------------------------------------------------------------------
 
 for app in "Activity Monitor" \
 	"Address Book" \
