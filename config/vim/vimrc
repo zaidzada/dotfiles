@@ -59,13 +59,15 @@ set display+=lastline   " Show as much as possible of the last line
 " Cursor settings
 " set cursorline          " Highlight current line with a horizontal line
 set scrolloff=2         " Number of lines to keep above and below the cursor
+set sidescroll=1        " Number of columns to scroll horizontally
 set sidescrolloff=2     " Number of lines to keep above and below the cursor
 set nostartofline       " On movement, keep cursor in same column if possible
 
 " Text options
 set nowrap              " Disable wrapping of lines
 set nojoinspaces        " Only use one space after . ! and ?
-set ttimeoutlen=0       " Don't wait for escape codes in insert mode
+set ttimeout            " Wait for a mapped sequence to complete
+set ttimeoutlen=100     " Don't wait for escape codes in insert mode
 set formatoptions+=j    " Delete comment character when joining commented lines
 set synmaxcol=800       " Column limit for syntaxing lines
 
