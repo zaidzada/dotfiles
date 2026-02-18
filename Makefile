@@ -24,12 +24,12 @@ BIN_TARGETS    := $(patsubst local/bin/%,$(XDG_BIN_HOME)/%,$(BIN_SOURCES))
 TMUX_PLUG := ${XDG_CONFIG_HOME}/tmux/plugins/tpm
 
 # --- 3. CORE TARGETS ---
-.PHONY: all tmux brew
+.PHONY: all
 
 all: $(DIRS) ${HOME}/.zshenv $(CONFIG_TARGETS) $(BIN_TARGETS)
 
 help:
-	@echo "Usage: make [all|info|tmux]"
+	@echo "Usage: make [all|info]"
 
 # --- 4. INSTALLATION RULES ---
 
@@ -50,23 +50,6 @@ $(CONFIG_TARGETS): $(XDG_CONFIG_HOME)/%: config/%
 $(BIN_TARGETS): $(XDG_BIN_HOME)/%: local/bin/%
 	@mkdir -p $(dir $@)
 	@ln -sfvn $(abspath $<) $@
-
-# brew:
-# ifeq ($(shell which brew),)
-# 	@printf "Homebrew not detected; running install script\\n"
-# 	NONINTERACTIVE=1 /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-# else
-# 	@printf "Homebrew already installed; skipping installation\\n"
-# endif
-# 	brew bundle --file=macos/Brewfile
-# 	brew analytics off
-
-# Clones Tmux Plugin Manager and installs plugins
-$(TMUX_PLUG):
-	git clone https://github.com/tmux-plugins/tpm "${XDG_CONFIG_HOME}"/tmux/plugins/tpm
-	"${XDG_CONFIG_HOME}"/tmux/plugins/tpm/bin/install_plugins
-
-tmux: $(TMUX_PLUG)
 
 # --- 5. DIAGNOSTICS ---
 info:
