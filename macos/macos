@@ -59,10 +59,15 @@ defaults write -g NSUserKeyEquivalents -dict-add "Zoom"                         
 
 # App shortcuts
 # To find an application's domain, mdls /Applications/"$app".app | grep kMDItemCF
+
+# Keynote
 defaults write com.apple.iWork.Keynote NSUserKeyEquivalents -dict-add "Group"          -string "@g"
 defaults write com.apple.iWork.Keynote NSUserKeyEquivalents -dict-add "Ungroup"        -string "@$g"
 defaults write com.apple.iWork.Keynote NSUserKeyEquivalents -dict-add "Next slide"     -string "@^n"
 defaults write com.apple.iWork.Keynote NSUserKeyEquivalents -dict-add "Previous slide" -string "@^p"
+
+# Safari
+defaults write com.apple.Safari NSUserKeyEquivalents -dict-add "Show Start Page"       -string "@^H"
 
 
 # -----------------------------------------------------------------------------
@@ -84,7 +89,7 @@ sudo pmset -c sleep 0
 # Four-letter codes for the other view modes: `icnv`, `clmv`, `glyv`
 defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 
-# Set Desktop as the default location for new Finder windows
+# Set default location for new Finder windows
 # For other paths, use `PfLo` and `file:///full/path/here/`
 defaults write com.apple.finder NewWindowTarget -string "PfLo"
 defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
@@ -109,6 +114,11 @@ defaults write com.apple.desktopservices DSDontWriteUSBStores     -bool true
 chflags nohidden ~/Library
 sudo chflags nohidden /Volumes
 
+# Don't show any icons on the desktop
+defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool false
+defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
+defaults write com.apple.finder ShowMountedServersOnDesktop -bool false
+defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
 
 # -----------------------------------------------------------------------------
 # > Dock and hot corners
