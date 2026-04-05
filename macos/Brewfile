@@ -28,13 +28,10 @@ cask "inkscape"
 # cask "sf-symbols"
 # cask "steam"
 cask "visual-studio-code"
-cask "zoom"
 cask "zotero"
 
 # Download through app store when possible:
 # AdGuard for Safari, Hush
-# XCode
 # WhatSApp
 # Slack
-# Remarkable
 # Reeder 5
