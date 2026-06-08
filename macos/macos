@@ -69,6 +69,8 @@ defaults write com.apple.iWork.Keynote NSUserKeyEquivalents -dict-add "Previous 
 # Safari
 defaults write com.apple.Safari NSUserKeyEquivalents -dict-add "Show Start Page"       -string "@^H"
 
+defaults write com.apple.mail NSUserKeyEquivalents -dict-add "Archive"                 -string "^a"
+
 
 # -----------------------------------------------------------------------------
 # > Battery

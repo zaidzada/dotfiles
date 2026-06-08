@@ -4,9 +4,9 @@ brew "ffmpeg"
 brew "fzf"
 brew "htop"
 brew "imagemagick"
-brew "jq"
+# brew "jq"
 brew "pandoc"
-brew "ripgrep"
+# brew "ripgrep"
 # brew "texlive"
 brew "tmux"
 brew "tree"
@@ -16,7 +16,7 @@ brew "yt-dlp"
 # cask "adobe-digital-editions"
 # cask "brewlet"
 cask "calibre"
-cask "gimp"
+# cask "gimp"
 cask "google-chrome"
 cask "iina"
 cask "inkscape"
@@ -32,6 +32,6 @@ cask "zotero"
 
 # Download through app store when possible:
 # AdGuard for Safari, Hush
-# WhatSApp
+# WhatsApp
 # Slack
 # Reeder 5

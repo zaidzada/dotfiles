@@ -7,7 +7,6 @@ if [[ -f "$XDG_CONFIG_HOME"/shell/aliases ]]; then
     source "$XDG_CONFIG_HOME/shell/aliases"
 fi
 
-
 # -----------------------------------------------------------------------------
 # > zsh options
 # -----------------------------------------------------------------------------
@@ -28,6 +27,9 @@ mkdir -p "$(dirname "$HISTFILE")"
 
 # Completion
 zmodload -i zsh/complist
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+fi
 autoload -Uz compinit
 compinit
 
@@ -91,3 +93,9 @@ export PS1="%(?.●.○)%2v%1v%2~ %# "
 if [[ -f "$XDG_CONFIG_HOME"/zsh/zshrc.local ]]; then
     source "$XDG_CONFIG_HOME"/zsh/zshrc.local
 fi
+
+# Set up fzf key bindings and fuzzy completion
+if type fzf &>/dev/null; then
+    source <(fzf --zsh)
+fi
+
