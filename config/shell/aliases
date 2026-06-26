@@ -110,3 +110,24 @@ bkp() {
 recipe() {
     pandoc -f html -t markdown_strict-escaped_line_breaks "https://www.plainoldrecipe.com/recipe?url=$1"
 }
+
+jd() {
+  local base_dir="$HOME/.icloud"
+
+  if [[ -z "$1" ]]; then
+    cd "$base_dir" || return
+    return
+  fi
+
+  local area_digit="${1:0:1}"
+  local area="${area_digit}0-${area_digit}9"
+  local category="${1:0:2}"
+
+  if [[ "${#1}" -eq 1 ]]; then
+    cd "$base_dir"/${area}* 2>/dev/null || echo "Area $1 not found."
+  elif [[ "${#1}" -eq 2 ]]; then
+    cd "$base_dir"/${area}*/${category}* 2>/dev/null || echo "Category $1 not found."
+  elif [[ "${#1}" -ge 3 ]]; then
+    cd "$base_dir"/${area}*/${category}*/${1}* 2>/dev/null || echo "ID $1 not found."
+  fi
+}
