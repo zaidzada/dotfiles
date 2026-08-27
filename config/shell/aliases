@@ -39,7 +39,7 @@ alias f='find'
 alias ffmpeg="ffmpeg -hide_banner" 
 alias ffprobe="ffprobe -hide_banner" 
 
-alias xdg='env | grep -E "^XDG*"'
+alias xdg='env | grep -E "^XDG"'
 
 v() { ${EDITOR:-vi} "$@"; }
 
@@ -104,7 +104,7 @@ function cd() {
 }
 
 bkp() {
-  cp "$1" "$(date +%Y%m%d_%s_)$1"
+  cp "$1" "${1:h}/$(date +%Y%m%d_%s_)${1:t}";
 }
 
 recipe() {

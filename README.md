@@ -29,5 +29,3 @@ make
 ## 📋 Available Commands
 - `make`: The default target. Validates directories, links files, and installs Vim/Tmux plugins.
 - `make info`: Prints all paths and detected files for verification.
-- `make vim`: Specifically handles `vim-plug` installation.
-- `make tmux`: Specifically handles `tpm` (Tmux Plugin Manager) installation.

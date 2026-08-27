@@ -1,4 +1,3 @@
-# https://unix.stackexchange.com/questions/547/make-my-zsh-prompt-show-mode-in-vi-mode
 # https://zsh.sourceforge.io/Doc/Release/User-Contributions.html#Version-Control-Information
 # https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html#Conditional-Substrings-in-Prompts
 
@@ -15,14 +14,16 @@ setopt autocd
 setopt correct
 
 # History (see `man zshoptions`)
-setopt append_history
 setopt share_history
 setopt inc_append_history
 setopt hist_ignore_all_dups
 setopt hist_ignore_space
-export HISTSIZE=50000  # the number of items for the internal history list
-export SAVEHIST=50000  # maximum number of items for the history file
-export HISTFILE="${XDG_STATE_HOME:=$HOME/.local/state}/zsh/history"
+setopt extended_history
+setopt hist_reduce_blanks
+setopt hist_verify
+HISTSIZE=50000  # the number of items for the internal history list
+SAVEHIST=50000  # maximum number of items for the history file
+HISTFILE="${XDG_STATE_HOME:=$HOME/.local/state}/zsh/history"
 mkdir -p "$(dirname "$HISTFILE")"
 
 # Completion
