@@ -14,8 +14,9 @@ export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
 
 export HOMEBREW_NO_ANALYTICS=1
 
-# add XDG bin to PATH
-export PATH="$XDG_BIN_HOME:$PATH"
+# add XDG bin to PATH (typeset -U drops duplicate entries)
+typeset -U path PATH
+path=("$XDG_BIN_HOME" $path)
 
 # less
 export LESSHISTFILE="${XDG_CONFIG_HOME}/less/history"
