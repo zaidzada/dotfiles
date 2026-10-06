@@ -6,6 +6,10 @@ if [[ -f "$XDG_CONFIG_HOME"/shell/aliases ]]; then
     source "$XDG_CONFIG_HOME/shell/aliases"
 fi
 
+if [[ -f "$XDG_CONFIG_HOME"/shell/functions ]]; then
+    source "$XDG_CONFIG_HOME/shell/functions"
+fi
+
 # -----------------------------------------------------------------------------
 # > zsh options
 # -----------------------------------------------------------------------------
