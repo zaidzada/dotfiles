@@ -7,12 +7,14 @@ else
     export EDITOR="vi"
 fi
 
+export HOMEBREW_NO_ANALYTICS=1
+export MAN_WIDTH=80
+
+
 # > XDG support
 
 # vim
 export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
-
-export HOMEBREW_NO_ANALYTICS=1
 
 # add XDG bin to PATH (typeset -U drops duplicate entries)
 typeset -U path PATH
@@ -29,7 +31,6 @@ export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME"/jupyter
 # eval $(dircolors "$XDG_CONFIG_HOME"/dircolors/dircolors)
 
 export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
-export CONDARC="$XDG_CONFIG_HOME/conda/condarc"
 
 # > Load local config
 
