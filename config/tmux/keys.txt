@@ -1,0 +1,26 @@
+  TMUX KEYS                          prefix = ;
+
+  Windows                            Panes
+  c   new window (here)              |   split right
+  a   new window after current       \   split right (full height)
+  j/k next / prev window             -   split down
+  L   last window                    _   split down (full width)
+  l   last pane (or window)          z   zoom toggle
+  R   renumber windows               b   break pane to window
+  F   find window                    B   break pane (stay)
+  < > move window left / right       J   join pane into...
+                                     { } swap pane up / down
+                                     ␣   next layout
+                                     K   kill pane
+
+  Copy                               Session
+  v / [  copy mode                   D   detach
+  i / ]  paste                       Q   kill session
+  f      search up                   :   command prompt
+                                     r   reload config
+  Misc                               ;   send literal ;
+  M   toggle mouse
+  A   send command to all panes      Nesting (no prefix)
+  S   send command to session panes  M-S toggle outer tmux off/on
+  e   open sidebar
+  C-l clear screen + history         ?   this help (q to close)
