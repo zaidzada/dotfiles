@@ -157,6 +157,24 @@ inoremap <C-K> <C-O>:bprev<CR>
 nnoremap <Tab> :tabnext<CR>
 nnoremap <S-Tab> :tabprevious<CR>
 
+" Show all listed buffers in the tabline (tab count on the right if > 1)
+function! BufferLine()
+    let s = ''
+    for b in filter(range(1, bufnr('$')), 'buflisted(v:val)')
+        let name = bufname(b) ==# '' ? '[No Name]' : fnamemodify(bufname(b), ':t')
+        let name = substitute(name, '%', '%%', 'g')
+        let s .= (b == bufnr('%') ? '%#TabLineSel#' : '%#TabLine#')
+        let s .= ' ' . b . ':' . name . (getbufvar(b, '&modified') ? ' +' : '') . ' '
+    endfor
+    let s .= '%#TabLineFill#%='
+    if tabpagenr('$') > 1
+        let s .= '%#TabLine# tab ' . tabpagenr() . '/' . tabpagenr('$') . ' '
+    endif
+    return s
+endfunction
+set showtabline=2
+set tabline=%!BufferLine()
+
 " Stay in visual mode when indenting
 vnoremap > >gv
 vnoremap < <gv
