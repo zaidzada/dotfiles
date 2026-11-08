@@ -1,0 +1,17 @@
+#!/bin/sh
+# Set the tmux accent colour and save it to tmux.conf.local, so this machine
+# keeps it across restarts. Usage: accent <colour>
+set -e
+
+[ -n "$1" ] || { echo "usage: accent <colour>" >&2; exit 1; }
+
+local_conf="${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf.local"
+
+tmux set -g @accentColor "$1"
+
+# Replace any previous accent line, keeping the rest of the local config
+{
+    grep -v '^set -g @accentColor ' "$local_conf" 2>/dev/null || true
+    printf 'set -g @accentColor "%s"\n' "$1"
+} > "$local_conf.tmp"
+mv "$local_conf.tmp" "$local_conf"

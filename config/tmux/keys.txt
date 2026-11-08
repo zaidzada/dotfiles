@@ -24,3 +24,4 @@
   S   send command to session panes  M-S toggle outer tmux off/on
   e   open sidebar
   C-l clear screen + history         ?   this help (q to close)
+  M-c pick accent colour
