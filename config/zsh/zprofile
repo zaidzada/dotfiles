@@ -30,8 +30,6 @@ export LESSKEY="${XDG_CONFIG_HOME}/less/keys"
 # jupyter
 export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME"/jupyter
 
-export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
-
 # > Load local config
 
 if [[ -f "$XDG_CONFIG_HOME"/zsh/zprofile.local ]]; then
