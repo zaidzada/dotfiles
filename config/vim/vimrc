@@ -283,11 +283,25 @@ nnoremap <leader>vv :source $MYVIMRC<CR>
 " > Color scheme
 " -----------------------------------------------------------------------------
 
-if strftime("%H") >= 7 && strftime("%H") < 18
-  colorscheme onehalflight
-else
-  colorscheme onehalfdark
-endif
+" Follow the macOS light/dark appearance; elsewhere, fall back to time of day
+function! s:SetColorscheme() abort
+  if executable('defaults')
+    let l:dark = system('defaults read -g AppleInterfaceStyle 2>/dev/null') =~? 'dark'
+  else
+    let l:dark = strftime("%H") < 7 || strftime("%H") >= 18
+  endif
+  let l:scheme = l:dark ? 'onehalfdark' : 'onehalflight'
+  if get(g:, 'colors_name', '') !=# l:scheme
+    execute 'colorscheme' l:scheme
+  endif
+endfunction
+
+call s:SetColorscheme()
+
+augroup appearance
+    autocmd!
+    autocmd FocusGained * call s:SetColorscheme()
+augroup END
 
 
 " -----------------------------------------------------------------------------
