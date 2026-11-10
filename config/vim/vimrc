@@ -36,6 +36,8 @@ set relativenumber      " Numbering is relative to current line
 set autoread            " Re-read buffer if file is changed outside
 set lazyredraw          " Don't redraw when typing macros, commands, etc.
 
+set mouse=a
+
 " Status bar settings
 set laststatus=2        " Always display a status bar
 set ruler               " Display current cursor position in status bar
