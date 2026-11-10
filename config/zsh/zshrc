@@ -79,14 +79,6 @@ vcs_precmd() {
 }
 add-zsh-hook precmd vcs_precmd
 
-conda_precmd() {
-    psvar[2]=""
-    if [[ -n "$CONDA_PREFIX" ]]; then
-        psvar[2]=" ($(basename $CONDA_PREFIX))"
-    fi
-}
-add-zsh-hook precmd conda_precmd
-
 export PS1="%(?.●.○)%2v%1v%2~ %# "
 
 
