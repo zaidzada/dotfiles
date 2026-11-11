@@ -9,7 +9,7 @@ alias la='ls -lhtA'
 alias ld='ls -lhtd'
 
 # Paging
-alias less='less -S -R'
+alias less='less -S -R --mouse'
 
 # Confirmation
 alias mv='mv -i'
