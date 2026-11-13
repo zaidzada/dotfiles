@@ -114,7 +114,7 @@ filetype plugin on      " Use filetype-specific plugins
 
 augroup markdown
     autocmd!
-    autocmd FileType markdown setlocal spell wrap
+    autocmd FileType markdown setlocal spell wrap textwidth=80
     autocmd FileType markdown nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
     autocmd FileType markdown nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 augroup END
