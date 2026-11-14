@@ -8,7 +8,7 @@ else
 fi
 
 export HOMEBREW_NO_ANALYTICS=1
-export MAN_WIDTH=80
+export MANWIDTH=80
 
 # fzf: use only the 16 terminal colours so it follows light/dark appearance
 export FZF_DEFAULT_OPTS='--color=16'
