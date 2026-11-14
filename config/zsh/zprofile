@@ -1,14 +1,18 @@
 #!/usr/bin/env zsh
 # .zprofile is only loaded for login shells
 
-if [[ -x $(command -v vim) ]]; then
-    export EDITOR="vim"
-else
-    export EDITOR="vi"
+export EDITOR="vim"
+
+# pager
+export PAGER="less"
+export LESS="-RS"
+if [[ -x $(command -v bat) ]]; then
+    export LESSOPEN="|bat --style=plain --paging=never --theme auto:system --theme-dark OneHalfDark --theme-light OneHalfLight --color=always %s"
 fi
 
-export HOMEBREW_NO_ANALYTICS=1
+# man(ual) config
 export MANWIDTH=80
+export MANPAGER="less -c"
 
 # fzf: use only the 16 terminal colours so it follows light/dark appearance
 export FZF_DEFAULT_OPTS='--color=16'
@@ -16,12 +20,12 @@ export FZF_DEFAULT_OPTS='--color=16'
 
 # > XDG support
 
-# vim
-export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
-
 # add XDG bin to PATH (typeset -U drops duplicate entries)
 typeset -U path PATH
 path=("$XDG_BIN_HOME" $path)
+
+# vim
+export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
 
 # less
 export LESSHISTFILE="${XDG_CONFIG_HOME}/less/history"
@@ -29,6 +33,7 @@ export LESSKEY="${XDG_CONFIG_HOME}/less/keys"
 
 # jupyter
 export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME"/jupyter
+
 
 # > Load local config
 

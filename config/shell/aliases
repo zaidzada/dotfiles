@@ -8,9 +8,6 @@ alias lt='ls -lhtr'
 alias la='ls -lhtA'
 alias ld='ls -lhtd'
 
-# Paging
-alias less='less -S -R --mouse'
-
 # Confirmation
 alias mv='mv -i'
 alias cp='cp -i'
