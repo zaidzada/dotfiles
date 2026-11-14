@@ -1,3 +1,2 @@
 [preview]
 command = "less"
-args = ["-R", "-S", "-N", "-c", "--mouse"]
