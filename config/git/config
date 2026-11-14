@@ -13,6 +13,9 @@
 # Misc settings
 [core]
     editor = vim
+    # zprofile exports LESS, which stops git adding its default FRX;
+    # uncomment to quit on short output again
+    # pager = less -FRX
 
 [push]
     default = simple
@@ -22,6 +25,12 @@
 
 [help]
     autocorrect = 1
+
+[init]
+    defaultBranch = main
+
+[http]
+    sslVerify = true
 
 # -----------------------------------------------------------------------------
 # Aliases
@@ -46,7 +55,3 @@
     lll = log --graph --oneline --decorate --all
     lgb = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset%n' --abbrev-commit --date=relative --branches
 
-[init]
-	defaultBranch = main
-[http]
-	sslVerify = true
