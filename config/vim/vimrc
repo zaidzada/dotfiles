@@ -5,6 +5,7 @@
 if empty($XDG_CACHE_HOME)  | let $XDG_CACHE_HOME  = $HOME."/.cache"       | endif
 if empty($XDG_CONFIG_HOME) | let $XDG_CONFIG_HOME = $HOME."/.config"      | endif
 if empty($XDG_DATA_HOME)   | let $XDG_DATA_HOME   = $HOME."/.local/share" | endif
+if empty($XDG_STATE_HOME)  | let $XDG_STATE_HOME  = $HOME."/.local/state" | endif
 
 set runtimepath^=$XDG_CONFIG_HOME/vim
 set runtimepath+=$XDG_DATA_HOME/vim
@@ -17,17 +18,21 @@ let g:netrw_home = $XDG_DATA_HOME."/vim"
 call mkdir($XDG_DATA_HOME."/vim/spell", 'p')
 set viewdir=$XDG_DATA_HOME/vim/view | call mkdir(&viewdir, 'p')
 
-set backupdir=$XDG_CACHE_HOME/vim/backup | call mkdir(&backupdir, 'p')
-set directory=$XDG_CACHE_HOME/vim/swap   | call mkdir(&directory, 'p')
-set undodir=$XDG_CACHE_HOME/vim/undo     | call mkdir(&undodir,   'p')
+" Trailing // makes file names unique by encoding the full path
+call mkdir($XDG_CACHE_HOME."/vim/backup", 'p') | set backupdir=$XDG_CACHE_HOME/vim/backup//
+call mkdir($XDG_CACHE_HOME."/vim/swap",   'p') | set directory=$XDG_CACHE_HOME/vim/swap//
 
-if !has('nvim') | set viminfofile=$XDG_STATE_HOME/vim/viminfo | endif
+if !has('nvim')
+    call mkdir($XDG_STATE_HOME."/vim", 'p')
+    set viminfofile=$XDG_STATE_HOME/vim/viminfo
+endif
 
 " -----------------------------------------------------------------------------
 " > Basic settings
 " -----------------------------------------------------------------------------
 
 set encoding=utf-8      " Use UTF-8
+scriptencoding utf-8    " This file contains non-ASCII characters
 set hidden
 
 set number              " Display numbering on the left
@@ -51,7 +56,7 @@ set incsearch           " Display the match of a search pattern while typing it
 set hlsearch            " Highlight matches of the last used search pattern
 set history=1000        " Expand history size
 set ignorecase          " Ignore case on searches
-set smartcase           " Don't ignore case if search includs an uppercase
+set smartcase           " Don't ignore case if search includes an uppercase
 
 " Window actions
 set splitright          " Split vertically to the right
@@ -62,16 +67,18 @@ set display+=lastline   " Show as much as possible of the last line
 " set cursorline          " Highlight current line with a horizontal line
 set scrolloff=2         " Number of lines to keep above and below the cursor
 set sidescroll=1        " Number of columns to scroll horizontally
-set sidescrolloff=2     " Number of lines to keep above and below the cursor
+set sidescrolloff=2     " Number of columns to keep left and right of the cursor
 set nostartofline       " On movement, keep cursor in same column if possible
 
 " Text options
 set nowrap              " Disable wrapping of lines
 set nojoinspaces        " Only use one space after . ! and ?
-set ttimeout            " Wait for a mapped sequence to complete
+set ttimeout            " Time out on key codes
 set ttimeoutlen=100     " Don't wait for escape codes in insert mode
 set formatoptions+=j    " Delete comment character when joining commented lines
 set synmaxcol=800       " Column limit for syntaxing lines
+
+set colorcolumn=80      " Color the 80th column
 
 " Security and encryption
 set nomodeline          " Disable mode line for security reasons
@@ -80,13 +87,13 @@ set cm=blowfish2        " Strong encryption (7.4.3+)
 endif
 
 " Display unprintable characters (whitespace), npbsp:  
-set list listchars=tab:»\ ,trail:·,precedes:·,nbsp:⌴
+set list listchars=tab:»\ ,trail:·,precedes:·,extends:›,nbsp:⌴
 
 
 " Set cursor style depending on mode
-if &term =~ '^xterm'
-    let &t_SI .= "\<Esc>[4 q"
-    let &t_EI .= "\<Esc>[2 q"
+if &term =~ '^\(xterm\|tmux\|screen\)'
+    let &t_SI = "\<Esc>[4 q"
+    let &t_EI = "\<Esc>[2 q"
 endif
 
 
@@ -100,12 +107,11 @@ set tabstop=8           " A tab is _always_ worth 8 spaces
 set shiftwidth=4        " For <<, >>, and ==. And for autoindent
 set softtabstop=4       " Insert this many spaces instead of a tab
 set autoindent          " Use the indent of the previous line on the new line
-set backspace=2         " Allow backspacing over indent, eol, and start
+set backspace=indent,eol,start  " Allow backspacing over everything
 set smarttab            " Use 'softtabstop' spaces to insert everywhere but ^
 
-syntax enable           " Use syntax highlighting
-filetype indent on      " Use filetype-specific indentation
-filetype plugin on      " Use filetype-specific plugins
+syntax enable               " Use syntax highlighting
+filetype plugin indent on   " Use filetype-specific plugins and indentation
 
 
 " -----------------------------------------------------------------------------
@@ -114,9 +120,9 @@ filetype plugin on      " Use filetype-specific plugins
 
 augroup markdown
     autocmd!
-    autocmd FileType markdown setlocal spell wrap textwidth=80
-    autocmd FileType markdown nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
-    autocmd FileType markdown nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
+    autocmd FileType markdown setlocal spell wrap
+    autocmd FileType markdown nnoremap <buffer> <expr> j (v:count == 0 ? 'gj' : 'j')
+    autocmd FileType markdown nnoremap <buffer> <expr> k (v:count == 0 ? 'gk' : 'k')
 augroup END
 
 augroup tex
@@ -185,7 +191,7 @@ vnoremap . :normal .<CR>
 "Line operations
 nnoremap H ^
 nnoremap L $
-nnoremap Y y$<CR>
+nnoremap Y y$
 nnoremap <silent> dJ :+1d<CR>k
 nnoremap <silent> dK :-1d<CR>
 nnoremap <silent> ]<Space> :pu! _<CR>:']+1<CR>
@@ -219,23 +225,32 @@ endfunction
 
 inoremap <Tab> <C-R>=CleverTab()<CR>
 
-if has("autocmd") && exists("+omnifunc")
-    autocmd Filetype *
-        \ if &omnifunc == "" |
-        \ setlocal omnifunc=syntaxcomplete#Complete |
-        \ endif
-endif
+augroup omnicomplete
+    autocmd!
+    if exists("+omnifunc")
+        autocmd Filetype *
+            \ if &omnifunc == "" |
+            \ setlocal omnifunc=syntaxcomplete#Complete |
+            \ endif
+    endif
+augroup END
 
-"  Commenting blocks of code.
-autocmd FileType c,cpp,java,scala let b:comment_leader = '//'
-autocmd FileType sh,ruby,python   let b:comment_leader = '#'
-autocmd FileType conf,fstab       let b:comment_leader = '#'
-autocmd FileType tex              let b:comment_leader = '%'
-autocmd FileType mail             let b:comment_leader = '>'
-autocmd FileType vim              let b:comment_leader = '"'
+" Commenting blocks of code (falls back to '#' for unlisted filetypes)
+augroup comment_leader
+    autocmd!
+    autocmd FileType c,cpp,java,scala     let b:comment_leader = '//'
+    autocmd FileType javascript,typescript,go,rust let b:comment_leader = '//'
+    autocmd FileType sh,zsh,ruby,python   let b:comment_leader = '#'
+    autocmd FileType conf,fstab,yaml,toml let b:comment_leader = '#'
+    autocmd FileType lua,sql,haskell      let b:comment_leader = '--'
+    autocmd FileType tex                  let b:comment_leader = '%'
+    autocmd FileType mail                 let b:comment_leader = '>'
+    autocmd FileType vim                  let b:comment_leader = '"'
+augroup END
 function! CommentToggle()
-    execute ':silent! s/\([^ ]\)/' . escape(b:comment_leader,'\/') . ' \1/'
-    execute ':silent! s/^\( *\)' . escape(b:comment_leader,'\/') . ' \?' . escape(b:comment_leader,'\/') . ' \?/\1/'
+    let l:leader = escape(get(b:, 'comment_leader', '#'), '\/')
+    execute ':silent! s/\([^ ]\)/' . l:leader . ' \1/'
+    execute ':silent! s/^\( *\)' . l:leader . ' \?' . l:leader . ' \?/\1/'
 endfunction
 nnoremap <leader>cc :call CommentToggle()<CR>
 vnoremap <leader>cc :call CommentToggle()<CR>
@@ -255,26 +270,16 @@ nnoremap [T :tfirst<CR>
 nnoremap ]T :tlast<CR>
 nnoremap <silent> <leader>/ :execute 'vimgrep /'.@/.'/g %'<CR>:copen<CR>
 
-" Matching tools
-nmap MM M1
-nnoremap <silent> M1 :match InterestingWord1 /<C-R><C-W>/<CR>
-nnoremap <silent> M2 :2match InterestingWord2 /<C-R><C-W>/<CR>
-nnoremap <silent> M3 :3match InterestingWord3 /<C-R><C-W>/<CR>
-nnoremap <silent> Mcc :call clearmatches()<CR>
-nnoremap <silent> Mc1 :match none<CR>
-nnoremap <silent> Mc2 :2match none<CR>
-nnoremap <silent> Mc3 :3match none<CR>
-
 " Misc
 nnoremap * *<C-O>
 nnoremap Q @@
 nnoremap V v$
-nnoremap U :update<CR><CR>
+nnoremap U :update<CR>
 nnoremap dL :%s/\s\+$//e<CR>
 
 " Highlighting
-nnoremap <C-L> :let @/ = ""<CR>
-inoremap <C-L> <C-O>:let @/ = ""<CR>
+nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
+inoremap <silent> <C-L> <C-O>:nohlsearch<CR>
 
 " .vimrc editing and reloading
 nnoremap <leader>ve :tabnew $MYVIMRC<CR>
@@ -331,6 +336,6 @@ nnoremap <silent> <Leader>z :ZoomToggle<CR>
 " > Custom configuration
 " -----------------------------------------------------------------------------
 
-if filereadable(expand("~/.vimrc.local"))
-    source ~/.vimrc.local
+if filereadable($XDG_CONFIG_HOME."/vim/vimrc.local")
+    source $XDG_CONFIG_HOME/vim/vimrc.local
 endif
