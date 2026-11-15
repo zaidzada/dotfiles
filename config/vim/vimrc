@@ -43,6 +43,11 @@ set lazyredraw          " Don't redraw when typing macros, commands, etc.
 
 set mouse=a
 
+" Yank, delete and put through the system clipboard
+if has('clipboard')
+    set clipboard^=unnamed,unnamedplus
+endif
+
 " Status bar settings
 set laststatus=2        " Always display a status bar
 set ruler               " Display current cursor position in status bar
