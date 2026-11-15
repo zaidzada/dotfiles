@@ -26,5 +26,6 @@
   C-l clear screen + history         Nesting (no prefix)
   M-c pick accent colour             M-S toggle outer tmux off/on
   P   edit tmux.conf
+  p   command palette
 
   ?   this help (q to close)

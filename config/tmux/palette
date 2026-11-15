@@ -1,0 +1,35 @@
+# Entries for the tmux command palette (prefix p, see palette.zsh).
+# One per line: label | key | tmux command
+# The key is only shown, not looked up: prefix keys are written bare (c), keys
+# bound without the prefix take a root: prefix (root:M-S). Leave it blank for
+# commands with no binding.
+
+# Panes
+Zoom pane                 | z   | resize-pane -Z
+Break pane to window      | b   | break-pane
+Join pane into...         | J   | new-pane -DE -O -x60% -y80% -X20% -Y20% ; choose-tree -hk "join-pane -h -s %%"
+Kill pane                 | K   | kill-pane
+Clear screen + history    | C-l | send-keys -R ; clear-history
+Open sidebar              | e   | split-window -hb -l 35 -c "#{pane_current_path}" "sbar"
+
+# Windows
+New window                | c   | new-window -c "#{pane_current_path}"
+New window after current  | a   | new-window -ac "#{pane_current_path}"
+Switch window             | w   | new-pane -DE -O -x60% -y60% -X20% -Y20% ; choose-tree -Nhkw
+Renumber windows          | R   | move-window -r
+Resize window to 145 cols | H   | resize-window -x 145
+Fit window to terminal    | F   | resize-window -A
+
+# Sessions
+Switch session            | s   | new-pane -DE -O -x60% -y60% -X20% -Y20% ; choose-tree -Nhks
+Detach                    | D   | detach-client
+Kill session              | Q   | confirm-before -p "kill-session #S? (y/n)" kill-session
+Kill server               |     | confirm-before -p "kill-server? (y/n)" kill-server
+
+# Config
+Toggle mouse              | M   | if -F '#{mouse}' 'set -g mouse off' 'set -g mouse on'
+Pick accent colour        | M-c | accent-menu
+Edit tmux.conf            | P   | edit-config
+Reload tmux.conf          | r   | source-file ~/.config/tmux/tmux.conf ; display "Reloaded .tmux.conf"
+Customize options         | C   | new-pane -DE -O -x60% -y60% -X20% -Y20% ; customize-mode -k
+Show key bindings         | ?   | display-popup -E -w 76 -h 30 -T " keys " "less -R ~/.config/tmux/keys.txt"
