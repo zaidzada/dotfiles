@@ -5,8 +5,8 @@ export EDITOR="vim"
 
 # pager
 export PAGER="less"
-export LESS="-RS"
-if [[ -x $(command -v bat) ]]; then
+export LESS="-RSc"
+if (( $+commands[bat] )); then
     export LESSOPEN="|bat --style=plain --paging=never --theme auto:system --theme-dark OneHalfDark --theme-light OneHalfLight --color=always %s"
 fi
 
