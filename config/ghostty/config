@@ -1,0 +1,22 @@
+# attach to the "main" tmux session, creating it if it doesn't exist
+initial-command = /opt/homebrew/bin/tmux new-session -A -s main
+
+# macOS: make Option act as Alt, for M- bindings in tmux
+macos-option-as-alt = left
+
+# set theme
+theme = light:One Half Light,dark:One Half Dark
+
+# Defaults, shown for clarity: programs may write the clipboard (OSC 52),
+# reading it asks first
+clipboard-write = allow
+clipboard-read = ask
+
+# don't confirm closing
+confirm-close-surface = false
+
+# set font
+font-family = Menlo
+font-style = Regular
+font-size = 13
+
