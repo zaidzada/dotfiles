@@ -1,5 +1,6 @@
-# attach to the "main" tmux session, creating it if it doesn't exist
-initial-command = /opt/homebrew/bin/tmux new-session -A -s main
+# attach to the "main" tmux session, creating it if it doesn't exist. Start it
+# from a login zsh so the tmux server gets the env from zshenv and zprofile
+initial-command = /bin/zsh -lc "exec /opt/homebrew/bin/tmux new-session -A -s main"
 
 # macOS: make Option act as Alt, for M- bindings in tmux
 macos-option-as-alt = left
