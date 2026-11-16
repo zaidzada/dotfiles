@@ -6,7 +6,7 @@
   j/k next / prev window             -   split down
   L   last window                    _   split down (full width)
   l   last pane (or window)          o/h next / prev pane
-  R   renumber windows               z   zoom toggle
+                                     z   zoom toggle
   f   find window                    b   break pane to window
   <   window menu                    B   break pane (stay)
   >   pane menu                      J   join pane into...

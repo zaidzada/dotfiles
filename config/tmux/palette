@@ -27,7 +27,7 @@ Kill session              | Q   | confirm-before -p "kill-session #S? (y/n)" kil
 Kill server               |     | confirm-before -p "kill-server? (y/n)" kill-server
 
 # Config
-Toggle mouse              | M   | if -F '#{mouse}' 'set -g mouse off' 'set -g mouse on'
+Toggle mouse              | M   | set -g mous    "set -s copy-command 'pbcopy'" \e
 Pick accent colour        | M-c | accent-menu
 Edit tmux.conf            | P   | edit-config
 Reload tmux.conf          | r   | source-file ~/.config/tmux/tmux.conf ; display "Reloaded .tmux.conf"
