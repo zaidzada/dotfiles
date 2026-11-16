@@ -20,7 +20,8 @@ export FZF_DEFAULT_OPTS='--color=16'
 
 # > XDG support
 
-# add XDG bin to PATH (typeset -U drops duplicate entries)
+# XDG bin is added to PATH in zshenv. Prepend it again here because macOS's
+# /etc/zprofile (path_helper) moves system dirs ahead of it in login shells
 typeset -U path PATH
 path=("$XDG_BIN_HOME" $path)
 

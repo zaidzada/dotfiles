@@ -25,6 +25,12 @@ export XDG_BIN_HOME="$HOME/.local/bin"
 # Set dotfile location
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
+# add XDG bin to PATH here rather than zprofile so non-login shells (e.g.
+# `ssh host cmd`, and the tmux server it starts) get it too. typeset -U drops
+# duplicate entries
+typeset -U path PATH
+path=("$XDG_BIN_HOME" $path)
+
 # Load custom zshenv
 if [[ -f "$XDG_CONFIG_HOME"/zsh/zshenv.local ]]; then
     source "$XDG_CONFIG_HOME"/zsh/zshenv.local
