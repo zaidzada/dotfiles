@@ -295,24 +295,28 @@ nnoremap <leader>vv :source $MYVIMRC<CR>
 " > Color scheme
 " -----------------------------------------------------------------------------
 
-" Follow the macOS light/dark appearance; elsewhere, fall back to time of day
-function! s:SetColorscheme() abort
-  if executable('defaults')
-    let l:dark = system('defaults read -g AppleInterfaceStyle 2>/dev/null') =~? 'dark'
+function! s:ApplyTheme() abort
+  if &background ==# 'light'
+    colorscheme onehalflight
   else
-    let l:dark = strftime("%H") < 7 || strftime("%H") >= 18
-  endif
-  let l:scheme = l:dark ? 'onehalfdark' : 'onehalflight'
-  if get(g:, 'colors_name', '') !=# l:scheme
-    execute 'colorscheme' l:scheme
+    colorscheme onehalfdark
   endif
 endfunction
 
-call s:SetColorscheme()
+function! s:PollTmuxTheme() abort
+  if exists('$TMUX')
+    let l:theme = trim(system('tmux display-message -p "#{client_theme}"'))
+    if (l:theme ==# 'light' || l:theme ==# 'dark') && &background !=# l:theme
+      let &background = l:theme
+    endif
+  endif
+endfunction
 
-augroup appearance
-    autocmd!
-    autocmd FocusGained * call s:SetColorscheme()
+augroup SyncOneHalfColorscheme
+  autocmd!
+  autocmd VimEnter * call s:PollTmuxTheme() | call s:ApplyTheme()
+  autocmd FocusGained,VimResume * call s:PollTmuxTheme()
+  autocmd OptionSet background call s:ApplyTheme()
 augroup END
 
 
