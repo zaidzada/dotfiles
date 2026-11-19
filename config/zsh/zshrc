@@ -65,21 +65,21 @@ bindkey -M viins "^R" history-incremental-search-backward
 # > Prompt & VCS
 # -----------------------------------------------------------------------------
 
-autoload -U vcs_info
-autoload -Uz add-zsh-hook
+# autoload -U vcs_info
+# autoload -Uz add-zsh-hook
+# 
+# # Git settings
+# zstyle ':vcs_info:*' enable git
+# zstyle ':vcs_info:git*' formats " [%r-%b]%u%c"
+# zstyle ':vcs_info:*' check-for-staged-changes true
+# 
+# vcs_precmd() {
+#     vcs_info
+#     psvar[1]="${vcs_info_msg_0_} "
+# }
+# add-zsh-hook precmd vcs_precmd
 
-# Git settings
-zstyle ':vcs_info:*' enable git
-zstyle ':vcs_info:git*' formats " [%r-%b]%u%c"
-zstyle ':vcs_info:*' check-for-staged-changes true
-
-vcs_precmd() {
-    vcs_info
-    psvar[1]="${vcs_info_msg_0_} "
-}
-add-zsh-hook precmd vcs_precmd
-
-export PS1="%(?.●.○)%2v%1v%2~ %# "
+export PS1="%(?.●.○) %3~ %# "
 
 
 # -----------------------------------------------------------------------------
