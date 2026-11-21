@@ -282,6 +282,9 @@ nnoremap V v$
 nnoremap U :update<CR>
 nnoremap dL :%s/\s\+$//e<CR>
 
+" Outline sidebar (plugin/outline.vim)
+nnoremap <silent> <leader>o :Outline<CR>
+
 " Highlighting
 nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
 inoremap <silent> <C-L> <C-O>:nohlsearch<CR>
