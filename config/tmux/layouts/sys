@@ -1,0 +1,22 @@
+# System monitor: htop on the left; disk, io and a scratch pad on the right.
+#
+# A layout file lists one pane per line, top to bottom in the order they're
+# created. A line is a shell command, optionally prefixed with a pane title
+# and " | ". Other lines:
+#   layout <name>   any select-layout argument: even-horizontal,
+#                   even-vertical, main-horizontal, main-vertical, tiled, or a
+#                   custom string copied from: tmux display -p '#{window_layout}'
+#   set <opt> <val> a window option for the layout, e.g. main-pane-width
+# Blank lines and # comments are skipped.
+
+layout main-vertical
+set main-pane-width 60%
+set pane-border-status top
+set pane-border-format " #{pane_title} "
+
+cpu  | htop
+disk | watch -t -n 5 df -h
+io   | iostat -w 2
+# One notes file per tmux session (the one this pane is in), saved on every
+# change so notes survive the session being killed
+notes | f=${XDG_DATA_HOME:-$HOME/.local/share}/scratchpad/$(tmux display -p -t "$TMUX_PANE" '#S').md; mkdir -p "${f%/*}"; exec vim -c 'autocmd TextChanged,InsertLeave,FocusLost <buffer> silent update' "$f"

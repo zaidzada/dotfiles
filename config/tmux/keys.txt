@@ -23,6 +23,7 @@
   Misc                               :   command prompt
   M   toggle mouse                   ;   send literal ;
   e   open sidebar
+  d   launch app layout
   C-l clear screen + history         Nesting (no prefix)
   M-c pick accent colour             M-S toggle outer tmux off/on
   P   edit tmux.conf

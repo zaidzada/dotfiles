@@ -26,6 +26,9 @@ Detach                    | D   | detach-client
 Kill session              | Q   | confirm-before -p "kill-session #S? (y/n)" kill-session
 Kill server               |     | confirm-before -p "kill-server? (y/n)" kill-server
 
+# Apps
+Launch app layout         | d   | launcher
+
 # Config
 Toggle mouse              | M   | set -g mous    "set -s copy-command 'pbcopy'" \e
 Pick accent colour        | M-c | accent-menu

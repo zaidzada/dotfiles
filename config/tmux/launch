@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+# App launcher: open a layout of panes running preset commands (a system
+# monitor, an editor with a test watcher, ...) described by a file in
+# ~/.config/tmux/layouts (see layouts/sys for the format). prefix d shows a
+# picker of layouts (launcher.zsh).
+#
+# usage: launch [-s | -w | -f] <layout>  open in a session, window or float
+#        launch -l                       list layouts
+#        (-t pane -c client: act for that pane and client, used by the picker)
+#
+# Window (the default) adds the layout as a window in the current session.
+# Session makes a session named after the layout. Float shows that same
+# session in a floating pane over the current window; it takes all keys, so
+# prefix D closes it (or a click outside, with the mouse on). Both leave the
+# session running, so reopening one is instant.
+set -eu
+
+dir=${XDG_CONFIG_HOME:-$HOME/.config}/tmux/layouts
+
+die() { echo "launch: $*" >&2; exit 1; }
+
+layouts() { for f in "$dir"/*; do [ -f "$f" ] && echo "${f##*/}"; done; }
+
+# Build the panes for layout $1 in window $2, which already runs the first
+# pane's command (in pane $3)
+fill() {
+    local file=$1 win=$2 pane=$3 first=1 layout=tiled line title cmd
+    while IFS= read -r line || [ -n "$line" ]; do
+        line=${line#"${line%%[![:space:]]*}"}
+        case $line in
+            ''|'#'*) continue ;;
+            'layout '*) layout=${line#layout }; continue ;;
+            # eval so quoted values work, as in tmux.conf
+            'set '*) eval "tmux set -w -t \"\$win\" ${line#set }"; continue ;;
+        esac
+        title= cmd=$line
+        case $line in *' | '*)
+            title=${line%% | *} cmd=${line#* | }
+            title=${title%"${title##*[![:space:]]}"}
+        esac
+        if [ $first = 1 ]; then
+            first=0
+            tmux respawn-pane -k -t "$pane" "$cmd"
+        else
+            pane=$(tmux split-window -d -P -F '#{pane_id}' -t "$pane" "$cmd")
+            # Re-tile as we go so many panes don't run out of room
+            tmux select-layout -t "$win" tiled
+        fi
+        tmux set -p -t "$pane" remain-on-exit failed
+        [ -z "$title" ] || tmux select-pane -t "$pane" -T "$title"
+    done < "$file"
+    [ $first = 0 ] || die "${file##*/} has no panes"
+    tmux select-layout -t "$win" "$layout"
+    tmux select-pane -t "$win.{top-left}"
+}
+
+# Make the session $1 unless it already exists, sized like the caller's
+# window so the layout starts at the right proportions
+ensure_session() {
+    local size ids
+    tmux has-session -t "=$1" 2>/dev/null && return
+    if [ -n "$here" ]; then
+        size=$(tmux display -p -t "$here" '#{window_width} #{window_height}')
+        size="-x ${size% *} -y ${size#* }"
+    else
+        size="-x $(tput cols) -y $(tput lines)"
+    fi
+    ids=$(tmux new-session -d -s "$1" -n "$1" $size -P -F '#{window_id} #{pane_id}')
+    fill "$dir/$1" ${ids% *} ${ids#* }
+}
+
+usage() { sed -n '7,9s/^# //p' "$0" >&2; exit 2; }
+
+# The pane and client to act on: given by the picker, else the pane this
+# runs in
+mode=w here=${TMUX_PANE:-} client=
+while getopts swflt:c: opt; do
+    case $opt in
+        s|w|f) mode=$opt ;;
+        t) here=$OPTARG ;;
+        c) client=$OPTARG ;;
+        l) layouts; exit ;;
+        *) usage ;;
+    esac
+done
+shift $((OPTIND - 1))
+[ $# = 1 ] || usage
+name=$1
+[ -f "$dir/$name" ] || die "no layout '$name' (have: $(layouts | tr '\n' ' '))"
+[ $mode = s ] || [ -n "$here" ] || die "-$mode only works inside tmux"
+
+case $mode in
+    w)
+        ids=$(tmux new-window -t "$(tmux display -p -t "$here" '#{session_id}'):" \
+            -n "$name" -P -F '#{window_id} #{pane_id}')
+        fill "$dir/$name" ${ids% *} ${ids#* }
+        ;;
+    s)
+        ensure_session "$name"
+        if [ -n "$here" ]; then
+            tmux switch-client ${client:+-c "$client"} -t "=$name"
+        else
+            exec tmux attach -t "=$name"
+        fi
+        ;;
+    f)
+        [ "$(tmux display -p -t "$here" '#S')" != "$name" ] ||
+            die "already in session $name"
+        ensure_session "$name"
+        # Attach to this server even if it isn't the default one
+        sock=$(tmux display -p '#{socket_path}')
+        tmux new-pane -t "$here" -O -K -C -x90% -y90% -X5% -Y5% \
+            "TMUX= tmux -S '$sock' attach -t '=$name'"
+        ;;
+esac
