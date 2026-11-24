@@ -1,8 +1,7 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 # App launcher: open a layout of panes running preset commands (a system
-# monitor, an editor with a test watcher, ...) described by a file in
-# ~/.config/tmux/layouts (see layouts/sys for the format). prefix d shows a
-# picker of layouts (launcher.zsh).
+# monitor, an editor with a test watcher, ...) described by a zsh script in
+# ~/.config/tmux/layouts. prefix d shows a picker of layouts (launcher.zsh).
 #
 # usage: launch [-s | -w | -f] <layout>  open in a session, window or float
 #        launch -l                       list layouts
@@ -13,128 +12,141 @@
 # session in a floating pane over the current window; it takes all keys, so
 # prefix D closes it (or a click outside, with the mouse on). Both leave the
 # session running, so reopening one is instant.
-set -eu
+#
+# A layout is sourced once its window exists. Its first line is a
+# "# description" for the picker. It builds the window with these functions,
+# named after the tmux commands they wrap:
+#   split-window [-T title] [-t title] [flags] <cmd>
+#       a pane running cmd. The first call fills the window's starting pane
+#       and later ones split beside the previous pane, or beside the pane
+#       titled with -t. Other flags go to tmux split-window (-h, -v, -b, -f,
+#       -l size, -c dir, -e var=val). Panes made without flags are tiled
+#   select-layout <name>
+#       any select-layout argument: even-horizontal, main-vertical, tiled, ...
+#       or a custom string copied from: tmux display -p '#{window_layout}'
+#   set-option <opt> <val>
+#       a window option, e.g. pane-border-status top
+# Everything else is plain zsh, so a layout can branch on $OSTYPE, check
+# $+commands[htop], or call tmux itself ($win is the window). The first pane
+# gets focus.
 
 dir=${XDG_CONFIG_HOME:-$HOME/.config}/tmux/layouts
 
-die() { echo "launch: $*" >&2; exit 1; }
+die() { print -ru2 -- "launch: $*"; exit 1 }
 
-layouts() { for f in "$dir"/*; do [ -f "$f" ] && echo "${f##*/}"; done; }
+layouts() { print -rl -- $dir/*(N.:t) }
 
-# Build the panes for layout $1 in window $2, which already runs the first
-# pane's command (in pane $3)
+usage() {
+    print -u2 'usage: launch [-s | -w | -f] <layout>\n       launch -l'
+    exit 2
+}
+
+# Layout functions. State: the window, its first pane, the last pane made,
+# pane ids by title, and whether any pane was placed by hand or a layout set
+split-window() {
+    local title= target=$prev pane
+    local -a args
+    while (( $# )); do
+        case $1 in
+            -T) title=$2; shift 2 ;;
+            -t) [[ -n ${panes[$2]-} ]] || die "split-window: no pane titled '$2'"
+                target=$panes[$2]; shift 2 ;;
+            -[lceF]) args+=($1 $2); shift 2 ;;
+            --) shift; break ;;
+            -*) args+=($1); shift ;;
+            *) break ;;
+        esac
+    done
+    (( $# )) || die "split-window: no command"
+    if [[ -z $prev ]]; then
+        pane=$first
+        tmux respawn-pane -k -t $pane "$@" || exit 1
+    else
+        if (( $#args )) || [[ $target != $prev ]]; then manual=1; fi
+        pane=$(tmux split-window -d -P -F '#{pane_id}' -t $target $args "$@") ||
+            exit 1
+        # Re-tile as we go so many panes don't run out of room
+        (( manual )) || tmux select-layout -t $win tiled
+    fi
+    prev=$pane
+    if [[ -n $title ]]; then
+        tmux select-pane -t $pane -T $title
+        panes[$title]=$pane
+    fi
+}
+
+select-layout() { tmux select-layout -t $win "$@" && laidout=1 }
+
+set-option() { tmux set-option -w -t $win "$@" }
+
+# Build layout $1 in window $2, whose only pane is $3. Run in a subshell so
+# the layout's variables can't clobber ours
 fill() {
-    local file=$1 win=$2 pane=$3 first=$3 n=0 layout= manual=0 split= \
-        ids='|' line title cmd arg args
-    while IFS= read -r line || [ -n "$line" ]; do
-        line=${line#"${line%%[![:space:]]*}"}
-        case $line in
-            ''|'#'*) continue ;;
-            'layout '*) layout=${line#layout }; continue ;;
-            'split '*) split=${line#split }; continue ;;
-            # eval so quoted values work, as in tmux.conf
-            'set '*) eval "tmux set -w -t \"\$win\" ${line#set }"; continue ;;
-        esac
-        title= cmd=$line
-        case $line in *' | '*)
-            title=${line%% | *} cmd=${line#* | }
-            title=${title%"${title##*[![:space:]]}"}
-        esac
-        n=$((n + 1))
-        if [ $n = 1 ]; then
-            tmux respawn-pane -k -t "$pane" "$cmd"
-        elif [ -n "$split" ]; then
-            # split-window flags, with -t naming an earlier pane by title
-            # (default: the previous pane)
-            manual=1 args=()
-            eval "set -- $split"
-            while [ $# -gt 0 ]; do
-                arg=$1; shift
-                if [ "$arg" = -t ]; then
-                    case $ids in *"|$1="*) ;; *) die "split: no pane titled '$1'" ;; esac
-                    arg=${ids#*"|$1="}; arg=${arg%%|*}; shift
-                    pane=$arg
-                    continue
-                fi
-                args+=("$arg")
-            done
-            pane=$(tmux split-window -d -P -F '#{pane_id}' -t "$pane" \
-                ${args[@]+"${args[@]}"} "$cmd")
-        else
-            pane=$(tmux split-window -d -P -F '#{pane_id}' -t "$pane" "$cmd")
-            # Re-tile as we go so many panes don't run out of room
-            [ $manual = 1 ] || tmux select-layout -t "$win" tiled
-        fi
-        split=
-        tmux set -p -t "$pane" remain-on-exit failed
-        if [ -n "$title" ]; then
-            tmux select-pane -t "$pane" -T "$title"
-            ids="$ids$title=$pane|"
-        fi
-    done < "$file"
-    [ $n -gt 0 ] || die "${file##*/} has no panes"
-    # Splits place panes themselves; otherwise default to tiled
-    [ -n "$layout" ] || [ $manual = 1 ] || layout=tiled
-    [ -z "$layout" ] || tmux select-layout -t "$win" "$layout"
-    tmux select-pane -t "$first"
+    win=$2 first=$3 prev= manual=0 laidout=0
+    typeset -A panes
+    # Keep panes whose command fails, to show why. Set on the window so new
+    # panes have it from the start, even one that fails immediately
+    tmux set -w -t $win remain-on-exit failed
+    source $1
+    [[ -n $prev ]] || die "${1:t} has no panes"
+    (( manual || laidout )) || tmux select-layout -t $win tiled
+    tmux select-pane -t $first
 }
 
 # Make the session $1 unless it already exists, sized like the caller's
 # window so the layout starts at the right proportions
 ensure_session() {
-    local size ids
+    local -a size ids
     tmux has-session -t "=$1" 2>/dev/null && return
-    if [ -n "$here" ]; then
-        size=$(tmux display -p -t "$here" '#{window_width} #{window_height}')
-        size="-x ${size% *} -y ${size#* }"
+    if [[ -n $here ]]; then
+        size=(${=$(tmux display -p -t $here '#{window_width} #{window_height}')})
     else
-        size="-x $(tput cols) -y $(tput lines)"
+        size=($(tput cols) $(tput lines))
     fi
-    ids=$(tmux new-session -d -s "$1" -n "$1" $size -P -F '#{window_id} #{pane_id}')
-    fill "$dir/$1" ${ids% *} ${ids#* }
+    ids=(${=$(tmux new-session -d -s $1 -n $1 -x $size[1] -y $size[2] \
+        -P -F '#{window_id} #{pane_id}')}) || exit 1
+    ( fill $dir/$1 $ids ) || exit 1
 }
-
-usage() { sed -n '7,9s/^# //p' "$0" >&2; exit 2; }
 
 # The pane and client to act on: given by the picker, else the pane this
 # runs in
 mode=w here=${TMUX_PANE:-} client=
 while getopts swflt:c: opt; do
     case $opt in
-        s|w|f) mode=$opt ;;
+        [swf]) mode=$opt ;;
         t) here=$OPTARG ;;
         c) client=$OPTARG ;;
         l) layouts; exit ;;
         *) usage ;;
     esac
 done
-shift $((OPTIND - 1))
-[ $# = 1 ] || usage
+shift $(( OPTIND - 1 ))
+(( $# == 1 )) || usage
 name=$1
-[ -f "$dir/$name" ] || die "no layout '$name' (have: $(layouts | tr '\n' ' '))"
-[ $mode = s ] || [ -n "$here" ] || die "-$mode only works inside tmux"
+[[ -f $dir/$name ]] || die "no layout '$name' (have: ${(f)$(layouts)})"
+[[ $mode == s || -n $here ]] || die "-$mode only works inside tmux"
 
 case $mode in
     w)
-        ids=$(tmux new-window -t "$(tmux display -p -t "$here" '#{session_id}'):" \
-            -n "$name" -P -F '#{window_id} #{pane_id}')
-        fill "$dir/$name" ${ids% *} ${ids#* }
+        ids=(${=$(tmux new-window -t "$(tmux display -p -t $here '#{session_id}'):" \
+            -n $name -P -F '#{window_id} #{pane_id}')}) || exit 1
+        ( fill $dir/$name $ids ) || exit 1
         ;;
     s)
-        ensure_session "$name"
-        if [ -n "$here" ]; then
-            tmux switch-client ${client:+-c "$client"} -t "=$name"
+        ensure_session $name
+        if [[ -n $here ]]; then
+            tmux switch-client ${client:+-c} ${client:+$client} -t "=$name"
         else
             exec tmux attach -t "=$name"
         fi
         ;;
     f)
-        [ "$(tmux display -p -t "$here" '#S')" != "$name" ] ||
+        [[ "$(tmux display -p -t $here '#S')" != $name ]] ||
             die "already in session $name"
-        ensure_session "$name"
+        ensure_session $name
         # Attach to this server even if it isn't the default one
         sock=$(tmux display -p '#{socket_path}')
-        tmux new-pane -t "$here" -O -K -C -x90% -y90% -X5% -Y5% \
+        tmux new-pane -t $here -O -K -C -x90% -y90% -X5% -Y5% \
             "TMUX= tmux -S '$sock' attach -t '=$name'"
         ;;
 esac

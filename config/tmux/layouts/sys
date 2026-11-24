@@ -1,34 +1,39 @@
 # System monitor: info and a scratch pad on the left; htop, disk and io on the right.
 #
-# A layout file lists one pane per line, in the order they're created; the
-# first one gets focus. A line is a shell command, optionally prefixed with a
-# pane title and " | ". Other lines:
-#   layout <name>   any select-layout argument: even-horizontal,
-#                   even-vertical, main-horizontal, main-vertical, tiled, or a
-#                   custom string copied from: tmux display -p '#{window_layout}'
-#   split <flags>   split-window flags for the next pane (-h, -v, -b, -f,
-#                   -l size), placing it beside the previous pane, or beside
-#                   the pane titled <title> with -t <title>. Panes without a
-#                   split line are tiled unless a split line came before
-#   set <opt> <val> a window option for the layout, e.g. main-pane-width
-# Blank lines and # comments are skipped.
+# Works on macOS and Linux. See ../launch for the layout functions.
 
-set pane-border-status top
-set pane-border-format " #{pane_title} "
+set-option pane-border-status top
+set-option pane-border-format " #{pane_title} "
 
-# One notes file per tmux session (the one this pane is in), saved on every
-# change so notes survive the session being killed
-notes | f=${XDG_DATA_HOME:-$HOME/.local/share}/scratchpad/$(tmux display -p -t "$TMUX_PANE" '#S').md; mkdir -p "${f%/*}"; exec vim -c 'autocmd TextChanged,InsertLeave,FocusLost <buffer> silent update' "$f"
+# One notes file per tmux session, saved on every change so notes survive the
+# session being killed
+notes=${XDG_DATA_HOME:-$HOME/.local/share}/scratchpad/$(tmux display -p -t $win '#S').md
+mkdir -p ${notes:h}
+split-window -T notes \
+    "exec vim -c 'autocmd TextChanged,InsertLeave,FocusLost <buffer> silent update' ${(q)notes}"
 
-split -h -l 60%
-cpu   | htop
+(( $+commands[htop] )) && cpu=htop || cpu=top
+split-window -T cpu -h -l 60% $cpu
 
-# Above the notes, sized to fit its four lines
-split -v -b -l 5 -t notes
-info  | watch -t -n 30 'echo "$(whoami)@$(hostname -s)"; uname -srm; uptime | sed "s/^ *//"'
+# Above the notes, sized to fit its three lines
+split-window -T info -t notes -v -b -l 5 \
+    "watch -t -n 30 'echo $USERNAME@${HOST%%.*}; uname -srm; uptime | sed \"s/^ *//\"'"
 
-split -v -l 50% -t cpu
-disk  | watch -t -n 5 df -h
+if [[ $OSTYPE == linux* ]]; then
+    # Skip the many pseudo filesystems Linux lists
+    disk='df -h -x tmpfs -x devtmpfs -x squashfs -x overlay -x efivarfs'
+else
+    disk='df -h'
+fi
+split-window -T disk -t cpu -v -l 50% "watch -t -n 5 $disk"
 
-split -v -l 50%
-io    | iostat -w 2
+# iostat flags differ: on macOS -w is the interval; on Linux (sysstat) -d shows
+# devices and -y skips the since-boot report. vmstat if sysstat is missing
+if [[ $OSTYPE == darwin* ]]; then
+    io='iostat -w 2'
+elif (( $+commands[iostat] )); then
+    io='iostat -dy 2'
+else
+    io='vmstat 2'
+fi
+split-window -T io -v -l 50% $io
