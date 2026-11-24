@@ -24,12 +24,14 @@ layouts() { for f in "$dir"/*; do [ -f "$f" ] && echo "${f##*/}"; done; }
 # Build the panes for layout $1 in window $2, which already runs the first
 # pane's command (in pane $3)
 fill() {
-    local file=$1 win=$2 pane=$3 first=1 layout=tiled line title cmd
+    local file=$1 win=$2 pane=$3 first=$3 n=0 layout= manual=0 split= \
+        ids='|' line title cmd arg args
     while IFS= read -r line || [ -n "$line" ]; do
         line=${line#"${line%%[![:space:]]*}"}
         case $line in
             ''|'#'*) continue ;;
             'layout '*) layout=${line#layout }; continue ;;
+            'split '*) split=${line#split }; continue ;;
             # eval so quoted values work, as in tmux.conf
             'set '*) eval "tmux set -w -t \"\$win\" ${line#set }"; continue ;;
         esac
@@ -38,20 +40,43 @@ fill() {
             title=${line%% | *} cmd=${line#* | }
             title=${title%"${title##*[![:space:]]}"}
         esac
-        if [ $first = 1 ]; then
-            first=0
+        n=$((n + 1))
+        if [ $n = 1 ]; then
             tmux respawn-pane -k -t "$pane" "$cmd"
+        elif [ -n "$split" ]; then
+            # split-window flags, with -t naming an earlier pane by title
+            # (default: the previous pane)
+            manual=1 args=()
+            eval "set -- $split"
+            while [ $# -gt 0 ]; do
+                arg=$1; shift
+                if [ "$arg" = -t ]; then
+                    case $ids in *"|$1="*) ;; *) die "split: no pane titled '$1'" ;; esac
+                    arg=${ids#*"|$1="}; arg=${arg%%|*}; shift
+                    pane=$arg
+                    continue
+                fi
+                args+=("$arg")
+            done
+            pane=$(tmux split-window -d -P -F '#{pane_id}' -t "$pane" \
+                ${args[@]+"${args[@]}"} "$cmd")
         else
             pane=$(tmux split-window -d -P -F '#{pane_id}' -t "$pane" "$cmd")
             # Re-tile as we go so many panes don't run out of room
-            tmux select-layout -t "$win" tiled
+            [ $manual = 1 ] || tmux select-layout -t "$win" tiled
         fi
+        split=
         tmux set -p -t "$pane" remain-on-exit failed
-        [ -z "$title" ] || tmux select-pane -t "$pane" -T "$title"
+        if [ -n "$title" ]; then
+            tmux select-pane -t "$pane" -T "$title"
+            ids="$ids$title=$pane|"
+        fi
     done < "$file"
-    [ $first = 0 ] || die "${file##*/} has no panes"
-    tmux select-layout -t "$win" "$layout"
-    tmux select-pane -t "$win.{top-left}"
+    [ $n -gt 0 ] || die "${file##*/} has no panes"
+    # Splits place panes themselves; otherwise default to tiled
+    [ -n "$layout" ] || [ $manual = 1 ] || layout=tiled
+    [ -z "$layout" ] || tmux select-layout -t "$win" "$layout"
+    tmux select-pane -t "$first"
 }
 
 # Make the session $1 unless it already exists, sized like the caller's
