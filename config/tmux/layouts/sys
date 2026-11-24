@@ -1,9 +1,11 @@
-# System monitor: info and a scratch pad on the left; htop, disk and io on the right.
+# System monitor: info, network and a scratch pad on the left; htop and disk on the right.
 #
 # Works on macOS and Linux. See ../launch for the layout functions.
 
 set-option pane-border-status top
 set-option pane-border-format " #{pane_title} "
+# The panes redraw constantly, so activity alerts would always be firing
+set-option monitor-activity off
 
 # One notes file per tmux session, saved on every change so notes survive the
 # session being killed
@@ -12,28 +14,19 @@ mkdir -p ${notes:h}
 split-window -T notes \
     "exec vim -c 'autocmd TextChanged,InsertLeave,FocusLost <buffer> silent update' ${(q)notes}"
 
-(( $+commands[htop] )) && cpu=htop || cpu=top
+# Busiest processes first
+if (( $+commands[htop] )); then
+    cpu='htop -s PERCENT_CPU'
+elif [[ $OSTYPE == darwin* ]]; then
+    cpu='top -o cpu'
+else
+    cpu='top -o %CPU'
+fi
 split-window -T cpu -h -l 60% $cpu
 
-# Above the notes, sized to fit its three lines
-split-window -T info -t notes -v -b -l 5 \
-    "watch -t -n 30 'echo $USERNAME@${HOST%%.*}; uname -srm; uptime | sed \"s/^ *//\"'"
+# Above the notes, each sized to fit its lines
+widget sysinfo -t notes -v -b -l 5
+widget net -t notes -v -b -l 7
 
-if [[ $OSTYPE == linux* ]]; then
-    # Skip the many pseudo filesystems Linux lists
-    disk='df -h -x tmpfs -x devtmpfs -x squashfs -x overlay -x efivarfs'
-else
-    disk='df -h'
-fi
-split-window -T disk -t cpu -v -l 50% "watch -t -n 5 $disk"
-
-# iostat flags differ: on macOS -w is the interval; on Linux (sysstat) -d shows
-# devices and -y skips the since-boot report. vmstat if sysstat is missing
-if [[ $OSTYPE == darwin* ]]; then
-    io='iostat -w 2'
-elif (( $+commands[iostat] )); then
-    io='iostat -dy 2'
-else
-    io='vmstat 2'
-fi
-split-window -T io -v -l 50% $io
+# Room for a few filesystems; htop gets the rest
+widget disk -t cpu -v -l 8

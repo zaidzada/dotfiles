@@ -1,0 +1,19 @@
+#!/usr/bin/env zsh
+# Podman containers, running or not, with their status and ports.
+# refresh: 10
+
+(( $+commands[podman] )) || { print 'podman not installed'; exit }
+
+# Errors (like no podman machine running on macOS) are worth showing
+if ! out=$(podman ps -a --format '{{.Names}}\t{{.Status}}\t{{.Ports}}' 2>&1); then
+    print -r -- $'\e[31m'"$out"$'\e[0m'
+    exit
+fi
+[[ -n $out ]] || { print 'no containers'; exit }
+
+print -r -- $out | awk -F'\t' '
+    BEGIN {printf "%-20s %-24s %s\n", "NAME", "STATUS", "PORTS"}
+    {
+        color = $2 ~ /^Up/ ? "\033[32m" : $2 ~ /^Exited/ ? "\033[31m" : "\033[2m"
+        printf "%-20s %s%-24s\033[0m %s\n", $1, color, $2, $3
+    }'

@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+# Usage of the filesystems that hold data, skipping system and pseudo ones.
+# refresh: 30
+
+if [[ $OSTYPE == darwin* ]]; then
+    # APFS mounts a volume per system role (VM, Preboot, Update, ...); keep
+    # the root, the Data volume where files really live, and external drives
+    df -hlI | awk 'NR == 1 || $NF == "/" || $NF == "/System/Volumes/Data" ||
+                   index($0, " /Volumes/")'
+else
+    df -h -x tmpfs -x devtmpfs -x squashfs -x overlay -x efivarfs
+fi

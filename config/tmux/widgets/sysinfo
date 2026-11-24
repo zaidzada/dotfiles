@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+# User and host, OS and kernel, and uptime with load averages.
+# refresh: 30
+
+print -r -- $USERNAME@${HOST%%.*}
+uname -srm
+uptime | sed 's/^ *//'

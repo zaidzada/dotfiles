@@ -1,0 +1,94 @@
+#!/usr/bin/env zsh
+# Network connection: status, addresses, Wi-Fi, router, DNS and firewall.
+# refresh: 10
+#
+# Works on macOS and Linux; anything it can't find is left out.
+
+row() { [[ -n $2 ]] && printf '%-8s %s\n' $1 $2 }
+
+# Reverse DNS name of an address, if it has one
+rdns() {
+    local name
+    if (( $+commands[host] )); then
+        name=$(host -W 1 $1 2>/dev/null) && name=${${name##* }%.}
+    fi
+    [[ $name == *.* ]] && print -r -- $name
+}
+
+if [[ $OSTYPE == darwin* ]]; then
+    route=$(route -n get default 2>/dev/null)
+    iface=${${(M)${(f)route}:#*interface:*}##* }
+    gw=${${(M)${(f)route}:#*gateway:*}##* }
+    if [[ -n $iface ]]; then
+        ip4=$(ipconfig getifaddr $iface 2>/dev/null)
+        ip6=$(ifconfig $iface 2>/dev/null |
+            awk '$1 == "inet6" && $2 !~ /^fe80/ && !/temporary/ {print $2; exit}')
+        port=$(networksetup -listallhardwareports 2>/dev/null |
+            awk -v d=$iface '/^Hardware Port/ {sub(/^Hardware Port: /, ""); p=$0}
+                             $2 == d {print p; exit}')
+        # macOS redacts the SSID unless the caller has location access
+        ssid=$(ipconfig getsummary $iface 2>/dev/null |
+            awk -F' : ' '$1 ~ /^ *SSID$/ {print $2; exit}')
+        [[ $ssid == '<redacted>' ]] && ssid='(hidden by macOS)'
+    fi
+    dns=(${(u)${(M)${(f)"$(scutil --dns 2>/dev/null)"}:#*nameserver*}##* })
+    fwtool=/usr/libexec/ApplicationFirewall/socketfilterfw
+    if [[ -x $fwtool ]]; then
+        [[ $($fwtool --getglobalstate 2>/dev/null) == *enabled* ]] &&
+            fw=on || fw=off
+        [[ $($fwtool --getstealthmode 2>/dev/null) == *' on'* ]] &&
+            fw+=', stealth'
+    fi
+else
+    route=($(ip -4 route show default 2>/dev/null | head -1))
+    gw=${route[${route[(i)via]}+1]-}
+    iface=${route[${route[(i)dev]}+1]-}
+    if [[ -n $iface ]]; then
+        ip4=$(ip -4 -o addr show dev $iface scope global 2>/dev/null |
+            awk '{sub(/\/.*/, "", $4); print $4; exit}')
+        ip6=$(ip -6 -o addr show dev $iface scope global 2>/dev/null |
+            awk '{sub(/\/.*/, "", $4); print $4; exit}')
+        if [[ -d /sys/class/net/$iface/wireless ]]; then
+            port=Wi-Fi
+            if (( $+commands[iwgetid] )); then
+                ssid=$(iwgetid -r 2>/dev/null)
+            elif (( $+commands[nmcli] )); then
+                ssid=$(nmcli -t -f active,ssid dev wifi 2>/dev/null |
+                    awk -F: '$1 == "yes" {print $2; exit}')
+            fi
+        else
+            port=Ethernet
+        fi
+    fi
+    # systemd-resolved hides the real servers behind 127.0.0.53
+    if (( $+commands[resolvectl] )); then
+        dns=(${(u)${=${(M)${(f)"$(resolvectl dns 2>/dev/null)"}:#*:*}#*: }})
+    fi
+    (( $#dns )) || dns=(${(u)${${(M)${(f)"$(</etc/resolv.conf)"}:#nameserver *}#nameserver }})
+    # Rule listings need root; these report state without it
+    if (( $+commands[firewall-cmd] )); then
+        fw=$(firewall-cmd --state 2>/dev/null)
+    elif (( $+commands[ufw] )) && [[ -f /etc/ufw/ufw.conf ]]; then
+        grep -q '^ENABLED=yes' /etc/ufw/ufw.conf && fw='ufw on' || fw='ufw off'
+    fi
+fi
+
+# Status in green or red. Under watch this needs -c to keep the colors
+up=$'\e[32mup\e[0m' down=$'\e[31mdown\e[0m'
+
+if [[ -z $iface ]]; then
+    row status "$down (no default route)"
+    row dns "$dns"
+    exit
+fi
+
+row status "$up via $iface${port:+ ($port)}"
+row wifi "$ssid"
+row ipv4 "$ip4"
+row ipv6 "$ip6"
+gwname=${gw:+$(rdns $gw)}
+row router "$gw${gwname:+ ($gwname)}"
+# Long lists would wrap and push the firewall line out of the pane
+(( $#dns > 2 )) && dns=($dns[1,2] "+$(( $#dns - 2 ))")
+row dns "${(j:, :)dns}"
+row firewall "$fw"

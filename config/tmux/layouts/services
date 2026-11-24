@@ -1,0 +1,20 @@
+# Services: brew services or systemd units, containers and listening ports.
+#
+# Works on macOS and Linux. See ../launch for the layout functions.
+
+set-option pane-border-status top
+set-option pane-border-format " #{pane_title} "
+set-option monitor-activity off
+
+# On Linux, units whose state to show under the counts. Prefix user: for a
+# user unit, e.g. 'sshd nginx user:syncthing'
+units=''
+
+widget services -e SERVICES_UNITS=$units
+
+if (( $+commands[podman] )); then
+    widget containers -h -l 50%
+    widget ports -v -l 50%
+else
+    widget ports -h -l 50%
+fi
