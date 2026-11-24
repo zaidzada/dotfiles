@@ -1,4 +1,4 @@
-# System monitor: info, network and a scratch pad on the left; htop and disk on the right.
+# System monitor: info, network, updates and a scratch pad on the left; htop and disk on the right.
 #
 # Works on macOS and Linux. See ../launch for the layout functions.
 
@@ -27,6 +27,8 @@ split-window -T cpu -h -l 60% $cpu
 # Above the notes, each sized to fit its lines
 widget sysinfo -t notes -v -b -l 5
 widget net -t notes -v -b -l 7
+# The count and the first several packages
+widget updates -t notes -v -b -l 10
 
 # Room for a few filesystems; htop gets the rest
 widget disk -t cpu -v -l 8

@@ -1,0 +1,63 @@
+#!/usr/bin/env zsh
+# Pending package updates: brew on macOS, apt on Debian and Ubuntu.
+# refresh: 3600
+#
+# A count, then one package per line as name, installed -> available.
+# brew refreshes its own index when it is stale ($HOMEBREW_AUTO_UPDATE_SECS);
+# apt can't without root, so the age of its index is shown instead.
+
+zmodload -F zsh/stat b:zstat
+zmodload zsh/datetime
+
+yellow=$'\e[33m' green=$'\e[32m' dim=$'\e[2m' off=$'\e[0m'
+
+# Seconds as a rough age: 40m, 5h, 3d
+age() {
+    local s=$1
+    if (( s < 3600 )); then print -rn -- "$(( s / 60 ))m"
+    elif (( s < 86400 )); then print -rn -- "$(( s / 3600 ))h"
+    else print -rn -- "$(( s / 86400 ))d"
+    fi
+}
+
+# Print the count line and the rows of name, old, new (tab separated)
+show() {
+    local rows=$1 extra=$2 n
+    n=${#${(f)rows}}
+    [[ -n $rows ]] || n=0
+    if (( n )); then
+        print -r -- "$yellow$n updates$off$extra"
+        print -r -- $rows | awk -F'\t' '{printf "%-24s %s -> %s\n", $1, $2, $3}'
+    else
+        print -r -- "${green}up to date$off$extra"
+    fi
+}
+
+if [[ $OSTYPE == darwin* ]]; then
+    (( $+commands[brew] )) || { print 'brew not installed'; exit }
+    # name (old) < new for formulae; name (old) != new for casks, which may
+    # end with [pinned at ...]
+    rows=$(HOMEBREW_NO_ENV_HINTS=1 brew outdated --verbose 2>/dev/null | awk '
+        $2 ~ /^\(/ && ($3 == "<" || $3 == "!=") {
+            old = $2; gsub(/[()]/, "", old)
+            pin = /\[pinned/ ? " (pinned)" : ""
+            print $1 "\t" old "\t" $4 pin
+        }')
+    show "$rows" "$dim · checked $(strftime %H:%M $EPOCHSECONDS)$off"
+elif (( $+commands[apt] )); then
+    # Lines look like: name/suite new arch [upgradable from: old]
+    rows=$(apt list --upgradable 2>/dev/null | awk '
+        /upgradable from:/ {
+            name = $1; sub(/\/.*/, "", name)
+            old = $NF; sub(/\]$/, "", old)
+            print name "\t" old "\t" $2
+        }')
+    stamp=/var/lib/apt/periodic/update-success-stamp
+    [[ -e $stamp ]] || stamp=/var/cache/apt/pkgcache.bin
+    if [[ -e $stamp ]]; then
+        extra="$dim · index $(age $(( EPOCHSECONDS - $(zstat +mtime $stamp) ))) old$off"
+    fi
+    show "$rows" "$extra"
+else
+    print 'no supported package manager (brew or apt)'
+fi

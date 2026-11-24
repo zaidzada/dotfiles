@@ -2,10 +2,11 @@
 # Background services: brew services on macOS, systemd units on Linux.
 # refresh: 30
 #
-# On Linux it shows how many system and user services run and which units
-# failed, then the state of each unit in $SERVICES_UNITS (space separated;
-# prefix user: for a user unit, e.g. "sshd nginx user:syncthing"). Set it
-# with split-window -e.
+# On Linux it lists every running user service, and for user and system
+# units alike, any that failed (in red) and those in $SERVICES_UNITS with
+# their state. System services are only counted otherwise; most are the
+# distro's own. $SERVICES_UNITS is space separated, with user: before a user
+# unit, e.g. "sshd nginx user:syncthing". Set it with split-window -e.
 
 green=$'\e[32m' red=$'\e[31m' dim=$'\e[2m' off=$'\e[0m'
 
@@ -32,25 +33,43 @@ fi
 
 (( $+commands[systemctl] )) || { print 'systemd not found'; exit }
 
-for scope in system user; do
-    flag=--$scope
-    running=$(systemctl $flag list-units --type=service --state=running \
-        --no-legend --plain 2>/dev/null | wc -l)
-    failed=(${(f)"$(systemctl $flag list-units --state=failed --no-legend \
-        --plain 2>/dev/null | awk '{print $1}')"})
-    printf '%-7s %s running, %s failed\n' $scope $green${running// /}$off \
-        "$( (( $#failed )) && print -rn -- $red$#failed$off || print -rn 0)"
-    for unit in $failed; printf '  %s %s\n' $unit "$(paint failed)"
-done
+# Units of a scope (system or user) in a state, as name and description.
+# Failed covers every unit type; .service is dropped from names
+units() {
+    local -a type=(--type=service)
+    [[ $2 == failed ]] && type=()
+    systemctl --$1 list-units $type --state=$2 --no-legend --plain 2>/dev/null |
+        awk '{
+            name = $1; sub(/\.service$/, "", name)
+            desc = ""; for (i = 5; i <= NF; i++) desc = desc (i > 5 ? " " : "") $i
+            print name "\t" desc
+        }'
+}
 
-if [[ -n ${SERVICES_UNITS-} ]]; then
-    print
-    for unit in ${=SERVICES_UNITS}; do
-        if [[ $unit == user:* ]]; then
-            state=$(systemctl --user is-active ${unit#user:} 2>/dev/null)
-        else
-            state=$(systemctl is-active $unit 2>/dev/null)
-        fi
-        printf '%-24s %s\n' $unit "$(paint ${state:-unknown})"
+# name, then a state if any, then a dim description if any
+row() { printf '  %-28s %s\n' $1 "${2:+$2 }${3:+$dim$3$off}" }
+
+# Watched units by scope; user: ones are user units
+watched_user=(${${(M)${=SERVICES_UNITS-}:#user:*}#user:})
+watched_system=(${${=SERVICES_UNITS-}:#user:*})
+
+for scope in user system; do
+    failed=(${(f)"$(units $scope failed)"})
+    running=(${(f)"$(units $scope running)"})
+    watched=(${(P)${:-watched_$scope}})
+    print -r -- "$scope ${dim}· $#running running, $#failed failed$off"
+    for line in $failed; row ${line%%$'\t'*} "$(paint failed)" ${line#*$'\t'}
+    for unit in $watched; do
+        state=$(systemctl --$scope is-active $unit 2>/dev/null)
+        row ${unit%.service} "$(paint ${state:-unknown})"
     done
-fi
+    # Every running user service; system ones are mostly the distro's own,
+    # so only the watched ones are shown
+    if [[ $scope == user ]]; then
+        for line in $running; do
+            (( ${watched[(Ie)${line%%$'\t'*}]} )) ||
+                row ${line%%$'\t'*} '' ${line#*$'\t'}
+        done
+    fi
+    print
+done
