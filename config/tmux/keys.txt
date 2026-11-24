@@ -9,6 +9,7 @@
                                      z   zoom toggle
   f   find window                    b   break pane to window
   <   window menu                    B   break pane (stay)
+  X   kill window (confirm)
   >   pane menu                      J   join pane into...
                                      { } swap pane up / down
                                      ␣   next layout
