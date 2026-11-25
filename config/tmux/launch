@@ -64,8 +64,15 @@ split-window() {
     done
     (( $# )) || die "split-window: no command"
     if [[ -z $prev ]]; then
+        # The starting pane is reused, so only the flags respawn-pane takes
+        # (dir and environment) apply; sizing and placement don't
+        local -a keep
+        local i
+        for (( i = 1; i <= $#args; i++ )); do
+            [[ $args[i] == -[ce] ]] && keep+=($args[i] $args[i+1]) && (( i++ ))
+        done
         pane=$first
-        tmux respawn-pane -k -t $pane "$@" || exit 1
+        tmux respawn-pane -k -t $pane $keep "$@" || exit 1
     else
         if (( $#args )) || [[ $target != $prev ]]; then manual=1; fi
         pane=$(tmux split-window -d -P -F '#{pane_id}' -t $target $args "$@") ||
